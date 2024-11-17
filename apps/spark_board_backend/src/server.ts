@@ -7,11 +7,14 @@ import { logHandler } from "./middlewares/apiLogger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFoundHandler } from "./middlewares/notFound";
 import { apiRoutes } from "./routes/api/apiRoutes";
+import { swaggerRoutes } from "./routes/swagger";
 
 const port = process.env.PORT;
 
 const app = express();
 app.use(bodyParser.json());
+
+app.use("/api-docs", ...swaggerRoutes);
 
 app.use(logHandler);
 

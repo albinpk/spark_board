@@ -25,7 +25,29 @@ auth.post(
   })
 );
 
-// /api/v1/auth/login
+/**
+ * @swagger
+ * /v1/auth/login:
+ *   post:
+ *     summary: User login
+ *     tags: [auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 default: albin@mail.com
+ *               password:
+ *                 type: string
+ *                 default: 12345678
+ *     responses:
+ *       200:
+ *         description: API response
+ */
 auth.post(
   "/login",
   validator(loginSchema),
