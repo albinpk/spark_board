@@ -2,3 +2,9 @@ name: SparkBoard
 
 packages:
   - apps/*
+
+command:
+  version:
+    hooks:
+      # Update the version in package.json
+      preCommit: ./scripts/preVersion.sh
