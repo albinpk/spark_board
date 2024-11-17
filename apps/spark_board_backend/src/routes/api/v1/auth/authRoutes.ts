@@ -1,8 +1,9 @@
 import { Router } from "express";
+import { createUser, loginUser } from "../../../../controllers/authController";
 import { validator } from "../../../../middlewares/reqValidator";
 import { good } from "../../../../utils/response";
 import { tryCatch } from "../../../../utils/tryCatch";
-import { SignupBody, signupSchema } from "./authSchema";
+import { LoginBody, loginSchema, SignupBody, signupSchema } from "./authSchema";
 
 /**
  * "/api/v1/auth" route.
@@ -14,8 +15,28 @@ auth.post(
   "/signup",
   validator(signupSchema),
   tryCatch<SignupBody>(async (req, res) => {
-    // TODO: create user
-    res.json(good({ message: "User created successfully" }));
+    const createdUser = await createUser(req.body);
+    res.json(
+      good({
+        message: "User created successfully",
+        data: createdUser,
+      })
+    );
+  })
+);
+
+// /api/v1/auth/login
+auth.post(
+  "/login",
+  validator(loginSchema),
+  tryCatch<LoginBody>(async (req, res) => {
+    const user = await loginUser(req.body);
+    res.json(
+      good({
+        message: "Logged in successfully",
+        data: user,
+      })
+    );
   })
 );
 
