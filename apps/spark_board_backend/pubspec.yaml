@@ -1,0 +1,8 @@
+# This file is only used by melos for versioning purposes.
+
+name: spark_board_backend
+
+version: 0.5.2+1
+
+environment:
+  sdk: ^3.5.3
