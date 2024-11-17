@@ -3,25 +3,21 @@ dotenv.config();
 
 import bodyParser from "body-parser";
 import express from "express";
+import { logHandler } from "./middlewares/apiLogger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFoundHandler } from "./middlewares/notFound";
-import { usersRoute } from "./routes/usersRoute";
-import { ok } from "./utils/response";
-import { tryCatch } from "./utils/tryCatch";
+import { apiRoutes } from "./routes/api/apiRoutes";
 
 const port = process.env.PORT;
 
 const app = express();
 app.use(bodyParser.json());
 
-// root
-app.get(
-  "/",
-  tryCatch(async (_, res) => res.json(ok()))
-);
+app.use(logHandler);
 
 // routes
-app.use("/users", usersRoute);
+app.use("/api", apiRoutes);
+// app.use("/users", usersRoute);
 
 // error handlers
 app.all("*", notFoundHandler);

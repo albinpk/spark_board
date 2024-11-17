@@ -1,7 +1,7 @@
 /**
  * Create success response.
  */
-export const ok = (res?: { data?: [] | {}; message?: string }) => {
+export const good = (res?: { data?: [] | {}; message?: string }) => {
   return {
     status: true,
     message: res?.message ?? "success",
