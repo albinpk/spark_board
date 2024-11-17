@@ -17,7 +17,6 @@ app.use(logHandler);
 
 // routes
 app.use("/api", apiRoutes);
-// app.use("/users", usersRoute);
 
 // error handlers
 app.all("*", notFoundHandler);

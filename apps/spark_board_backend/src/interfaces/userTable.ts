@@ -1,7 +1,6 @@
 /**
  * Interface for users table.
  */
-
 export interface UserTable {
   id: number;
   user_id: string;
