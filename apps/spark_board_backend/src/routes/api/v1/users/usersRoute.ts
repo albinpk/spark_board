@@ -8,7 +8,13 @@ import { tryCatch } from "../../../../utils/tryCatch";
  */
 const users = Router();
 
-// /api/v1/users/
+/**
+ * @swagger
+ * /v1/users:
+ *   get:
+ *     summary: User signup
+ *     tags: [user]
+ */
 users.get(
   "/",
   tryCatch(async (req, res) => {

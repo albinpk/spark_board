@@ -9,5 +9,6 @@ namespace NodeJS {
     POSTGRES_DB: string;
     POSTGRES_USER_NAME: string;
     POSTGRES_PASSWORD: string;
+    JWT_SECRET: string;
   }
 }

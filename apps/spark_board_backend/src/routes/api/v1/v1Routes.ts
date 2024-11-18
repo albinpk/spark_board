@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authGuard } from "../../../middlewares/authGuard";
 import { good } from "../../../utils/response";
 import { tryCatch } from "../../../utils/tryCatch";
 import { authRoute } from "./auth/authRoutes";
@@ -19,6 +20,6 @@ v1.all(
 v1.use("/auth", authRoute);
 
 // /api/v1/users
-v1.use("/users", usersRoute);
+v1.use("/users", authGuard, usersRoute);
 
 export { v1 as v1Route };
