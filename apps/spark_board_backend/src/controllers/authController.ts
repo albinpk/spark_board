@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import sql from "../db";
 import { UserTable } from "../interfaces/userTable";
 import { LoginBody, SignupBody } from "../routes/api/v1/auth/authSchema";
@@ -25,7 +26,9 @@ export const createUser = async (data: SignupBody): Promise<UserTable> => {
  * @param data login body
  * @returns user data
  */
-export const loginUser = async (data: LoginBody): Promise<{}> => {
+export const loginUser = async (
+  data: LoginBody
+): Promise<{ token: string }> => {
   const [user] = await sql<UserTable[]>`
     SELECT user_id, name, email, password, created_at
     FROM users
@@ -38,10 +41,12 @@ export const loginUser = async (data: LoginBody): Promise<{}> => {
     throw new Error("Invalid email or password");
   }
 
-  return {
-    user_id: user.user_id,
-    name: user.name,
-    email: user.email,
-    created_at: user.created_at,
-  };
+  const token = jwt.sign(
+    {
+      userId: user.user_id,
+    },
+    process.env.JWT_SECRET!
+  );
+
+  return { token };
 };

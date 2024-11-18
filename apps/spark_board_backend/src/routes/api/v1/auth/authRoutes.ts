@@ -77,11 +77,11 @@ auth.post(
   "/login",
   validator(loginSchema),
   tryCatch<LoginBody>(async (req, res) => {
-    const user = await loginUser(req.body);
+    const data = await loginUser(req.body);
     res.json(
       good({
         message: "Logged in successfully",
-        data: user,
+        data,
       })
     );
   })
