@@ -10,7 +10,32 @@ import { LoginBody, loginSchema, SignupBody, signupSchema } from "./authSchema";
  */
 const auth = Router();
 
-// /api/v1/auth/signup
+/**
+ * @swagger
+ * /v1/auth/signup:
+ *   post:
+ *     summary: User signup
+ *     tags: [auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 default: Albin
+ *               email:
+ *                 type: string
+ *                 default: albin@mail.com
+ *               password:
+ *                 type: string
+ *                 default: 12345678
+ *     responses:
+ *       200:
+ *         description: API response
+ */
 auth.post(
   "/signup",
   validator(signupSchema),
