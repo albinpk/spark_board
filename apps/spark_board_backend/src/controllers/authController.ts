@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import sql from "../db";
 import { UserTable } from "../interfaces/userTable";
+import { appError } from "../models/appError";
 import { LoginBody, SignupBody } from "../routes/api/v1/auth/authSchema";
 import { createToken } from "../utils/jwt";
 
@@ -21,9 +22,7 @@ export const signupUser = async (
     VALUES (${data.name}, ${data.email}, ${hashedPassword})
     RETURNING user_id, name, email, created_at`;
 
-  // const token = createToken(user[0].user_id);
-  const token = createToken({ userId: user[0].user_id });
-  return { token };
+  return { token: createToken({ userId: user[0].user_id }) };
 };
 
 /**
@@ -39,13 +38,9 @@ export const loginUser = async (
     FROM users
     WHERE email = ${data.email}`;
 
-  if (!user) throw new Error("Invalid email or password");
-
-  // compare password
-  if (!(await bcrypt.compare(data.password, user.password))) {
-    throw new Error("Invalid email or password");
+  if (!user || !(await bcrypt.compare(data.password, user.password))) {
+    throw appError("Invalid email or password", 400);
   }
 
-  const token = createToken({ userId: user.user_id });
-  return { token };
+  return { token: createToken({ userId: user.user_id }) };
 };

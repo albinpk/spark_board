@@ -1,5 +1,6 @@
 import sql from "../db";
 import { ProjectTable } from "../interfaces/projectTable";
+import { appError } from "../models/appError";
 import { CreateProjectBody } from "../routes/api/v1/projects/projectsSchema";
 
 /**
@@ -7,11 +8,10 @@ import { CreateProjectBody } from "../routes/api/v1/projects/projectsSchema";
  * @returns Array of projects
  */
 export const getAllProjectsOfUser = async (userId: string) => {
-  const projects = await sql<ProjectTable[]>`
+  return await sql<ProjectTable[]>`
         SELECT project_id, name, description, created_at
         FROM projects
         WHERE owner_id = ${userId}`;
-  return projects;
 };
 
 /**
@@ -24,11 +24,11 @@ export const createProject = async (
   userId: string,
   data: CreateProjectBody
 ) => {
-  const project = await sql<ProjectTable[]>`
+  const [project] = await sql<ProjectTable[]>`
         INSERT INTO projects (name, description, owner_id)
         VALUES (${data.name}, ${data.description ?? null}, ${userId})
         RETURNING project_id, name, description, created_at`;
-  return project[0];
+  return project;
 };
 
 /**
@@ -41,13 +41,11 @@ export const deleteProject = async (userId: string, projectId: string) => {
         SELECT owner_id FROM projects
         WHERE project_id = ${projectId}`;
 
-  if (!project) throw new Error("Project not found");
+  if (!project) throw appError("Project not found", 404);
 
-  if (project.owner_id !== userId) throw new Error("Unauthorized");
+  if (project.owner_id !== userId) throw appError("Permission denied", 403);
 
-  const x = await sql`
+  await sql`
         DELETE FROM projects
         WHERE project_id = ${projectId}`;
-
-  console.log(x);
 };
