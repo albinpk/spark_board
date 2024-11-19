@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, loginUser } from "../../../../controllers/authController";
+import { loginUser, signupUser } from "../../../../controllers/authController";
 import { validator } from "../../../../middlewares/reqValidator";
 import { good } from "../../../../utils/response";
 import { tryCatch } from "../../../../utils/tryCatch";
@@ -40,11 +40,11 @@ auth.post(
   "/signup",
   validator(signupSchema),
   tryCatch<SignupBody>(async (req, res) => {
-    const createdUser = await createUser(req.body);
+    const data = await signupUser(req.body);
     res.json(
       good({
-        message: "User created successfully",
-        data: createdUser,
+        message: "Signed up successfully",
+        data: data,
       })
     );
   })

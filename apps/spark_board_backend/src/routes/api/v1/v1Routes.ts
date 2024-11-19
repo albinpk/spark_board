@@ -3,6 +3,7 @@ import { authGuard } from "../../../middlewares/authGuard";
 import { good } from "../../../utils/response";
 import { tryCatch } from "../../../utils/tryCatch";
 import { authRoute } from "./auth/authRoutes";
+import { projectsRoute } from "./projects/projectsRoute";
 import { usersRoute } from "./users/usersRoute";
 
 /**
@@ -21,5 +22,8 @@ v1.use("/auth", authRoute);
 
 // /api/v1/users
 v1.use("/users", authGuard, usersRoute);
+
+// /api/v1/projects
+v1.use("/projects", authGuard, projectsRoute);
 
 export { v1 as v1Route };
