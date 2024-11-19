@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: SparkBoard
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: "{{base_url}}"
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      description: Login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: albin@mail.com
+                password:
+                  type: string
+                  example: "12345678"
+            examples:
+              Login:
+                value:
+                  email: albin@mail.com
+                  password: "12345678"
+      responses:
+        "200":
+          description: ""
+      security:
+        - {}
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Signup
+      description: Signup
+      operationId: signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: albin@mail.com
+                name:
+                  type: string
+                  example: Albin
+                password:
+                  type: string
+                  example: "12345678"
+            examples:
+              Signup:
+                value:
+                  email: albin@mail.com
+                  name: Albin
+                  password: "12345678"
+      responses:
+        "200":
+          description: ""
+      security:
+        - {}
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      description: Get all users
+      operationId: getAllUsers
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+  /projects:
+    get:
+      tags:
+        - Projects
+      summary: Get all projects user
+      description: Get all projects user
+      operationId: getAllProjectsUser
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Projects
+      summary: Create project
+      description: Create project
+      operationId: createProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: X
+                name:
+                  type: string
+                  example: Project X
+            examples:
+              Create project:
+                value:
+                  description: X
+                  name: Project X
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: Auth
+  - name: User
+  - name: Projects

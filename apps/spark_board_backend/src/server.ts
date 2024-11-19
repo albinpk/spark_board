@@ -7,7 +7,7 @@ import { logHandler } from "./middlewares/apiLogger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFoundHandler } from "./middlewares/notFound";
 import { apiRoutes } from "./routes/api/apiRoutes";
-import { swaggerRoutes } from "./routes/swagger";
+import { swaggerRoutes } from "./swagger/swagger";
 
 const port = process.env.PORT;
 
