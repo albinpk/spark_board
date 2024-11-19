@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { AppError } from "../models/appError";
 import { bad } from "../utils/response";
 
 /**
@@ -14,6 +15,11 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error(err.stack);
-  res.status(500).json(bad({ message: err.message }));
+  console.error(err.message);
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json(bad({ message: err.message }));
+  } else {
+    console.error(err.stack);
+    res.status(500).json(bad({ message: err.message }));
+  }
 };

@@ -6,8 +6,7 @@ import { UserTable } from "../interfaces/userTable";
  * @returns Array of users
  */
 export const getAllUsers = async () => {
-  const users = await sql<UserTable[]>`
+  return await sql<UserTable[]>`
     SELECT user_id, name, email, created_at
     FROM users`;
-  return users;
 };

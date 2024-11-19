@@ -1,6 +1,6 @@
 import Joi from "joi";
+import { appError } from "../models/appError";
 import { ReqHandler } from "../types/types";
-import { bad } from "../utils/response";
 
 /**
  * Middleware to validate request body.
@@ -10,9 +10,7 @@ import { bad } from "../utils/response";
 export const validator: (schema: Joi.ObjectSchema) => ReqHandler = (schema) => {
   return async (req, res, next) => {
     const { error } = schema.validate(req.body);
-    if (error) {
-      return res.status(400).json(bad({ message: error.message }));
-    }
+    if (error) return next(appError(error.message, 400));
     next();
   };
 };

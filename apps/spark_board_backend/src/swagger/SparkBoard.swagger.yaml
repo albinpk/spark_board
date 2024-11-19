@@ -72,9 +72,9 @@ paths:
     get:
       tags:
         - User
-      summary: Get all users
-      description: Get all users
-      operationId: getAllUsers
+      summary: List users
+      description: List users
+      operationId: listUsers
       responses:
         "200":
           description: ""
@@ -84,9 +84,9 @@ paths:
     get:
       tags:
         - Projects
-      summary: Get all projects user
-      description: Get all projects user
-      operationId: getAllProjectsUser
+      summary: List projects
+      description: List projects
+      operationId: listProjects
       responses:
         "200":
           description: ""
@@ -120,6 +120,25 @@ paths:
           description: ""
       security:
         - bearerAuth: []
+  /projects/{projectId}:
+    delete:
+      tags:
+        - Projects
+      summary: Delete project
+      description: Delete project
+      operationId: deleteProject
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ff4721f2-047b-4c2d-bce9-14a2c0cbb23b
 components:
   securitySchemes:
     bearerAuth:
