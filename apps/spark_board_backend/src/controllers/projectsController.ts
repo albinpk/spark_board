@@ -30,3 +30,24 @@ export const createProject = async (
         RETURNING project_id, name, description, created_at`;
   return project[0];
 };
+
+/**
+ * Delete a a project.
+ * @param userId
+ * @param projectId
+ */
+export const deleteProject = async (userId: string, projectId: string) => {
+  const [project] = await sql<ProjectTable[]>`
+        SELECT owner_id FROM projects
+        WHERE project_id = ${projectId}`;
+
+  if (!project) throw new Error("Project not found");
+
+  if (project.owner_id !== userId) throw new Error("Unauthorized");
+
+  const x = await sql`
+        DELETE FROM projects
+        WHERE project_id = ${projectId}`;
+
+  console.log(x);
+};
