@@ -132,7 +132,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Project X\",\n    \"description\": \"X\"\n}",
+              "raw": "{\n    \"name\": \"Project 1\",\n    \"description\": \"The project\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -170,6 +170,120 @@
                 {
                   "key": "projectId",
                   "value": "ff4721f2-047b-4c2d-bce9-14a2c0cbb23b"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "List tasks",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "23b9f2df-c215-4d79-bceb-d12e007d0bec"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Task 1\",\n    \"description\": \"description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "23b9f2df-c215-4d79-bceb-d12e007d0bec"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Task 2\",\n    \"description\": \"description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks", ":taskId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "e7bc2a89-4f14-4f15-875c-67130faf2b4d"
                 }
               ]
             }

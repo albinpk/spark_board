@@ -106,15 +106,15 @@ paths:
               properties:
                 description:
                   type: string
-                  example: X
+                  example: The project
                 name:
                   type: string
-                  example: Project X
+                  example: Project 1
             examples:
               Create project:
                 value:
-                  description: X
-                  name: Project X
+                  description: The project
+                  name: Project 1
       responses:
         "200":
           description: ""
@@ -139,6 +139,95 @@ paths:
         schema:
           type: string
           example: ff4721f2-047b-4c2d-bce9-14a2c0cbb23b
+  /projects/{projectId}/tasks:
+    get:
+      tags:
+        - Tasks
+      summary: List tasks
+      description: List tasks
+      operationId: listTasks
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Tasks
+      summary: Create task
+      description: Create task
+      operationId: createTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: description
+                name:
+                  type: string
+                  example: Task 1
+            examples:
+              Create task:
+                value:
+                  description: description
+                  name: Task 1
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 23b9f2df-c215-4d79-bceb-d12e007d0bec
+  /projects/{projectId}/tasks/{taskId}:
+    delete:
+      tags:
+        - Tasks
+      summary: Delete task
+      description: Delete task
+      operationId: deleteTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: description
+                name:
+                  type: string
+                  example: Task 2
+            examples:
+              Delete task:
+                value:
+                  description: description
+                  name: Task 2
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: e7bc2a89-4f14-4f15-875c-67130faf2b4d
 components:
   securitySchemes:
     bearerAuth:
@@ -148,3 +237,4 @@ tags:
   - name: Auth
   - name: User
   - name: Projects
+  - name: Tasks
