@@ -13,7 +13,8 @@ interface Jwt {
  * @returns token
  */
 export const createToken = (data: Jwt) => {
-  return jwt.sign(data, process.env.JWT_SECRET!);
+  // TODO: Update expiresIn
+  return jwt.sign(data, process.env.JWT_SECRET!, { expiresIn: "1h" });
 };
 
 /**
