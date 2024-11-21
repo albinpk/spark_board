@@ -13,5 +13,5 @@ export interface CreateProjectBody {
  */
 export const createProjectSchema = Joi.object<CreateProjectBody>({
   name: Joi.string().required(),
-  description: Joi.string(),
+  description: Joi.string().allow(null),
 });
