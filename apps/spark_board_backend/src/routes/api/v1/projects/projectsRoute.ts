@@ -8,6 +8,7 @@ import { validator } from "../../../../middlewares/reqValidator";
 import { good } from "../../../../utils/response";
 import { tryCatch } from "../../../../utils/tryCatch";
 import { CreateProjectBody, createProjectSchema } from "./projectsSchema";
+import { tasksRoutes } from "./tasks/tasksRoute";
 
 /**
  * "/api/v1/projects" route.
@@ -41,5 +42,7 @@ projects.delete(
     res.json(good({ message: "Project deleted successfully" }));
   })
 );
+
+projects.use("/:projectId/tasks", tasksRoutes);
 
 export { projects as projectsRoute };
