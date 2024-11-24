@@ -1,8 +1,10 @@
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../route/router.dart';
-// ignore: unused_import
-import '../../route/routes.dart';
+import '../../services/api/api_client.dart';
+import '../../services/api/api_client_provider.dart';
+import '../../services/storage/shared_preferences_provider.dart';
 import '../common.dart';
 
 extension WidgetRefExt on WidgetRef {
@@ -10,10 +12,10 @@ extension WidgetRefExt on WidgetRef {
   GoRouter get router => read(appRouterProvider);
 
   /// Get shared preferences instance.
-  // SharedPreferences get storage => read(sharedPreferencesProvider).requireValue;
+  SharedPreferences get storage => read(sharedPreferencesProvider).requireValue;
 
   /// Get api client instance.
-  // ApiClient get api => read(apiClientProvider);
+  ApiClient get api => read(apiClientProvider);
 
   /// Redirect to [GoRouter.go] method.
   /// Usage:
@@ -28,7 +30,7 @@ extension ProviderRefExt on Ref {
   GoRouter get router => read(appRouterProvider);
 
   /// Get shared preferences instance.
-  // SharedPreferences get storage => read(sharedPreferencesProvider).requireValue;
+  SharedPreferences get storage => read(sharedPreferencesProvider).requireValue;
 
   /// Get api client instance.
   // ApiClient get api => read(apiClientProvider);

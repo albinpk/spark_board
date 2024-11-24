@@ -10,6 +10,7 @@ class SignupView extends CoraConsumerView<SignupState> {
   @override
   Widget build(BuildContext context, SignupState state) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Signup')),
       body: Center(
         child: TextButton(
           onPressed: () {
