@@ -1,20 +1,15 @@
-import 'package:flutter/material.dart';
+import 'app.dart';
+import 'services/storage/shared_preferences_provider.dart';
+import 'utils/common.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+Future<void> main() async {
+  final container = ProviderContainer();
+  await container.read(sharedPreferencesProvider.future);
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const App(),
+    ),
+  );
 }
