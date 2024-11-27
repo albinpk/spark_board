@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,7 +34,7 @@ extension ProviderRefExt on Ref {
   SharedPreferences get storage => read(sharedPreferencesProvider).requireValue;
 
   /// Get api client instance.
-  // ApiClient get api => read(apiClientProvider);
+  ApiClient get api => read(apiClientProvider);
 
   /// Redirect to [GoRouter.go] method.
   /// Usage:
@@ -41,4 +42,11 @@ extension ProviderRefExt on Ref {
   /// ref.go(const LoginRoute().location);
   /// ```
   void go(String location) => router.go(location);
+
+  /// Get dio cancel token that will be cancelled on dispose.
+  CancelToken cancelToken() {
+    final cancelToken = CancelToken();
+    onDispose(cancelToken.cancel);
+    return cancelToken;
+  }
 }
