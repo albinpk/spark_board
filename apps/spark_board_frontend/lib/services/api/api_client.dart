@@ -3,6 +3,7 @@ import 'package:retrofit/retrofit.dart';
 
 import 'endpoints.dart';
 import 'models/login_response.dart';
+import 'models/projects_response.dart';
 
 part 'api_client.g.dart';
 
@@ -16,5 +17,10 @@ abstract class ApiClient {
   @POST(Endpoints.login)
   Future<HttpResponse<LoginResponse>> login({
     @Body() required Map<String, dynamic> body,
+  });
+
+  @GET(Endpoints.projects)
+  Future<HttpResponse<ProjectsResponse>> projects({
+    @CancelRequest() required CancelToken cancelToken,
   });
 }
