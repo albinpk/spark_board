@@ -1,3 +1,4 @@
+export 'package:flex_color_scheme/flex_color_scheme.dart';
 export 'package:flutter/material.dart';
 export 'package:flutter_cora_riverpod/flutter_cora_riverpod.dart';
 export 'package:form_builder_validators/form_builder_validators.dart';
