@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_cora_riverpod/flutter_cora_riverpod.dart';
-
+import '../../utils/common.dart';
 import 'project_details_state.dart';
 
 class ProjectDetailsView extends CoraConsumerView<ProjectDetailsState> {
@@ -18,7 +16,17 @@ class ProjectDetailsView extends CoraConsumerView<ProjectDetailsState> {
   Widget build(BuildContext context, ProjectDetailsState state) {
     return Scaffold(
       body: Center(
-        child: Text('Project $projectId'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FilledButton(
+              onPressed: () {
+                TasksRoute(projectId: projectId).go(context);
+              },
+              child: const Text('Open Board'),
+            ),
+          ],
+        ),
       ),
     );
   }
