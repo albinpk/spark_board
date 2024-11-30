@@ -23,6 +23,7 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   retrofit: ^4.4.1
   riverpod_annotation: ^2.6.1
+  scroll_animator: ^0.3.0
   shared_preferences: ^2.3.3
 
 dev_dependencies:
