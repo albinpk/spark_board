@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../../utils/common.dart';
 import 'tasks_state.dart';
 
@@ -10,63 +12,68 @@ class TasksView extends CoraConsumerView<TasksState> {
   @override
   Widget build(BuildContext context, TasksState state) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Margin.small,
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final column = Column(
-              children: [
-                Row(
-                  children: [
-                    _buildTitle(context, _Status.todo),
-                    W.small,
-                    _buildTitle(context, _Status.inProgress),
-                    W.small,
-                    _buildTitle(context, _Status.done),
-                  ],
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(bottom: Margin.large * 4),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildTasks(context, _Status.todo),
-                        _buildTasks(context, _Status.inProgress),
-                        _buildTasks(context, _Status.done),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final child = CustomScrollView(
+            slivers: [
+              SliverCrossAxisGroup(
+                slivers: [
+                  _buildGridList(state, _Status.todo),
+                  _buildGridList(state, _Status.inProgress),
+                  _buildGridList(state, _Status.done),
+                ],
+              ),
+            ],
+          );
 
-            const minWidth = 430.0;
-            if (constraints.maxWidth > minWidth) return column;
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                width: minWidth,
-                child: column,
+          const minWidth = _width * 3 + 30;
+          if (constraints.maxWidth > minWidth) return child;
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: minWidth,
+              child: child,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildGridList(TasksState state, _Status status) {
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _Sticky(status),
+        ),
+        SliverLayoutBuilder(
+          builder: (context, constraints) {
+            final maxWidth = constraints.crossAxisExtent;
+            return SliverPadding(
+              padding: const EdgeInsets.all(
+                Margin.medium,
+              ).copyWith(right: maxWidth % _width),
+              sliver: SliverGrid.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: max(1, maxWidth ~/ _width),
+                  mainAxisExtent: _height,
+                  mainAxisSpacing: Margin.medium,
+                  crossAxisSpacing: Margin.medium,
+                ),
+                itemBuilder: (context, index) {
+                  return _buildCard(context, status);
+                },
               ),
             );
           },
         ),
-      ),
+      ],
     );
   }
 
-  Widget _buildTasks(BuildContext context, _Status status) {
-    return Expanded(
-      child: Wrap(
-        children: [
-          for (int i = 0; i < 5; i++) _buildCard(context, status),
-        ],
-      ),
-    );
-  }
+  static const _width = 140.0;
+  static const _height = 80.0;
 
   Widget _buildCard(BuildContext context, _Status status) {
     final border = BorderSide(
@@ -74,11 +81,11 @@ class TasksView extends CoraConsumerView<TasksState> {
       color: status.color,
     );
     return SizedBox(
-      height: 80,
-      width: 140,
+      height: _height,
+      width: _width,
       child: Card(
         elevation: 0,
-        margin: const EdgeInsets.all(Margin.small),
+        margin: EdgeInsets.zero,
         color: context.cs.surfaceContainer,
         shape: Border(
           left: BorderSide(
@@ -140,36 +147,6 @@ class TasksView extends CoraConsumerView<TasksState> {
       ),
     );
   }
-
-  Widget _buildTitle(BuildContext context, _Status status) {
-    return Expanded(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(
-              width: 4,
-              color: status.color,
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            W.medium,
-            Expanded(
-              child: Text(
-                status.name.capitalize,
-                style: context.titleSmall,
-              ),
-            ),
-            _SmallIconButton(
-              onPressed: () {},
-              iconData: Icons.add,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 enum _Status {
@@ -185,7 +162,6 @@ class _SmallIconButton extends StatelessWidget {
   const _SmallIconButton({
     required this.onPressed,
     required this.iconData,
-    super.key,
   });
 
   final VoidCallback onPressed;
@@ -209,4 +185,60 @@ class _SmallIconButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Sticky extends SliverPersistentHeaderDelegate {
+  const _Sticky(this.status);
+
+  final _Status status;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Margin.medium,
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: context.cs.surface,
+          border: Border(
+            left: BorderSide(
+              width: 4,
+              color: status.color,
+            ),
+          ),
+        ),
+        child: Center(
+          child: Row(
+            children: [
+              W.medium,
+              Expanded(
+                child: Text(
+                  status.name.capitalize,
+                  style: context.titleSmall,
+                ),
+              ),
+              _SmallIconButton(
+                onPressed: () {},
+                iconData: Icons.add,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => minExtent;
+
+  @override
+  double get minExtent => 25;
+
+  @override
+  bool shouldRebuild(covariant _Sticky oldDelegate) => false;
 }
