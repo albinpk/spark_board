@@ -11,6 +11,7 @@ class AppRouter extends _$AppRouter {
   GoRouter build() {
     return GoRouter(
       initialLocation: const ProjectsRoute().location,
+      // initialLocation: const TasksRoute(projectId: '23').location,
       debugLogDiagnostics: kDebugMode,
       routes: $appRoutes,
       redirect: _redirect,
