@@ -1,5 +1,3 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
-
 import '../utils/common.dart';
 
 /// Left navigation rail.
@@ -62,7 +60,6 @@ class _Item extends StatefulWidget {
   const _Item({
     required this.item,
     required this.depth,
-    super.key,
   });
 
   final NavItem item;
@@ -73,7 +70,7 @@ class _Item extends StatefulWidget {
 }
 
 class _ItemState extends State<_Item> {
-  bool _expanded = !true;
+  bool _expanded = false;
 
   NavItem get item => widget.item;
 
@@ -84,9 +81,7 @@ class _ItemState extends State<_Item> {
     final radius = BorderRadius.circular(20);
     final child = item.child ??
         ListTile(
-          shape: RoundedRectangleBorder(
-            borderRadius: radius,
-          ),
+          dense: true,
           onTap: _onTap,
           leading: item.icon,
           selected: item.isSelected,
