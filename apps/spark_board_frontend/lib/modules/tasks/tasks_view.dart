@@ -15,6 +15,7 @@ class TasksView extends CoraConsumerView<TasksState> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final child = CustomScrollView(
+            controller: state.scrollController,
             slivers: [
               SliverCrossAxisGroup(
                 slivers: [
