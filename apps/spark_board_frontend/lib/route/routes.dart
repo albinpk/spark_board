@@ -101,7 +101,7 @@ class TasksRoute extends GoRouteData {
 
   @override
   NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
-    return const NoTransitionPage(child: TasksView());
+    return NoTransitionPage(child: TasksView(projectId: projectId));
   }
 }
 
