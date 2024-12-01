@@ -1,10 +1,17 @@
 import 'dart:math';
 
 import '../../utils/common.dart';
+import 'enums/task_status.dart';
 import 'tasks_state.dart';
+import 'widgets/task_card.dart';
 
 class TasksView extends CoraConsumerView<TasksState> {
-  const TasksView({super.key});
+  const TasksView({
+    required this.projectId,
+    super.key,
+  });
+
+  final String projectId;
 
   @override
   TasksState createState() => TasksState();
@@ -19,15 +26,15 @@ class TasksView extends CoraConsumerView<TasksState> {
             slivers: [
               SliverCrossAxisGroup(
                 slivers: [
-                  _buildGridList(state, _Status.todo),
-                  _buildGridList(state, _Status.inProgress),
-                  _buildGridList(state, _Status.done),
+                  _buildGridList(state, TaskStatus.todo),
+                  _buildGridList(state, TaskStatus.inProgress),
+                  _buildGridList(state, TaskStatus.done),
                 ],
               ),
             ],
           );
 
-          const minWidth = _width * 3 + 30;
+          const minWidth = TaskCard.width * 3 + 30;
           if (constraints.maxWidth > minWidth) return child;
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -41,7 +48,7 @@ class TasksView extends CoraConsumerView<TasksState> {
     );
   }
 
-  Widget _buildGridList(TasksState state, _Status status) {
+  Widget _buildGridList(TasksState state, TaskStatus status) {
     return SliverMainAxisGroup(
       slivers: [
         SliverPersistentHeader(
@@ -54,16 +61,17 @@ class TasksView extends CoraConsumerView<TasksState> {
             return SliverPadding(
               padding: const EdgeInsets.all(
                 Margin.medium,
-              ).copyWith(right: maxWidth % _width),
+              ).copyWith(right: maxWidth % TaskCard.width),
               sliver: SliverGrid.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: max(1, maxWidth ~/ _width),
-                  mainAxisExtent: _height,
+                  crossAxisCount: max(1, maxWidth ~/ TaskCard.width),
+                  mainAxisExtent: TaskCard.height,
                   mainAxisSpacing: Margin.medium,
                   crossAxisSpacing: Margin.medium,
                 ),
+                itemCount: state.tasks.length,
                 itemBuilder: (context, index) {
-                  return _buildCard(context, status);
+                  return TaskCard(status: status, task: state.tasks[index]);
                 },
               ),
             );
@@ -72,91 +80,6 @@ class TasksView extends CoraConsumerView<TasksState> {
       ],
     );
   }
-
-  static const _width = 140.0;
-  static const _height = 80.0;
-
-  Widget _buildCard(BuildContext context, _Status status) {
-    final border = BorderSide(
-      width: 0.3,
-      color: status.color,
-    );
-    return SizedBox(
-      height: _height,
-      width: _width,
-      child: Card(
-        elevation: 0,
-        margin: EdgeInsets.zero,
-        color: context.cs.surfaceContainer,
-        shape: Border(
-          left: BorderSide(
-            width: 2,
-            color: status.color,
-          ),
-          top: border,
-          right: border,
-          bottom: border,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(Margin.small),
-          child: Column(
-            children: [
-              Expanded(
-                child: Text(
-                  'Lorem ipsum dolor sit ' * 4,
-                  style: context.bodySmall,
-                  overflow: TextOverflow.fade,
-                ),
-              ),
-              H.small,
-              Row(
-                children: [
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: context.cs.onSurface.withOpacity(0.1),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: Text(
-                        'Albin',
-                        style: context.labelSmall,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: context.cs.onSurface.withOpacity(0.1),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: Text(
-                        status.name.capitalize,
-                        style: context.labelSmall,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-enum _Status {
-  todo(Colors.purple),
-  inProgress(Colors.orange),
-  done(Colors.green);
-
-  const _Status(this.color);
-  final Color color;
 }
 
 class _SmallIconButton extends StatelessWidget {
@@ -191,7 +114,7 @@ class _SmallIconButton extends StatelessWidget {
 class _Sticky extends SliverPersistentHeaderDelegate {
   const _Sticky(this.status);
 
-  final _Status status;
+  final TaskStatus status;
 
   @override
   Widget build(
