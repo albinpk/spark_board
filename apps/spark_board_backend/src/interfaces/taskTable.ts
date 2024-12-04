@@ -7,5 +7,6 @@ export interface TaskTable {
   project_id: string;
   name: string;
   description: string;
+  status: string;
   created_at: Date;
 }

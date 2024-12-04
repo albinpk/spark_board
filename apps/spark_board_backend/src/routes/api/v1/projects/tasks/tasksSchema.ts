@@ -6,6 +6,7 @@ import Joi from "joi";
 export interface CreateTaskBody {
   name: string;
   description?: string;
+  status?: string;
 }
 
 /**
@@ -14,4 +15,5 @@ export interface CreateTaskBody {
 export const createTaskSchema = Joi.object<CreateTaskBody>({
   name: Joi.string().required(),
   description: Joi.string().allow(null),
+  status: Joi.string().allow(null).valid("todo", "inProgress", "done"),
 });

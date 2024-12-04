@@ -27,6 +27,7 @@ export const getAllTasksOfProject = async (
         task_id,
         name,
         description,
+        status,
         created_at
     FROM
         tasks
@@ -56,17 +57,19 @@ export const createTask = async (
 
   const [createdTask] = await sql<TaskTable[]>`
     INSERT INTO
-      tasks (project_id, name, description)
+      tasks (project_id, name, description, status)
     VALUES
       (
         ${projectId},
         ${task.name},
-        ${task.description ?? null}
+        ${task.description ?? null},
+        ${task.status ?? null}
       )
     RETURNING
       task_id,
       name,
       description,
+      status,
       created_at;`;
   return createdTask;
 };
