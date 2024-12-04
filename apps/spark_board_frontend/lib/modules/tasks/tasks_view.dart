@@ -18,42 +18,49 @@ class TasksView extends CoraConsumerView<TasksState> {
 
   @override
   Widget build(BuildContext context, TasksState state) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final child = CustomScrollView(
-            controller: state.scrollController,
-            slivers: [
-              SliverCrossAxisGroup(
-                slivers: [
-                  _buildGridList(state, TaskStatus.todo),
-                  _buildGridList(state, TaskStatus.inProgress),
-                  _buildGridList(state, TaskStatus.done),
-                ],
-              ),
-            ],
-          );
+    return TaskStateProvider(
+      state: state,
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final child = CustomScrollView(
+              controller: state.scrollController,
+              slivers: [
+                SliverCrossAxisGroup(
+                  slivers: [
+                    _buildGridList(state, TaskStatus.todo),
+                    _buildGridList(state, TaskStatus.inProgress),
+                    _buildGridList(state, TaskStatus.done),
+                  ],
+                ),
+              ],
+            );
 
-          const minWidth = TaskCard.width * 3 + 30;
-          if (constraints.maxWidth > minWidth) return child;
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: minWidth,
-              child: child,
-            ),
-          );
-        },
+            const minWidth = TaskCard.width * 3 + 30;
+            if (constraints.maxWidth > minWidth) return child;
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                width: minWidth,
+                child: child,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget _buildGridList(TasksState state, TaskStatus status) {
+    final taskList = state.tasks[status] ?? [];
     return SliverMainAxisGroup(
       slivers: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: _Sticky(status),
+          delegate: _Sticky(
+            status: status,
+            onTapAdd: () => state.onTapAdd(status),
+          ),
         ),
         SliverLayoutBuilder(
           builder: (context, constraints) {
@@ -69,9 +76,12 @@ class TasksView extends CoraConsumerView<TasksState> {
                   mainAxisSpacing: Margin.medium,
                   crossAxisSpacing: Margin.medium,
                 ),
-                itemCount: state.tasks.length,
+                itemCount: taskList.length,
                 itemBuilder: (context, index) {
-                  return TaskCard(status: status, task: state.tasks[index]);
+                  return TaskCard(
+                    key: ValueKey(taskList[index]),
+                    task: taskList[index],
+                  );
                 },
               ),
             );
@@ -112,9 +122,13 @@ class _SmallIconButton extends StatelessWidget {
 }
 
 class _Sticky extends SliverPersistentHeaderDelegate {
-  const _Sticky(this.status);
+  const _Sticky({
+    required this.status,
+    required this.onTapAdd,
+  });
 
   final TaskStatus status;
+  final VoidCallback onTapAdd;
 
   @override
   Widget build(
@@ -147,7 +161,7 @@ class _Sticky extends SliverPersistentHeaderDelegate {
                 ),
               ),
               _SmallIconButton(
-                onPressed: () {},
+                onPressed: onTapAdd,
                 iconData: Icons.add,
               ),
             ],
