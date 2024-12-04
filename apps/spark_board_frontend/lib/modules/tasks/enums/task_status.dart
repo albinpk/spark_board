@@ -8,5 +8,9 @@ enum TaskStatus {
 
   const TaskStatus(this.color);
 
+  /// Converts string to [TaskStatus] enum.
+  factory TaskStatus.fromName(String name) =>
+      TaskStatus.values.firstWhere((e) => e.name == name);
+
   final Color color;
 }

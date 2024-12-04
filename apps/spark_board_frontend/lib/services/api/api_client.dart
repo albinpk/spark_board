@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'endpoints.dart';
+import 'models/create_task_response.dart';
 import 'models/login_response.dart';
 import 'models/projects_response.dart';
 import 'models/tasks_response.dart';
@@ -29,5 +30,11 @@ abstract class ApiClient {
   Future<HttpResponse<TasksResponse>> tasks({
     @Path('projectId') required String projectId,
     @CancelRequest() required CancelToken cancelToken,
+  });
+
+  @POST(Endpoints.tasks)
+  Future<HttpResponse<CreateTaskResponse>> createTask({
+    @Path('projectId') required String projectId,
+    @Body() required Map<String, dynamic> body,
   });
 }
