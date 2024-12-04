@@ -1,5 +1,6 @@
 {
   "dart.flutterSdkPath": ".fvm/versions/3.24.3",
+  "debug.toolBarLocation": "floating",
   "editor.codeActionsOnSave": {
     "source.fixAll": "always",
     "source.organizeImports": "always"
