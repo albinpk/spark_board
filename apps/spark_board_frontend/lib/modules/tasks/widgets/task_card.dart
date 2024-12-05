@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../utils/common.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
+import 'task_menu.dart';
 
 /// A widget that displays a task card in the tasks view.
 class TaskCard extends StatefulWidget {
@@ -23,11 +24,16 @@ class TaskCard extends StatefulWidget {
 class _TaskCardState extends State<TaskCard> {
   late final _inputFocusNode = FocusNode()..addListener(() => setState(() {}));
 
+  final _overlayController = OverlayPortalController();
+  final _layerLink = LayerLink();
+
   @override
   void dispose() {
     _inputFocusNode.dispose();
     super.dispose();
   }
+
+  bool _showMoreButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,75 +50,142 @@ class _TaskCardState extends State<TaskCard> {
     return SizedBox(
       height: TaskCard.height,
       width: TaskCard.width,
-      child: Focus(
-        onKeyEvent: (node, event) {
-          if (task is TaskNew &&
-              event.logicalKey == LogicalKeyboardKey.escape) {
-            TasksState.of(context).onRemoveNewCard(task.status);
-            return KeyEventResult.handled;
-          }
-          return KeyEventResult.ignored;
+      child: MouseRegion(
+        onEnter: (event) {
+          setState(() => _showMoreButton = true);
         },
-        child: Card(
-          elevation: 0,
-          margin: EdgeInsets.zero,
-          color: context.cs.surfaceContainer,
-          shape: Border(
-            left: border,
-            top: focused ? border : thinBorder,
-            right: focused ? border : thinBorder,
-            bottom: focused ? border : thinBorder,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(Margin.small),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        onExit: (event) {
+          setState(() => _showMoreButton = false);
+        },
+        child: Focus(
+          onKeyEvent: (node, event) {
+            if (task is TaskNew &&
+                event.logicalKey == LogicalKeyboardKey.escape) {
+              TasksState.of(context).onRemoveNewCard(task.status);
+              return KeyEventResult.handled;
+            }
+            return KeyEventResult.ignored;
+          },
+          child: Card(
+            elevation: 0,
+            margin: EdgeInsets.zero,
+            color: context.cs.surfaceContainer,
+            shape: Border(
+              left: border,
+              top: focused ? border : thinBorder,
+              right: focused ? border : thinBorder,
+              bottom: focused ? border : thinBorder,
+            ),
+            child: Stack(
               children: [
-                Expanded(
-                  child: switch (task) {
-                    TaskModel() => Text(
-                        task.name,
-                        style: context.bodySmall,
-                        overflow: TextOverflow.fade,
+                Padding(
+                  padding: const EdgeInsets.all(Margin.small),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: switch (task) {
+                          TaskModel() => Text(
+                              task.name,
+                              style: context.bodySmall,
+                              overflow: TextOverflow.fade,
+                            ),
+                          TaskNew() => _buildInputField(context),
+                        },
                       ),
-                    TaskNew() => _buildInputField(context),
-                  },
+                      H.small,
+                      Row(
+                        children: [
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: context.cs.onSurface.withOpacity(0.1),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                              ),
+                              child: Text(
+                                'Albin',
+                                style: context.labelSmall,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: context.cs.onSurface.withOpacity(0.1),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                              ),
+                              child: Text(
+                                task.status.name.capitalize,
+                                style: context.labelSmall,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                H.small,
-                Row(
-                  children: [
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: context.cs.onSurface.withOpacity(0.1),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: Text(
-                          'Albin',
-                          style: context.labelSmall,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: context.cs.onSurface.withOpacity(0.1),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: Text(
-                          task.status.name.capitalize,
-                          style: context.labelSmall,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+
+                // more button
+                if (task is TaskModel &&
+                    (_showMoreButton || _overlayController.isShowing))
+                  _buildMoreButton(task, thinBorder),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMoreButton(TaskModel task, BorderSide thinBorder) {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: thinBorder.color,
+            width: thinBorder.width,
+          ),
+        ),
+        child: InkWell(
+          onTap: _overlayController.show,
+          child: CompositedTransformTarget(
+            link: _layerLink,
+            child: OverlayPortal(
+              controller: _overlayController,
+              overlayChildBuilder: (context) {
+                return CompositedTransformFollower(
+                  link: _layerLink,
+                  targetAnchor: Alignment.bottomLeft,
+                  showWhenUnlinked: false,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: TapRegion(
+                      onTapOutside: (event) {
+                        _overlayController.hide();
+                      },
+                      child: TaskMenu(task: task),
+                    ),
+                  ),
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(Margin.xxSmall),
+                child: Icon(
+                  Icons.more_vert,
+                  size: 12,
+                ),
+              ),
             ),
           ),
         ),

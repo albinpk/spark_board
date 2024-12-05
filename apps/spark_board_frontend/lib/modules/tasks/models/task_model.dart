@@ -11,6 +11,7 @@ sealed class TaskBase {
 
 class TaskModel extends TaskBase {
   const TaskModel({
+    required this.taskId,
     required this.name,
     required this.description,
     required super.status,
@@ -19,6 +20,7 @@ class TaskModel extends TaskBase {
 
   factory TaskModel.fromData(TaskResponse task) {
     return TaskModel(
+      taskId: task.taskId,
       name: task.name,
       description: task.description,
       status: TaskStatus.fromName(task.status),
@@ -26,6 +28,7 @@ class TaskModel extends TaskBase {
     );
   }
 
+  final String taskId;
   final String name;
   final String? description;
   final DateTime createdAt;
