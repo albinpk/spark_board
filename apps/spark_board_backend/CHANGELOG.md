@@ -1,3 +1,10 @@
+## 0.0.3
+
+ - **FIX**: enable cors.
+ - **FEAT**: add `status` column in task table & apis.
+ - **DOCS**: update postman collection and swagger docs (#18).
+ - **DOCS**: add readme files.
+
 ## 0.0.2
 
  - **REFACTOR**: global error handing (#7).

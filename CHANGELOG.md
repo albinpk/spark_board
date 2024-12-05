@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`spark_board_backend` - `v0.0.3`](#spark_board_backend---v003)
+ - [`spark_board_frontend` - `v0.0.1`](#spark_board_frontend---v001)
+
+---
+
+#### `spark_board_backend` - `v0.0.3`
+
+ - **FIX**: enable cors.
+ - **FEAT**: add `status` column in task table & apis.
+ - **DOCS**: update postman collection and swagger docs (#18).
+ - **DOCS**: add readme files.
+
+#### `spark_board_frontend` - `v0.0.1`
+
+ - **REFACTOR**: smooth scrolling on mouse wheel (#15).
+ - **REFACTOR**: use slivers for tasks view (#14).
+ - **FEAT**: delete task (#17).
+ - **FEAT**: create new task.
+ - **FEAT**: tasks get api integration.
+ - **FEAT**: collapsible sidebar (#13).
+ - **FEAT**: base ui for task view (#12).
+ - **FEAT**: create project bar with project switcher (#11).
+ - **FEAT**: shell route base.
+ - **FEAT**: login ui and api integration - base (#9).
+ - **DOCS**: add readme files.
+
+
 ## 2024-11-22
 
 ### Changes
