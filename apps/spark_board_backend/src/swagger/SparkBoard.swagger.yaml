@@ -168,12 +168,16 @@ paths:
                   example: description
                 name:
                   type: string
-                  example: Task 1
+                  example: Task view with status update and assignee update option
+                status:
+                  type: string
+                  example: done
             examples:
               Create task:
                 value:
                   description: description
-                  name: Task 1
+                  name: Task view with status update and assignee update option
+                  status: done
       responses:
         "200":
           description: ""
@@ -193,23 +197,6 @@ paths:
       summary: Delete task
       description: Delete task
       operationId: deleteTask
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                description:
-                  type: string
-                  example: description
-                name:
-                  type: string
-                  example: Task 2
-            examples:
-              Delete task:
-                value:
-                  description: description
-                  name: Task 2
       responses:
         "200":
           description: ""
@@ -227,7 +214,7 @@ paths:
         required: true
         schema:
           type: string
-          example: e7bc2a89-4f14-4f15-875c-67130faf2b4d
+          example: 30d6223e-74a4-465e-8c30-f95b98fe8771
 components:
   securitySchemes:
     bearerAuth:
