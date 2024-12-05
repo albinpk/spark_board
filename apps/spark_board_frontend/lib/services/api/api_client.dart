@@ -37,4 +37,10 @@ abstract class ApiClient {
     @Path('projectId') required String projectId,
     @Body() required Map<String, dynamic> body,
   });
+
+  @DELETE(Endpoints.task)
+  Future<HttpResponse<void>> deleteTask({
+    @Path('projectId') required String projectId,
+    @Path('taskId') required String taskId,
+  });
 }
