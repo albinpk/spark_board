@@ -3,11 +3,17 @@ import {
   createTask,
   deleteTask,
   getAllTasksOfProject,
+  updateTask,
 } from "../../../../../controllers/tasksController";
 import { validator } from "../../../../../middlewares/reqValidator";
 import { good } from "../../../../../utils/response";
 import { tryCatch } from "../../../../../utils/tryCatch";
-import { CreateTaskBody, createTaskSchema } from "./tasksSchema";
+import {
+  CreateTaskBody,
+  createTaskSchema,
+  UpdateTaskBody,
+  updateTaskSchema,
+} from "./tasksSchema";
 
 /**
  * "/api/v1/projects/:projectId/tasks" route.
@@ -32,6 +38,20 @@ tasks.post(
     const projectId = req.params["projectId"];
     const project = await createTask(req.userId, projectId, req.body);
     res.json(good({ data: project }));
+  })
+);
+
+// api/v1/projects/:projectId/tasks/:taskId
+tasks.patch(
+  "/:taskId",
+  validator(updateTaskSchema),
+  tryCatch<UpdateTaskBody>(async (req, res) => {
+    const updatedTask = await updateTask(
+      req.userId,
+      req.params.taskId,
+      req.body
+    );
+    res.json(good({ message: "Task updated successfully", data: updatedTask }));
   })
 );
 

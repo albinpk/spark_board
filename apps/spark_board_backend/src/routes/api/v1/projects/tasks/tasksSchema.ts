@@ -17,3 +17,24 @@ export const createTaskSchema = Joi.object<CreateTaskBody>({
   description: Joi.string().allow(null),
   status: Joi.string().allow(null).valid("todo", "inProgress", "done"),
 });
+
+/**
+ * Request body for updating a task.
+ */
+export interface UpdateTaskBody {
+  name?: string;
+  description?: string;
+  status?: string;
+}
+
+/**
+ * Joi schema for update task request body.
+ */
+export const updateTaskSchema = Joi.object<UpdateTaskBody>()
+  .min(1)
+  .required()
+  .keys({
+    name: Joi.string().allow(null),
+    description: Joi.string().allow(null),
+    status: Joi.string().allow(null).valid("todo", "inProgress", "done"),
+  });
