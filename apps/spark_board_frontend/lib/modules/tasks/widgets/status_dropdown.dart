@@ -26,7 +26,7 @@ class StatusDropdown extends StatelessWidget {
             children: [
               for (final status in TaskStatus.values)
                 DropItem(
-                  label: status.name.capitalize,
+                  label: status.label,
                   onTap: () {
                     controller.hide();
                     TasksState.of(context).changeStatus(task, status);
@@ -45,7 +45,7 @@ class StatusDropdown extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    task.status.name.capitalize,
+                    task.status.label,
                     style: context.labelSmall,
                   ),
                   Icon(
