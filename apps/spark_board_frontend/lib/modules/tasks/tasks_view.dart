@@ -156,7 +156,7 @@ class _Sticky extends SliverPersistentHeaderDelegate {
               W.medium,
               Expanded(
                 child: Text(
-                  status.name.capitalize,
+                  status.label,
                   style: context.titleSmall,
                 ),
               ),
