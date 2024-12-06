@@ -86,6 +86,24 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
     });
   }
 
+  Future<void> changeStatus(TaskModel task, TaskStatus status) async {
+    if (task.status == status) return;
+
+    final (err, data) = await ref.api.updateTask(
+      projectId: widget.projectId,
+      taskId: task.taskId,
+      body: {
+        'status': status.name,
+      },
+    ).go();
+    if (err != null) return AppSnackbar.error(err);
+
+    setState(() {
+      tasks[task.status]!.remove(task);
+      tasks[status]!.add(TaskModel.fromData(data!.data));
+    });
+  }
+
   static TasksState of(BuildContext context) {
     return TaskStateProvider.of(context).state;
   }

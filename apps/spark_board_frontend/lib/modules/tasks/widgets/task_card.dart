@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../utils/common.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
+import 'status_dropdown.dart';
 import 'task_menu.dart';
 
 /// A widget that displays a task card in the tasks view.
@@ -94,43 +95,31 @@ class _TaskCardState extends State<TaskCard> {
                         },
                       ),
                       H.small,
-                      Row(
-                        children: [
-                          DecoratedBox(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: context.cs.onSurface.withOpacity(0.1),
+
+                      // assignee and status
+                      if (task is TaskModel)
+                        Row(
+                          children: [
+                            DecoratedBox(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: context.cs.onSurface.withOpacity(0.1),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 2,
+                                ),
+                                child: Text(
+                                  'Albin',
+                                  style: context.labelSmall,
+                                ),
                               ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 2,
-                              ),
-                              child: Text(
-                                'Albin',
-                                style: context.labelSmall,
-                              ),
-                            ),
-                          ),
-                          const Spacer(),
-                          DecoratedBox(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: context.cs.onSurface.withOpacity(0.1),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 2,
-                              ),
-                              child: Text(
-                                task.status.name.capitalize,
-                                style: context.labelSmall,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                            const Spacer(),
+                            StatusDropdown(task: task),
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -173,6 +162,7 @@ class _TaskCardState extends State<TaskCard> {
                     child: TapRegion(
                       onTapOutside: (event) {
                         _overlayController.hide();
+                        setState(() {});
                       },
                       child: TaskMenu(task: task),
                     ),

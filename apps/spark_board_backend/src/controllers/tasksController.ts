@@ -2,7 +2,10 @@ import sql from "../db";
 import { ProjectTable } from "../interfaces/projectTable";
 import { TaskTable } from "../interfaces/taskTable";
 import { appError } from "../models/appError";
-import { CreateTaskBody } from "../routes/api/v1/projects/tasks/tasksSchema";
+import {
+  CreateTaskBody,
+  UpdateTaskBody,
+} from "../routes/api/v1/projects/tasks/tasksSchema";
 
 /**
  * Get all tasks of a project.
@@ -72,6 +75,52 @@ export const createTask = async (
       status,
       created_at;`;
   return createdTask;
+};
+
+/**
+ * Update a task.
+ * @param userId
+ * @param taskId
+ * @param body update task body
+ * @returns updated task
+ */
+export const updateTask = async (
+  userId: string,
+  taskId: string,
+  body: UpdateTaskBody
+) => {
+  const [task] = await sql`
+    SELECT
+      p.owner_id
+    FROM
+      tasks t
+      JOIN projects p ON t.project_id = p.project_id
+    WHERE
+      t.task_id = ${taskId}`;
+
+  if (!task) throw appError("Task not found", 404);
+
+  if (task.owner_id !== userId) throw appError("Permission denied", 403);
+
+  const [updatedTask] = await sql<TaskTable[]>`
+    UPDATE tasks
+    SET
+      name = COALESCE(NULLIF(${body.name ?? null}, NULL), name),
+      description = COALESCE(NULLIF(${
+        body.description ?? null
+      }, NULL), description),
+      status = COALESCE(NULLIF(${
+        body.status ?? null
+      }, NULL)::task_status, status)
+    WHERE
+      task_id = ${taskId}
+    RETURNING
+      task_id,
+      name,
+      description,
+      status,
+      created_at;`;
+  return updatedTask;
 };
 
 /**
