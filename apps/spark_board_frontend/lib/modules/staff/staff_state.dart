@@ -33,4 +33,18 @@ class StaffState extends CoraConsumerState<StaffView> with ObsStateMixin {
     staffs[staffs.indexOf(staff)] = data!.data;
     staffs.refresh();
   }
+
+  Future<void> deleteStaff(StaffResponse staff) async {
+    final (err, data) = await ref.api
+        .deleteStaff(
+          staffId: staff.staffId,
+        )
+        .go();
+
+    if (err != null) return AppSnackbar.error(err);
+
+    staffs
+      ..remove(staff)
+      ..refresh();
+  }
 }
