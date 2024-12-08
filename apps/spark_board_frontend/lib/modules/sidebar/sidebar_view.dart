@@ -69,11 +69,11 @@ class SidebarView extends CoraConsumerView<SidebarState> {
                     ),
                     _buildTile(
                       state: state,
-                      selected: isStartsWith('user'),
+                      selected: isStartsWith('staff'),
                       iconData: Icons.people_alt_outlined,
-                      label: 'Users',
+                      label: 'Staff',
                       onTap: () {
-                        UsersRoute(projectId: projectId).go(context);
+                        StaffRoute(projectId: projectId).go(context);
                       },
                     ),
                   ],
