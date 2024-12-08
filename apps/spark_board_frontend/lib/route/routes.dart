@@ -5,8 +5,8 @@ import '../modules/login/login_view.dart';
 import '../modules/project_details/project_details_view.dart';
 import '../modules/projects/projects_view.dart';
 import '../modules/signup/signup_view.dart';
+import '../modules/staff/staff_view.dart';
 import '../modules/tasks/tasks_view.dart';
-import '../modules/users/users_view.dart';
 import '../utils/common.dart';
 
 part 'routes.g.dart';
@@ -26,9 +26,9 @@ part 'routes.g.dart';
 /// projects/:id/tasks       => tasks list
 /// projects/:id/tasks/:id   => task details
 ///
-/// Users
-/// projects/:id/users       => users list
-/// projects/:id/users/:id   => user details
+/// Staff
+/// projects/:id/staff       => staff list
+/// projects/:id/staff/:id   => staff details
 
 @TypedGoRoute<LoginRoute>(path: '/login')
 class LoginRoute extends GoRouteData {
@@ -55,7 +55,7 @@ class SignupRoute extends GoRouteData {
         TypedShellRoute<ProjectShellRoute>(
           routes: [
             TypedGoRoute<TasksRoute>(path: 'tasks'),
-            TypedGoRoute<UsersRoute>(path: 'users'),
+            TypedGoRoute<StaffRoute>(path: 'staff'),
           ],
         ),
       ],
@@ -105,8 +105,8 @@ class TasksRoute extends GoRouteData {
   }
 }
 
-class UsersRoute extends GoRouteData {
-  const UsersRoute({
+class StaffRoute extends GoRouteData {
+  const StaffRoute({
     required this.projectId,
   });
 
@@ -114,6 +114,6 @@ class UsersRoute extends GoRouteData {
 
   @override
   NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
-    return const NoTransitionPage(child: UsersView());
+    return const NoTransitionPage(child: StaffView());
   }
 }

@@ -9,6 +9,7 @@ export 'package:riverpod_annotation/riverpod_annotation.dart';
 export '../route/routes.dart';
 export '../types.dart';
 export '../widgets/widgets.dart';
+export 'app_snackbar.dart';
 export 'extensions/extensions.dart';
 export 'logger.dart';
 export 'margin.dart';
