@@ -1,7 +1,6 @@
 import 'package:scroll_animator/scroll_animator.dart';
 
 import '../../services/api/models/tasks_response.dart';
-import '../../utils/app_snackbar.dart';
 import '../../utils/common.dart';
 import 'enums/task_status.dart';
 import 'models/task_model.dart';
