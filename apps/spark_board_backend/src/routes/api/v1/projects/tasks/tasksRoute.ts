@@ -1,14 +1,18 @@
 import { Router } from "express";
 import {
+  assignTask,
   createTask,
   deleteTask,
   getAllTasksOfProject,
+  unassignTask,
   updateTask,
 } from "../../../../../controllers/tasksController";
 import { validator } from "../../../../../middlewares/reqValidator";
 import { good } from "../../../../../utils/response";
 import { tryCatch } from "../../../../../utils/tryCatch";
 import {
+  AssignTaskBody,
+  assignTaskSchema,
   CreateTaskBody,
   createTaskSchema,
   UpdateTaskBody,
@@ -61,6 +65,25 @@ tasks.delete(
   tryCatch(async (req, res) => {
     await deleteTask(req.userId, req.params.taskId);
     res.json(good({ message: "Task deleted successfully" }));
+  })
+);
+
+// api/v1/projects/:projectId/tasks/:taskId/assign
+tasks.post(
+  "/:taskId/assign",
+  validator(assignTaskSchema),
+  tryCatch<AssignTaskBody>(async (req, res) => {
+    await assignTask(req.userId, req.params.taskId, req.body);
+    res.json(good({ message: "Task assigned successfully" }));
+  })
+);
+
+// api/v1/projects/:projectId/tasks/:taskId/assign
+tasks.delete(
+  "/:taskId/assign",
+  tryCatch(async (req, res) => {
+    await unassignTask(req.userId, req.params.taskId);
+    res.json(good({ message: "Task unassigned successfully" }));
   })
 );
 

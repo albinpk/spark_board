@@ -38,3 +38,17 @@ export const updateTaskSchema = Joi.object<UpdateTaskBody>()
     description: Joi.string().allow(null),
     status: Joi.string().allow(null).valid("todo", "inProgress", "done"),
   });
+
+/**
+ * Request body for assigning a task.
+ */
+export interface AssignTaskBody {
+  staffId: string;
+}
+
+/**
+ * Joi schema for assign task request body.
+ */
+export const assignTaskSchema = Joi.object<AssignTaskBody>({
+  staffId: Joi.string().uuid().required(),
+});

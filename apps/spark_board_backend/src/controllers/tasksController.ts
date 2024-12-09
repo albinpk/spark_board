@@ -3,6 +3,7 @@ import { ProjectTable } from "../interfaces/projectTable";
 import { TaskTable } from "../interfaces/taskTable";
 import { appError } from "../models/appError";
 import {
+  AssignTaskBody,
   CreateTaskBody,
   UpdateTaskBody,
 } from "../routes/api/v1/projects/tasks/tasksSchema";
@@ -159,4 +160,64 @@ export const deleteTask = async (userId: string, taskId: string) => {
   await sql`
     DELETE FROM tasks
     WHERE task_id = ${taskId}`;
+};
+
+/**
+ * Assign a task to a staff.
+ * @param userId
+ * @param taskId
+ * @param body assign task body
+ */
+export const assignTask = async (
+  userId: string,
+  taskId: string,
+  body: AssignTaskBody
+) => {
+  const [task] = await sql`
+    SELECT
+      p.owner_id
+    FROM
+      tasks t
+      JOIN projects p ON t.project_id = p.project_id
+    WHERE
+      t.task_id = ${taskId}`;
+
+  if (!task) throw appError("Task not found", 404);
+
+  if (task.owner_id !== userId) throw appError("Permission denied", 403);
+
+  await sql`
+    INSERT INTO
+      task_assignee (task_id, staff_id)
+    VALUES
+      (${taskId}, ${body.staffId})
+    ON CONFLICT (task_id) DO
+    UPDATE
+    SET
+      staff_id = excluded.staff_id`;
+};
+
+/**
+ * Unassign a task from a staff.
+ * @param userId
+ * @param taskId
+ */
+export const unassignTask = async (userId: string, taskId: string) => {
+  const [task] = await sql`
+    SELECT
+      p.owner_id
+    FROM
+      tasks t
+      JOIN projects p ON t.project_id = p.project_id
+    WHERE
+      t.task_id = ${taskId}`;
+
+  if (!task) throw appError("Task not found", 404);
+
+  if (task.owner_id !== userId) throw appError("Permission denied", 403);
+
+  await sql`
+    DELETE FROM task_assignee
+    WHERE
+      task_id = ${taskId}`;
 };
