@@ -27,15 +27,28 @@ export const getAllTasksOfProject = async (
 
   return await sql<TaskTable[]>`
     SELECT
-        task_id,
-        name,
-        description,
-        status,
-        created_at
+      t.task_id,
+      t.name,
+      t.description,
+      t.status,
+      t.created_at,
+      CASE
+        WHEN s.staff_id IS NOT NULL THEN json_build_object(
+          'staff_id',
+          s.staff_id,
+          'name',
+          s.name,
+          'email',
+          s.email
+        )
+        ELSE NULL
+      END assignee
     FROM
-        tasks
+      tasks t
+      LEFT JOIN task_assignee a ON a.task_id = t.task_id
+      LEFT JOIN staff s ON s.staff_id = a.staff_id
     WHERE
-        project_id = ${projectId}`;
+      t.project_id = ${projectId}`;
 };
 
 /**
