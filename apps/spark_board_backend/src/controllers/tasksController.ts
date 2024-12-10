@@ -1,4 +1,4 @@
-import sql from "../db";
+import sql from "../db/db";
 import { ProjectTable } from "../interfaces/projectTable";
 import { TaskTable } from "../interfaces/taskTable";
 import { appError } from "../models/appError";

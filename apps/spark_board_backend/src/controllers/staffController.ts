@@ -1,4 +1,4 @@
-import sql from "../db";
+import sql from "../db/db";
 import { StaffTable } from "../interfaces/staffTable";
 import { appError } from "../models/appError";
 import {
