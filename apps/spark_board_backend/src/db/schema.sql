@@ -323,7 +323,7 @@ ALTER TABLE ONLY public.projects
 --
 
 ALTER TABLE ONLY public.task_assignee
-    ADD CONSTRAINT task_staff_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staff(staff_id);
+    ADD CONSTRAINT task_staff_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES public.staff(staff_id) ON DELETE CASCADE;
 
 
 --
@@ -331,7 +331,7 @@ ALTER TABLE ONLY public.task_assignee
 --
 
 ALTER TABLE ONLY public.task_assignee
-    ADD CONSTRAINT task_staff_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
+    ADD CONSTRAINT task_staff_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(task_id) ON DELETE CASCADE;
 
 
 --
