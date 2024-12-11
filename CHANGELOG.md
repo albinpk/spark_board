@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`spark_board_backend` - `v0.0.4`](#spark_board_backend---v004)
+ - [`spark_board_frontend` - `v0.0.2`](#spark_board_frontend---v002)
+
+---
+
+#### `spark_board_backend` - `v0.0.4`
+
+ - **REFACTOR**: move `db.ts` to `db` folder.
+ - **FIX**: task deletion (#24).
+ - **FEAT**: update patch api response for task.
+ - **FEAT**: api for assign/unassign task.
+ - **FEAT**: add assignee field in tasks get api.
+ - **FEAT**: CRUD api for `staff` (#21).
+ - **FEAT**: update task status (#19).
+ - **DOCS**: update db schema.
+ - **DOCS**: update swagger docs.
+ - **DOCS**: update postman collection.
+ - **DOCS**: create `commands.md` for keep useful commands.
+
+#### `spark_board_frontend` - `v0.0.2`
+
+ - **FIX**: add label to `TaskStatus` enum (#20).
+ - **FEAT**: assign staff to a task.
+ - **FEAT**: staff list, update & delete (#22).
+ - **FEAT**: update task status (#19).
+
+
 ## 2024-12-05
 
 ### Changes

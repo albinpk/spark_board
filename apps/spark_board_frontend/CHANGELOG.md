@@ -1,3 +1,10 @@
+## 0.0.2
+
+ - **FIX**: add label to `TaskStatus` enum (#20).
+ - **FEAT**: assign staff to a task.
+ - **FEAT**: staff list, update & delete (#22).
+ - **FEAT**: update task status (#19).
+
 ## 0.0.1
 
  - **REFACTOR**: smooth scrolling on mouse wheel (#15).

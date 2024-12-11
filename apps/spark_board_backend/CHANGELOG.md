@@ -1,3 +1,17 @@
+## 0.0.4
+
+ - **REFACTOR**: move `db.ts` to `db` folder.
+ - **FIX**: task deletion (#24).
+ - **FEAT**: update patch api response for task.
+ - **FEAT**: api for assign/unassign task.
+ - **FEAT**: add assignee field in tasks get api.
+ - **FEAT**: CRUD api for `staff` (#21).
+ - **FEAT**: update task status (#19).
+ - **DOCS**: update db schema.
+ - **DOCS**: update swagger docs.
+ - **DOCS**: update postman collection.
+ - **DOCS**: create `commands.md` for keep useful commands.
+
 ## 0.0.3
 
  - **FIX**: enable cors.
