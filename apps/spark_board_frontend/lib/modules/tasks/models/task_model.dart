@@ -16,6 +16,7 @@ class TaskModel extends TaskBase {
     required this.description,
     required super.status,
     required this.createdAt,
+    required this.assignee,
   });
 
   factory TaskModel.fromData(TaskResponse task) {
@@ -25,6 +26,7 @@ class TaskModel extends TaskBase {
       description: task.description,
       status: TaskStatus.fromName(task.status),
       createdAt: DateTime.parse(task.createdAt),
+      assignee: task.assignee,
     );
   }
 
@@ -32,6 +34,7 @@ class TaskModel extends TaskBase {
   final String name;
   final String? description;
   final DateTime createdAt;
+  final Assignee? assignee;
 }
 
 class TaskNew extends TaskBase {
