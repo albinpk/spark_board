@@ -129,10 +129,10 @@ CREATE TABLE public.tasks (
 ALTER TABLE public.tasks OWNER TO postgres;
 
 --
--- Name: task_data; Type: VIEW; Schema: public; Owner: postgres
+-- Name: task_assignee_view; Type: VIEW; Schema: public; Owner: postgres
 --
 
-CREATE VIEW public.task_data AS
+CREATE VIEW public.task_assignee_view AS
  SELECT t.task_id,
     t.name,
     t.description,
@@ -147,7 +147,7 @@ CREATE VIEW public.task_data AS
      LEFT JOIN public.staff s ON ((s.staff_id = a.staff_id)));
 
 
-ALTER VIEW public.task_data OWNER TO postgres;
+ALTER VIEW public.task_assignee_view OWNER TO postgres;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
