@@ -116,7 +116,7 @@ export const updateTask = async (
 
   if (task.owner_id !== userId) throw appError("Permission denied", 403);
 
-  const [updatedTask] = await sql<TaskTable[]>`
+  await sql`
     UPDATE tasks
     SET
       name = COALESCE(NULLIF(${body.name ?? null}, NULL), name),
@@ -127,13 +127,15 @@ export const updateTask = async (
         body.status ?? null
       }, NULL)::task_status, status)
     WHERE
-      task_id = ${taskId}
-    RETURNING
-      task_id,
-      name,
-      description,
-      status,
-      created_at;`;
+      task_id = ${taskId}`;
+
+  const [updatedTask] = await sql`
+    SELECT
+      *
+    FROM
+      task_assignee_view
+    WHERE
+      task_id = ${taskId}`;
   return updatedTask;
 };
 
@@ -195,6 +197,15 @@ export const assignTask = async (
     UPDATE
     SET
       staff_id = excluded.staff_id`;
+
+  const [updatedTask] = await sql`
+    SELECT
+      *
+    FROM
+      task_assignee_view
+    WHERE
+      task_id = ${taskId}`;
+  return updatedTask;
 };
 
 /**
@@ -220,4 +231,13 @@ export const unassignTask = async (userId: string, taskId: string) => {
     DELETE FROM task_assignee
     WHERE
       task_id = ${taskId}`;
+
+  const [updatedTask] = await sql`
+    SELECT
+      *
+    FROM
+      task_assignee_view
+    WHERE
+      task_id = ${taskId}`;
+  return updatedTask;
 };

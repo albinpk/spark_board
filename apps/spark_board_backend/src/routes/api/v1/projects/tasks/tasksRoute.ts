@@ -73,8 +73,8 @@ tasks.post(
   "/:taskId/assign",
   validator(assignTaskSchema),
   tryCatch<AssignTaskBody>(async (req, res) => {
-    await assignTask(req.userId, req.params.taskId, req.body);
-    res.json(good({ message: "Task assigned successfully" }));
+    const task = await assignTask(req.userId, req.params.taskId, req.body);
+    res.json(good({ message: "Task assigned successfully", data: task }));
   })
 );
 
@@ -82,8 +82,8 @@ tasks.post(
 tasks.delete(
   "/:taskId/assign",
   tryCatch(async (req, res) => {
-    await unassignTask(req.userId, req.params.taskId);
-    res.json(good({ message: "Task unassigned successfully" }));
+    const task = await unassignTask(req.userId, req.params.taskId);
+    res.json(good({ message: "Task unassigned successfully", data: task }));
   })
 );
 
