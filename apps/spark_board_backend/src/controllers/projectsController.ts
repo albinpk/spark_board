@@ -1,4 +1,4 @@
-import sql from "../db";
+import sql from "../db/db";
 import { ProjectTable } from "../interfaces/projectTable";
 import { appError } from "../models/appError";
 import { CreateProjectBody } from "../routes/api/v1/projects/projectsSchema";

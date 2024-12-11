@@ -36,24 +36,32 @@ class StatusDropdown extends StatelessWidget {
           );
         },
         childBuilder: (context, controller) {
-          return InkWell(
-            onTap: controller.show,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 2,
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    task.status.label,
-                    style: context.labelSmall,
-                  ),
-                  Icon(
-                    Icons.arrow_drop_down,
-                    color: context.cs.onSurface.withOpacity(0.7),
-                    size: 14,
-                  ),
-                ],
+          return LimitedBox(
+            maxWidth: 60,
+            child: InkWell(
+              onTap: controller.show,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 2,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        task.status.label,
+                        style: context.labelSmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: context.cs.onSurface.withOpacity(0.7),
+                      size: 14,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

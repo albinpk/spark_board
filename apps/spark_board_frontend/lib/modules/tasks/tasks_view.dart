@@ -33,6 +33,7 @@ class TasksView extends CoraConsumerView<TasksState> {
                     _buildGridList(state, TaskStatus.done),
                   ],
                 ),
+                const SliverPadding(padding: EdgeInsets.only(bottom: 130)),
               ],
             );
 

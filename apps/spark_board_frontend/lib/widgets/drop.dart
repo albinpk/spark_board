@@ -40,6 +40,7 @@ class _DropState extends State<Drop> {
             child: TapRegion(
               onTapOutside: (event) {
                 _overlayController.hide();
+                setState(() {});
               },
               child: Align(
                 alignment: Alignment.topLeft,

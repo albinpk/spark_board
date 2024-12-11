@@ -1,5 +1,6 @@
 import 'package:scroll_animator/scroll_animator.dart';
 
+import '../../services/api/models/staffs_response.dart';
 import '../../services/api/models/tasks_response.dart';
 import '../../utils/common.dart';
 import 'enums/task_status.dart';
@@ -15,6 +16,7 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
   void initState() {
     super.initState();
     _getTasks();
+    _getStaffs();
     onDispose(scrollController.dispose);
   }
 
@@ -40,6 +42,14 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
       );
     }
     setState(() {});
+  }
+
+  List<StaffResponse> staffs = [];
+
+  Future<void> _getStaffs() async {
+    final (err, data) = await ref.api.staffs(cancelToken: cancelToken()).go();
+    if (err != null) return AppSnackbar.error(err);
+    staffs = data!.data;
   }
 
   void onTapAdd(TaskStatus status) {
@@ -100,6 +110,24 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
     setState(() {
       tasks[task.status]!.remove(task);
       tasks[status]!.add(TaskModel.fromData(data!.data));
+    });
+  }
+
+  Future<void> changeAssignee(TaskModel task, StaffResponse staff) async {
+    if (task.assignee?.staffId == staff.staffId) return;
+
+    final (err, data) = await ref.api.taskAssign(
+      projectId: widget.projectId,
+      taskId: task.taskId,
+      body: {
+        'staffId': staff.staffId,
+      },
+    ).go();
+    if (err != null) return AppSnackbar.error(err);
+
+    setState(() {
+      tasks[task.status]![tasks[task.status]!.indexOf(task)] =
+          TaskModel.fromData(data!.data);
     });
   }
 

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'endpoints.dart';
+import 'models/assign_task_response.dart';
 import 'models/create_staff_response.dart';
 import 'models/create_task_response.dart';
 import 'models/login_response.dart';
@@ -51,6 +52,19 @@ abstract class ApiClient {
     @Path('projectId') required String projectId,
     @Path('taskId') required String taskId,
     @Body() required Map<String, dynamic> body,
+  });
+
+  @POST(Endpoints.taskAssign)
+  Future<HttpResponse<AssignTaskResponse>> taskAssign({
+    @Path('projectId') required String projectId,
+    @Path('taskId') required String taskId,
+    @Body() required Map<String, dynamic> body,
+  });
+
+  @DELETE(Endpoints.taskAssign)
+  Future<HttpResponse<AssignTaskResponse>> removeTaskAssign({
+    @Path('projectId') required String projectId,
+    @Path('taskId') required String taskId,
   });
 
   @GET(Endpoints.staffs)

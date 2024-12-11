@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import sql from "../db";
+import sql from "../db/db";
 import { UserTable } from "../interfaces/userTable";
 import { appError } from "../models/appError";
 import { LoginBody, SignupBody } from "../routes/api/v1/auth/authSchema";

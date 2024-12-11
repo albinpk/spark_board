@@ -28,6 +28,7 @@ class TaskResponse {
     required this.description,
     required this.status,
     required this.createdAt,
+    this.assignee,
   });
 
   factory TaskResponse.fromJson(Map<String, dynamic> json) {
@@ -37,6 +38,9 @@ class TaskResponse {
       description: json['description'] as String?,
       status: json['status'] as String,
       createdAt: json['created_at'] as String,
+      assignee: json['assignee'] == null
+          ? null
+          : Assignee.fromJson(json['assignee'] as Map<String, dynamic>),
     );
   }
 
@@ -45,4 +49,25 @@ class TaskResponse {
   final String? description;
   final String status;
   final String createdAt;
+  final Assignee? assignee;
+}
+
+class Assignee {
+  const Assignee({
+    required this.staffId,
+    required this.name,
+    required this.email,
+  });
+
+  factory Assignee.fromJson(Map<String, dynamic> json) {
+    return Assignee(
+      staffId: json['staff_id'] as String,
+      name: json['name'] as String,
+      email: json['email'] as String,
+    );
+  }
+
+  final String staffId;
+  final String name;
+  final String email;
 }

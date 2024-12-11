@@ -168,7 +168,7 @@ paths:
                   example: description
                 name:
                   type: string
-                  example: Task view with status update and assignee update option
+                  example: The task
                 status:
                   type: string
                   example: done
@@ -176,7 +176,7 @@ paths:
               Create task:
                 value:
                   description: description
-                  name: Task view with status update and assignee update option
+                  name: The task
                   status: done
       responses:
         "200":
@@ -202,6 +202,38 @@ paths:
           description: ""
       security:
         - bearerAuth: []
+    patch:
+      tags:
+        - Tasks
+      summary: Update task
+      description: Update task
+      operationId: updateTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: The description
+                name:
+                  type: string
+                  example: New name
+                status:
+                  type: string
+                  example: todo
+            examples:
+              Update task:
+                value:
+                  description: The description
+                  name: New name
+                  status: todo
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
     parameters:
       - name: projectId
         in: path
@@ -214,7 +246,139 @@ paths:
         required: true
         schema:
           type: string
-          example: 30d6223e-74a4-465e-8c30-f95b98fe8771
+          example: 4758181a-128c-4e34-b716-2cfb082cfc1a
+  /projects/{projectId}/tasks/{taskId}/assign:
+    post:
+      tags:
+        - Tasks
+      summary: Assign task
+      description: Assign task
+      operationId: assignTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                staffId:
+                  type: string
+                  example: cbbe1c2f-ea36-4a1b-b4cc-fa3f17f99af7
+            examples:
+              Assign task:
+                value:
+                  staffId: cbbe1c2f-ea36-4a1b-b4cc-fa3f17f99af7
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Tasks
+      summary: Remove assign
+      description: Remove assign
+      operationId: removeAssign
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 4758181a-128c-4e34-b716-2cfb082cfc1a
+  /staff:
+    get:
+      tags:
+        - Staff
+      summary: List staff
+      description: List staff
+      operationId: listStaff
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Staff
+      summary: Create staff
+      description: Create staff
+      operationId: createStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: praveen@mail.com
+                name:
+                  type: string
+                  example: Praveen
+            examples:
+              Create staff:
+                value:
+                  email: praveen@mail.com
+                  name: Praveen
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+  /staff/{staffId}:
+    delete:
+      tags:
+        - Staff
+      summary: Delete staff
+      description: Delete staff
+      operationId: deleteStaff
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Staff
+      summary: Update staff
+      description: Update staff
+      operationId: updateStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Shebin
+            examples:
+              Update staff:
+                value:
+                  name: Shebin
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: staffId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: e98085f6-bc9f-4943-bc9b-a3a089649ae9
 components:
   securitySchemes:
     bearerAuth:
@@ -225,3 +389,4 @@ tags:
   - name: User
   - name: Projects
   - name: Tasks
+  - name: Staff

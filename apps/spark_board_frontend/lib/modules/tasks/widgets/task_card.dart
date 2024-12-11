@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../utils/common.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
+import 'assign_dropdown.dart';
 import 'status_dropdown.dart';
 import 'task_menu.dart';
 
@@ -100,22 +101,7 @@ class _TaskCardState extends State<TaskCard> {
                       if (task is TaskModel)
                         Row(
                           children: [
-                            DecoratedBox(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: context.cs.onSurface.withOpacity(0.1),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 2,
-                                ),
-                                child: Text(
-                                  'Albin',
-                                  style: context.labelSmall,
-                                ),
-                              ),
-                            ),
+                            AssignDropdown(task: task),
                             const Spacer(),
                             StatusDropdown(task: task),
                           ],
