@@ -20,6 +20,17 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
     onDispose(scrollController.dispose);
   }
 
+  @override
+  void didUpdateWidget(covariant TasksView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.projectId != oldWidget.projectId) {
+      for (final list in tasks.values) {
+        list.clear();
+      }
+      _getTasks();
+    }
+  }
+
   final tasks = <TaskStatus, List<TaskBase>>{
     TaskStatus.todo: [],
     TaskStatus.inProgress: [],
