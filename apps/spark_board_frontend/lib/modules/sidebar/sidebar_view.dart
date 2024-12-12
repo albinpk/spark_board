@@ -1,6 +1,9 @@
 import 'package:go_router/go_router.dart';
 
+import '../../providers/projects_provider.dart';
+import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';
+import '../../widgets/custom_drop.dart';
 import 'sidebar_state.dart';
 
 class SidebarView extends CoraConsumerView<SidebarState> {
@@ -33,26 +36,9 @@ class SidebarView extends CoraConsumerView<SidebarState> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              elevation: 0,
-              margin: state.projectSwitchPadding.value,
-              color: context.cs.surfaceContainer,
-              clipBehavior: Clip.hardEdge,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  state.projectSwitchRadius.value,
-                ),
-              ),
-              child: SizedBox.square(
-                dimension: state.projectSwitchSize.value,
-                child: InkWell(
-                  onTap: () {},
-                  child: const Center(
-                    child: Icon(Icons.swap_horiz_rounded),
-                  ),
-                ),
-              ),
-            ),
+            // dropdown
+            _projectSwitch(state),
+
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(Margin.medium),
@@ -85,6 +71,52 @@ class SidebarView extends CoraConsumerView<SidebarState> {
         ),
       ),
     );
+  }
+
+  Widget _projectSwitch(SidebarState state) {
+    return switch (state.watch(projectsProvider)) {
+      AsyncData<List<Data>>(:final value) => CustomDrop<Data>(
+          initialValue: value.firstWhere((e) => e.projectId == projectId),
+          menuPadding: EdgeInsets.zero,
+          childBuilder: (context, show) {
+            return Tooltip(
+              message: 'Change Project',
+              child: Card(
+                elevation: 0,
+                margin: state.projectSwitchPadding.value,
+                color: context.cs.surfaceContainer,
+                clipBehavior: Clip.hardEdge,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    state.projectSwitchRadius.value,
+                  ),
+                ),
+                child: SizedBox.square(
+                  dimension: state.projectSwitchSize.value,
+                  child: InkWell(
+                    onTap: show,
+                    child: const Center(
+                      child: Icon(Icons.swap_horiz_rounded),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          onSelected: (value) {
+            TasksRoute(projectId: value.projectId).go(state.context);
+          },
+          itemBuilder: (context) => value
+              .map(
+                (e) => PopupMenuItem(
+                  value: e,
+                  child: Text(e.name),
+                ),
+              )
+              .toList(),
+        ),
+      _ => const SizedBox.shrink(),
+    };
   }
 
   Widget _buildSidebarButton(SidebarState state) {
