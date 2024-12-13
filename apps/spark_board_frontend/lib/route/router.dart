@@ -11,7 +11,6 @@ class AppRouter extends _$AppRouter {
   GoRouter build() {
     return GoRouter(
       initialLocation: const ProjectsRoute().location,
-      // initialLocation: const TasksRoute(projectId: '23').location,
       debugLogDiagnostics: kDebugMode,
       routes: $appRoutes,
       redirect: _redirect,
@@ -20,17 +19,11 @@ class AppRouter extends _$AppRouter {
 
   // ignore: avoid_build_context_in_providers
   FutureOr<String?> _redirect(BuildContext context, GoRouterState state) {
-    final token = ref.storage.getString('token');
-    final isLoginOrSignup =
-        state.matchedLocation == const LoginRoute().location ||
-            state.matchedLocation == const SignupRoute().location;
-    if (token == null) {
-      if (isLoginOrSignup) return null;
-      return const LoginRoute().location;
+    if (state.matchedLocation == const LoginRoute().location ||
+        state.matchedLocation == const SignupRoute().location ||
+        ref.storage.getString('token') != null) {
+      return null;
     }
-    if (isLoginOrSignup) {
-      return const ProjectsRoute().location;
-    }
-    return null;
+    return const LoginRoute().location;
   }
 }
