@@ -8,3 +8,7 @@ command:
     hooks:
       # Update the version in package.json
       preCommit: ./scripts/preVersion.sh
+# scripts:
+#   build: docker build --tag app .
+#   run: docker run -d -p 7070:3000 app:latest
+#   tunnel: cloudflared tunnel run spark-board
