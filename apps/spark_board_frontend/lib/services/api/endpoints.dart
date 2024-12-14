@@ -1,5 +1,10 @@
 /// Api endpoints.
 abstract final class Endpoints {
+  static const baseUrl = String.fromEnvironment(
+    'BASE_URL',
+    defaultValue: 'http://localhost:3000/api',
+  );
+
   static const _v1 = '/v1';
 
   static const login = '$_v1/auth/login';
