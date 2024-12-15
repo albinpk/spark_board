@@ -11,6 +11,7 @@ class App extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: AppSnackbar.key,
+      title: 'SparkBoard',
       routerConfig: ref.watch(appRouterProvider),
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),

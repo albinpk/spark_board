@@ -18,10 +18,11 @@ class TasksView extends CoraConsumerView<TasksState> {
 
   @override
   Widget build(BuildContext context, TasksState state) {
-    return TaskStateProvider(
-      state: state,
-      child: Scaffold(
-        body: LayoutBuilder(
+    return WebTitle(
+      title: 'Tasks',
+      child: TaskStateProvider(
+        state: state,
+        child: LayoutBuilder(
           builder: (context, constraints) {
             final child = CustomScrollView(
               controller: state.scrollController,

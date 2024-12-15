@@ -9,14 +9,17 @@ class SignupView extends CoraConsumerView<SignupState> {
 
   @override
   Widget build(BuildContext context, SignupState state) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Signup')),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            state.go(const LoginRoute().location);
-          },
-          child: const Text('Login'),
+    return WebTitle(
+      title: 'Signup',
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Signup')),
+        body: Center(
+          child: TextButton(
+            onPressed: () {
+              state.go(const LoginRoute().location);
+            },
+            child: const Text('Login'),
+          ),
         ),
       ),
     );
