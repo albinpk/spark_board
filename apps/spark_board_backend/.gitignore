@@ -3,3 +3,6 @@ dist
 .env
 
 pubspec.lock
+
+# flutter static files directory (after build)
+public

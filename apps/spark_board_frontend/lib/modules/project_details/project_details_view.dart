@@ -14,18 +14,21 @@ class ProjectDetailsView extends CoraConsumerView<ProjectDetailsState> {
 
   @override
   Widget build(BuildContext context, ProjectDetailsState state) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FilledButton(
-              onPressed: () {
-                TasksRoute(projectId: projectId).go(context);
-              },
-              child: const Text('Open Board'),
-            ),
-          ],
+    return WebTitle(
+      title: 'Project',
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FilledButton(
+                onPressed: () {
+                  TasksRoute(projectId: projectId).go(context);
+                },
+                child: const Text('Open Board'),
+              ),
+            ],
+          ),
         ),
       ),
     );

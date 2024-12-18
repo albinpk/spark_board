@@ -14,13 +14,16 @@ class StaffView extends CoraConsumerView<StaffState> {
 
   @override
   Widget build(BuildContext context, StaffState state) {
-    return TableView.builder(
-      columnCount: 4,
-      rowCount: state.staffs.length + 1, // +1 for header
-      columnBuilder: (i) => _columnBuilder(context, i),
-      rowBuilder: (i) => _rowBuilder(context, i),
-      cellBuilder: (context, vicinity) =>
-          _cellBuilder(context, vicinity, state),
+    return WebTitle(
+      title: 'Staff',
+      child: TableView.builder(
+        columnCount: 4,
+        rowCount: state.staffs.length + 1, // +1 for header
+        columnBuilder: (i) => _columnBuilder(context, i),
+        rowBuilder: (i) => _rowBuilder(context, i),
+        cellBuilder: (context, vicinity) =>
+            _cellBuilder(context, vicinity, state),
+      ),
     );
   }
 

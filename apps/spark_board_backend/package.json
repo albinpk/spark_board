@@ -3,10 +3,11 @@
   "version": "0.0.4",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/server.js",
+    "build": "npx tsc && npm run moveSwagger",
+    "start": "POSTGRES_HOST=host.docker.internal node dist/server.js",
     "dev": "nodemon src/server.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "moveSwagger": "cp src/swagger/SparkBoard.swagger.yaml dist/swagger/SparkBoard.swagger.yaml"
   },
   "keywords": [],
   "author": "Albin PK",

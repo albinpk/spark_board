@@ -5,6 +5,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../utils/common.dart';
 import 'api_client.dart';
+import 'endpoints.dart';
 
 part 'api_client_provider.g.dart';
 
@@ -30,5 +31,5 @@ ApiClient apiClient(Ref ref) {
     ]);
   }
 
-  return ApiClient(dio, baseUrl: 'http://localhost:3000/api');
+  return ApiClient(dio, baseUrl: Endpoints.baseUrl);
 }
