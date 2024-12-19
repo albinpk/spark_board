@@ -46,7 +46,7 @@ class _TaskCardState extends State<TaskCard> {
       color: task.status.color,
     );
     final thinBorder = BorderSide(
-      width: 0.3,
+      width: 0.5,
       color: task.status.color,
     );
     return SizedBox(
