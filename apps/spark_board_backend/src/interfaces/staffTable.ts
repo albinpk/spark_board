@@ -4,6 +4,6 @@
 export interface StaffTable {
   staff_id: string;
   name: string;
-  email: number;
+  email: string;
   created_at: Date;
 }
