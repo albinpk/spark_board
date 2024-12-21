@@ -5,7 +5,6 @@ import '../models/task_model.dart';
 import '../tasks_state.dart';
 import 'assign_dropdown.dart';
 import 'status_dropdown.dart';
-import 'task_menu.dart';
 
 /// A widget that displays a task card in the tasks view.
 class TaskCard extends StatefulWidget {
@@ -16,8 +15,8 @@ class TaskCard extends StatefulWidget {
 
   final TaskBase task;
 
-  static const width = 140.0;
-  static const height = 80.0;
+  static const width = 160.0;
+  static const height = 90.0;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -27,7 +26,6 @@ class _TaskCardState extends State<TaskCard> {
   late final _inputFocusNode = FocusNode()..addListener(() => setState(() {}));
 
   final _overlayController = OverlayPortalController();
-  final _layerLink = LayerLink();
 
   @override
   void dispose() {
@@ -46,7 +44,6 @@ class _TaskCardState extends State<TaskCard> {
       color: task.status.color,
     );
     final thinBorder = BorderSide(
-      width: 0.5,
       color: task.status.color,
     );
     return SizedBox(
@@ -111,9 +108,11 @@ class _TaskCardState extends State<TaskCard> {
                 ),
 
                 // more button
-                if (task is TaskModel &&
-                    (_showMoreButton || _overlayController.isShowing))
-                  _buildMoreButton(task, thinBorder),
+                if (task is TaskModel)
+                  _buildMoreButton(
+                    task,
+                    _showMoreButton || _overlayController.isShowing,
+                  ),
               ],
             ),
           ),
@@ -122,39 +121,23 @@ class _TaskCardState extends State<TaskCard> {
     );
   }
 
-  Widget _buildMoreButton(TaskModel task, BorderSide thinBorder) {
+  Widget _buildMoreButton(TaskModel task, bool showBorder) {
     return Align(
       alignment: Alignment.topRight,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: thinBorder.color,
-            width: thinBorder.width,
-          ),
-        ),
-        child: InkWell(
-          onTap: _overlayController.show,
-          child: CompositedTransformTarget(
-            link: _layerLink,
-            child: OverlayPortal(
-              controller: _overlayController,
-              overlayChildBuilder: (context) {
-                return CompositedTransformFollower(
-                  link: _layerLink,
-                  targetAnchor: Alignment.bottomLeft,
-                  showWhenUnlinked: false,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: TapRegion(
-                      onTapOutside: (event) {
-                        _overlayController.hide();
-                        setState(() {});
-                      },
-                      child: TaskMenu(task: task),
-                    ),
-                  ),
-                );
-              },
+      child: Drop(
+        controller: _overlayController,
+        childBuilder: (context, controller) {
+          return Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: showBorder
+                    ? context.cs.onSurface.withOpacity(0.5)
+                    : Colors.transparent,
+              ),
+            ),
+            child: InkWell(
+              onTap: controller.show,
               child: const Padding(
                 padding: EdgeInsets.all(Margin.xxSmall),
                 child: Icon(
@@ -163,8 +146,21 @@ class _TaskCardState extends State<TaskCard> {
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
+        dropBuilder: (context, controller) {
+          return DropChild(
+            children: [
+              DropItem(
+                label: 'Delete',
+                onTap: () {
+                  controller.hide();
+                  TasksState.of(context).deleteTask(task);
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }
