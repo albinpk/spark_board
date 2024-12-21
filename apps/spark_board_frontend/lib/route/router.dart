@@ -10,7 +10,7 @@ class AppRouter extends _$AppRouter {
   @override
   GoRouter build() {
     return GoRouter(
-      initialLocation: const ProjectsRoute().location,
+      initialLocation: const LoginRoute().location,
       debugLogDiagnostics: kDebugMode,
       routes: $appRoutes,
       redirect: _redirect,

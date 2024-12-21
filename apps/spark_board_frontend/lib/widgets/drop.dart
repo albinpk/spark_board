@@ -5,6 +5,7 @@ class Drop extends StatefulWidget {
   const Drop({
     required this.childBuilder,
     required this.dropBuilder,
+    this.controller,
     super.key,
   });
 
@@ -18,12 +19,15 @@ class Drop extends StatefulWidget {
     OverlayPortalController controller,
   ) dropBuilder;
 
+  final OverlayPortalController? controller;
+
   @override
   State<Drop> createState() => _DropState();
 }
 
 class _DropState extends State<Drop> {
-  final _overlayController = OverlayPortalController();
+  late final _overlayController =
+      widget.controller ?? OverlayPortalController();
   final _layerLink = LayerLink();
 
   @override

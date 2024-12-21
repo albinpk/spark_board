@@ -38,3 +38,4 @@ COPY --from=flutter-build app/build/web public
 RUN npm run build
 
 CMD ["npm", "start"]
+
