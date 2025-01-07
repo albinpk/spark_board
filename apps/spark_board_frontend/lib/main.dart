@@ -3,6 +3,8 @@ import 'services/storage/shared_preferences_provider.dart';
 import 'utils/common.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final container = ProviderContainer();
   await container.read(sharedPreferencesProvider.future);
 
