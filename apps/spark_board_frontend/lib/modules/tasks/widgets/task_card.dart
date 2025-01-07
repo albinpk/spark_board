@@ -46,7 +46,8 @@ class _TaskCardState extends State<TaskCard> {
     final thinBorder = BorderSide(
       color: task.status.color,
     );
-    return SizedBox(
+
+    final card = SizedBox(
       height: TaskCard.height,
       width: TaskCard.width,
       child: MouseRegion(
@@ -118,6 +119,34 @@ class _TaskCardState extends State<TaskCard> {
           ),
         ),
       ),
+    );
+
+    if (task is! TaskModel) return card;
+    return card;
+
+    return Draggable<TaskModel>(
+      data: task,
+      feedback: SizedBox(
+        child: Card(
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          color: context.cs.surfaceContainer,
+          shape: Border(
+            left: thinBorder.copyWith(width: 2),
+            top: thinBorder,
+            right: thinBorder,
+            bottom: thinBorder,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(Margin.medium),
+            child: Text(
+              task.name,
+              style: context.bodySmall,
+            ),
+          ),
+        ),
+      ),
+      child: card,
     );
   }
 
