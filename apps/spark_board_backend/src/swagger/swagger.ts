@@ -12,7 +12,7 @@ const yamlString = fs.readFileSync(swaggerFile, "utf8");
 const definition = yaml.parse(yamlString);
 
 // updating postman environment variable
-definition.servers[0].url = "http://localhost:3000/api/v1";
+definition.servers[0].url = "http://localhost:7070/api/v1";
 
 const swaggerDocs = swaggerJsdoc({ definition, apis: [] });
 
