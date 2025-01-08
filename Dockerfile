@@ -14,4 +14,3 @@ COPY apps/spark_board_frontend/build/web public
 RUN npm run build
 
 CMD ["npm", "start"]
-
