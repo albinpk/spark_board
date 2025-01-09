@@ -12,4 +12,3 @@ cd ../../
 docker compose build --no-cache
 # docker compose up
 # docker build --no-cache --tag app:2 .
-
