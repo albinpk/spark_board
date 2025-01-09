@@ -6,6 +6,7 @@ services:
     restart: always
     ports:
       - "7070:3000"
+    platform: linux/amd64
     environment:
       POSTGRES_HOST: db
 
