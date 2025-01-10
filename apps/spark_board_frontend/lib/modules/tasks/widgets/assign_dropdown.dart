@@ -1,7 +1,6 @@
 import 'package:scroll_animator/scroll_animator.dart';
 
 import '../../../utils/common.dart';
-import '../../../widgets/drop.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
 
@@ -105,7 +104,7 @@ class _AssignDropdownState extends State<AssignDropdown> {
                           Flexible(
                             child: Text(
                               task.assignee?.name ?? 'Assign',
-                              style: context.labelSmall.copyWith(
+                              style: context.bodyMedium.copyWith(
                                 color: task.assignee == null
                                     ? context.cs.onSurface.withOpacity(0.4)
                                     : null,
@@ -117,7 +116,7 @@ class _AssignDropdownState extends State<AssignDropdown> {
                           Icon(
                             Icons.arrow_drop_down,
                             color: context.cs.onSurface.withOpacity(0.7),
-                            size: 14,
+                            size: 16,
                           ),
                         ],
                       ),
@@ -135,7 +134,7 @@ class _AssignDropdownState extends State<AssignDropdown> {
       focusNode: _searchFocusNode,
       autofocus: true,
       cursorHeight: 10,
-      style: context.labelSmall,
+      style: context.bodyMedium,
       decoration: const InputDecoration(
         hintText: 'Search...',
         border: InputBorder.none,

@@ -15,8 +15,8 @@ class TaskCard extends StatefulWidget {
 
   final TaskBase task;
 
-  static const width = 160.0;
-  static const height = 90.0;
+  static const width = 180.0;
+  static const height = 100.0;
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -87,7 +87,7 @@ class _TaskCardState extends State<TaskCard> {
                         child: switch (task) {
                           TaskModel() => Text(
                               task.name,
-                              style: context.bodySmall,
+                              style: context.bodyMedium,
                               overflow: TextOverflow.fade,
                             ),
                           TaskNew() => _buildInputField(context),
@@ -171,7 +171,7 @@ class _TaskCardState extends State<TaskCard> {
                 padding: EdgeInsets.all(Margin.xxSmall),
                 child: Icon(
                   Icons.more_vert,
-                  size: 12,
+                  size: 16,
                 ),
               ),
             ),
@@ -198,7 +198,7 @@ class _TaskCardState extends State<TaskCard> {
     return TextFormField(
       expands: true,
       maxLines: null,
-      style: context.labelSmall,
+      style: context.bodyMedium,
       focusNode: _inputFocusNode,
       autofocus: true,
       decoration: InputDecoration.collapsed(

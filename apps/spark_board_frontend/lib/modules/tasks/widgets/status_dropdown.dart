@@ -1,5 +1,4 @@
 import '../../../utils/common.dart';
-import '../../../widgets/drop.dart';
 import '../enums/task_status.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
@@ -50,7 +49,7 @@ class StatusDropdown extends StatelessWidget {
                     Flexible(
                       child: Text(
                         task.status.label,
-                        style: context.labelSmall,
+                        style: context.bodyMedium,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -58,7 +57,7 @@ class StatusDropdown extends StatelessWidget {
                     Icon(
                       Icons.arrow_drop_down,
                       color: context.cs.onSurface.withOpacity(0.7),
-                      size: 14,
+                      size: 16,
                     ),
                   ],
                 ),
