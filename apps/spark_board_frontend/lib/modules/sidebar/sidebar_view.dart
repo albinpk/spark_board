@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import '../../providers/projects_provider.dart';
 import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';
-import '../../widgets/custom_drop.dart';
 import 'sidebar_state.dart';
 
 class SidebarView extends CoraConsumerView<SidebarState> {
@@ -157,40 +156,45 @@ class SidebarView extends CoraConsumerView<SidebarState> {
     final borderRadius = BorderRadius.circular(Margin.medium);
     return Padding(
       padding: const EdgeInsets.only(bottom: Margin.small),
-      child: Material(
-        borderRadius: borderRadius,
-        clipBehavior: Clip.hardEdge,
-        child: InkWell(
-          onTap: onTap,
+      child: Tooltip(
+        message: state.curve.isCompleted ? label : '',
+        // verticalOffset: -13,
+        // margin: const EdgeInsets.only(left: 50),
+        child: Material(
           borderRadius: borderRadius,
-          child: Ink(
-            color: selected ? state.context.cs.surfaceContainer : null,
-            child: Container(
-              padding: state.itemPadding.value,
-              decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                border: Border.all(
-                  color: selected
-                      ? state.context.cs.surfaceContainerHighest
-                      : Colors.transparent,
+          clipBehavior: Clip.hardEdge,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: borderRadius,
+            child: Ink(
+              color: selected ? state.context.cs.surfaceContainer : null,
+              child: Container(
+                padding: state.itemPadding.value,
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  border: Border.all(
+                    color: selected
+                        ? state.context.cs.surfaceContainerHighest
+                        : Colors.transparent,
+                  ),
                 ),
-              ),
-              alignment: state.itemIconAlign.value,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: state.itemIconPadding.value,
-                    child: Icon(iconData, size: 18),
-                  ),
-                  ClipRect(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      widthFactor: 1 - state.curve.value,
-                      child: Text(label),
+                alignment: state.itemIconAlign.value,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: state.itemIconPadding.value,
+                      child: Icon(iconData, size: 18),
                     ),
-                  ),
-                ],
+                    ClipRect(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: 1 - state.curve.value,
+                        child: Text(label),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
