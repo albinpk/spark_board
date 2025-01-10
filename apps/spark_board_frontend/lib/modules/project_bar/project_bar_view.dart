@@ -1,5 +1,4 @@
 import '../../utils/common.dart';
-import '../../widgets/custom_drop.dart';
 import 'project_bar_state.dart';
 
 class ProjectBarView extends CoraConsumerView<ProjectBarState> {

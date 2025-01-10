@@ -109,13 +109,13 @@ class DropItem extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: Margin.medium,
+          horizontal: Margin.large,
           vertical: Margin.xSmall,
         ).copyWith(right: Margin.xxLarge),
         child: child ??
             Text(
               label!,
-              style: context.labelSmall,
+              style: context.bodyMedium,
             ),
       ),
     );
