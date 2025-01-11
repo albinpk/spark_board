@@ -19,11 +19,15 @@ export const authGuard: ReqHandler = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
-      return res.status(401).json(bad({ message: "Unauthorized" }));
+      return res.status(401).json(bad({ message: "Please login" }));
     }
-    const { userId } = verifyToken(token);
-    req.userId = userId!;
-    next();
+    try {
+      const { userId } = verifyToken(token);
+      req.userId = userId!;
+      next();
+    } catch (error) {
+      return res.status(401).json(bad({ message: "Please login" }));
+    }
   } catch (error) {
     next(error);
   }
