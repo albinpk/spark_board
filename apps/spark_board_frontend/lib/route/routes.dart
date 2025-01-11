@@ -39,8 +39,9 @@ class LoginRoute extends GoRouteData {
   final String? next;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      LoginView(nextRoute: next);
+  NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
+    return NoTransitionPage(child: LoginView(nextRoute: next));
+  }
 }
 
 @TypedGoRoute<SignupRoute>(path: '/signup')
@@ -48,7 +49,9 @@ class SignupRoute extends GoRouteData {
   const SignupRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const SignupView();
+  NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
+    return const NoTransitionPage(child: SignupView());
+  }
 }
 
 @TypedGoRoute<ProjectsRoute>(
@@ -71,8 +74,9 @@ class ProjectsRoute extends GoRouteData {
   const ProjectsRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const ProjectsView();
+  NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
+    return const NoTransitionPage(child: ProjectsView());
+  }
 }
 
 class ProjectDetailsRoute extends GoRouteData {
@@ -83,17 +87,24 @@ class ProjectDetailsRoute extends GoRouteData {
   final String projectId;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      ProjectDetailsView(projectId: projectId);
+  NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
+    return NoTransitionPage(child: ProjectDetailsView(projectId: projectId));
+  }
 }
 
 class ProjectShellRoute extends ShellRouteData {
   const ProjectShellRoute();
 
   @override
-  Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
+  NoTransitionPage<void> pageBuilder(
+    BuildContext context,
+    GoRouterState state,
+    Widget navigator,
+  ) {
     final projectId = state.pathParameters['projectId']!;
-    return ProjectShell(projectId: projectId, child: navigator);
+    return NoTransitionPage(
+      child: ProjectShell(projectId: projectId, child: navigator),
+    );
   }
 }
 
