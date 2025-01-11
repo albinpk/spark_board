@@ -3,7 +3,13 @@ import 'login_state.dart';
 
 /// Route: [LoginRoute].
 class LoginView extends CoraConsumerView<LoginState> {
-  const LoginView({super.key});
+  const LoginView({
+    super.key,
+    this.nextRoute,
+  });
+
+  /// The route to navigate to after login
+  final String? nextRoute;
 
   @override
   Widget build(BuildContext context, LoginState state) {
