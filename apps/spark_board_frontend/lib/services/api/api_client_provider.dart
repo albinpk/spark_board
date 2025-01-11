@@ -22,9 +22,13 @@ ApiClient apiClient(Ref ref) {
         return handler.next(options);
       },
       onError: (error, handler) {
+        // Redirect to login if unauthorized, preserving the 'next' query parameter
+        // to ensure the user can return to their previous page after logging in.
         if (error.response?.statusCode == 401) {
-          // Redirect to login page if token is expired
-          ref.go(const LoginRoute().location);
+          final uri = ref.router.state?.uri;
+          final hasNext = uri?.queryParameters.containsKey('next') ?? false;
+          final next = hasNext ? uri?.queryParameters['next'] : uri?.toString();
+          ref.go(LoginRoute(next: next).location);
           return handler.reject(error);
         }
         return handler.next(error);

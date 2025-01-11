@@ -32,10 +32,15 @@ part 'routes.g.dart';
 
 @TypedGoRoute<LoginRoute>(path: '/login')
 class LoginRoute extends GoRouteData {
-  const LoginRoute();
+  const LoginRoute({
+    this.next,
+  });
+
+  final String? next;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const LoginView();
+  Widget build(BuildContext context, GoRouterState state) =>
+      LoginView(nextRoute: next);
 }
 
 @TypedGoRoute<SignupRoute>(path: '/signup')
