@@ -26,8 +26,7 @@ ApiClient apiClient(Ref ref) {
         // to ensure the user can return to their previous page after logging in.
         if (error.response?.statusCode == 401) {
           final uri = ref.router.state?.uri;
-          final hasNext = uri?.queryParameters.containsKey('next') ?? false;
-          final next = hasNext ? uri?.queryParameters['next'] : uri?.toString();
+          final next = uri?.queryParameters['next'] ?? uri?.toString();
           ref.go(LoginRoute(next: next).location);
           return handler.reject(error);
         }
