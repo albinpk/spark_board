@@ -12,7 +12,17 @@ packageJson="apps/spark_board_backend/package.json"
 packageLock="apps/spark_board_backend/package-lock.json"
 
 # Updating the version in package.json
-sed -i "/\"version\":/c\  \"version\": \"$newVersion\"," $packageJson
+
+# old (works on linux)
+# sed -i "/\"version\":/c\  \"version\": \"$newVersion\"," $packageJson
+
+# Cross-platform sed command
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i '' -e "/\"version\":/s/.*/  \"version\": \"$newVersion\",/" "$packageJson"
+else
+  sed -i -e "/\"version\":/s/.*/  \"version\": \"$newVersion\",/" "$packageJson"
+fi
+
 # npm install for updating package-lock.json
 npm --prefix "./apps/spark_board_backend" install
 
