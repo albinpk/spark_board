@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`spark_board_backend` - `v0.0.5`](#spark_board_backend---v005)
+ - [`spark_board_frontend` - `v0.0.3`](#spark_board_frontend---v003)
+
+---
+
+#### `spark_board_backend` - `v0.0.5`
+
+ - **FIX**: wrong types in table interface.
+ - **FEAT**: Docker configuration, release setup and SEO (#26).
+ - **DOCS**: add Docker commands for running and testing PostgreSQL.
+
+#### `spark_board_frontend` - `v0.0.3`
+
+ - **FIX**: increase text sizes for dropdowns and task card (#31).
+ - **FIX**: ensure Flutter bindings are initialized before accessing shared preferences.
+ - **FIX**: add Podfile and configuration for macOS and iOS support.
+ - **FIX**: task card boarder.
+ - **FEAT**: update task card dimensions and replace task menu with drop widget.
+ - **FEAT**: Docker configuration, release setup and SEO (#26).
+ - **FEAT**: project switcher (#25).
+
+
 ## 2024-12-12
 
 ### Changes

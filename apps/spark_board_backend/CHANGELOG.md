@@ -1,3 +1,9 @@
+## 0.0.5
+
+ - **FIX**: wrong types in table interface.
+ - **FEAT**: Docker configuration, release setup and SEO (#26).
+ - **DOCS**: add Docker commands for running and testing PostgreSQL.
+
 ## 0.0.4
 
  - **REFACTOR**: move `db.ts` to `db` folder.

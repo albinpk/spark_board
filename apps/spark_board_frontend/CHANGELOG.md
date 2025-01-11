@@ -1,3 +1,13 @@
+## 0.0.3
+
+ - **FIX**: increase text sizes for dropdowns and task card (#31).
+ - **FIX**: ensure Flutter bindings are initialized before accessing shared preferences.
+ - **FIX**: add Podfile and configuration for macOS and iOS support.
+ - **FIX**: task card boarder.
+ - **FEAT**: update task card dimensions and replace task menu with drop widget.
+ - **FEAT**: Docker configuration, release setup and SEO (#26).
+ - **FEAT**: project switcher (#25).
+
 ## 0.0.2
 
  - **FIX**: add label to `TaskStatus` enum (#20).
