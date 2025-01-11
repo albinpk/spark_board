@@ -21,6 +21,14 @@ ApiClient apiClient(Ref ref) {
         }
         return handler.next(options);
       },
+      onError: (error, handler) {
+        if (error.response?.statusCode == 401) {
+          // Redirect to login page if token is expired
+          ref.go(const LoginRoute().location);
+          return handler.reject(error);
+        }
+        return handler.next(error);
+      },
     ),
   );
 
