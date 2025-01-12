@@ -4,6 +4,7 @@ import {
   createTask,
   deleteTask,
   getAllTasksOfProject,
+  taskDetails,
   unassignTask,
   updateTask,
 } from "../../../../../controllers/tasksController";
@@ -42,6 +43,15 @@ tasks.post(
     const projectId = req.params["projectId"];
     const project = await createTask(req.userId, projectId, req.body);
     res.json(good({ data: project }));
+  })
+);
+
+// api/v1/projects/:projectId/tasks/:taskId
+tasks.get(
+  "/:taskId",
+  tryCatch(async (req, res) => {
+    const task = await taskDetails(req.userId, req.params.taskId);
+    res.json(good({ data: task }));
   })
 );
 
