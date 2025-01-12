@@ -5,18 +5,21 @@ import 'task_details_view.dart';
 class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
     with SingleTickerProviderStateMixin, ObsStateMixin {
   final nameController = TextEditingController();
+  final scrollController = ScrollController();
   late final TabController tabController;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 1, vsync: this);
+    scrollController.addListener(_onScroll);
     _getTask();
   }
 
   @override
   void dispose() {
     tabController.dispose();
+    scrollController.dispose();
     nameController.dispose();
     super.dispose();
   }
@@ -36,6 +39,12 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
     task.value = data!.data;
     nameController.text = task.value!.name;
   }
+
+  /// Visibility of the task name on the header.
+  /// Will be true when the scroll offset is greater than 70.
+  late final showHeader = obs(false);
+
+  void _onScroll() => showHeader.value = scrollController.offset > 70;
 
   late final isNameEditing = obs(false);
 

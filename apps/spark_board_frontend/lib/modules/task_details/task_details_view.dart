@@ -29,15 +29,32 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.all(Margin.small),
+          padding: const EdgeInsets.all(Margin.small).copyWith(
+            left: Margin.xLarge,
+          ),
           child: Row(
             children: [
-              // const IconButton(
-              //   tooltip: 'Copy link',
-              //   onPressed: null,
-              //   icon: Icon(Icons.link),
-              // ),
-              const Spacer(),
+              // task name; only visible when scrolled
+              Expanded(
+                child: AnimatedCrossFade(
+                  duration: const Duration(milliseconds: 200),
+                  firstCurve: Curves.easeInOut,
+                  secondCurve: Curves.easeInOut,
+                  sizeCurve: Curves.easeInOut,
+                  crossFadeState: state.showHeader.value
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  firstChild: Text(
+                    task.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.titleSmall,
+                  ),
+                  secondChild: const SizedBox(),
+                ),
+              ),
+              W.xxLarge,
+
+              // close button
               IconButton(
                 tooltip: 'Close',
                 onPressed: () {
@@ -50,6 +67,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
         ),
         Flexible(
           child: NestedScrollView(
+            controller: state.scrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               final labelStyle = context.bodyMedium.copyWith(
                 color: context.cs.onSurface.withValues(alpha: 0.7),
