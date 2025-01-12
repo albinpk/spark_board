@@ -16,6 +16,8 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
   @override
   TaskDetailsState createState() => TaskDetailsState();
 
+  static const _namePadding = 6.0;
+
   @override
   Widget build(BuildContext context, TaskDetailsState state) {
     final task = state.task.value;
@@ -50,23 +52,23 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               final labelStyle = context.bodyMedium.copyWith(
-                color: context.cs.onSurface.withOpacity(0.7),
+                color: context.cs.onSurface.withValues(alpha: 0.7),
               );
               return [
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(Margin.xLarge),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          task.name,
-                          style: context.titleLarge,
-                        ),
-                        H.xxLarge,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.all(Margin.xLarge - _namePadding),
+                        child: _buildTaskName(state, task),
+                      ),
 
-                        // status
-                        IntrinsicWidth(
+                      // status
+                      Padding(
+                        padding: const EdgeInsets.all(Margin.xLarge),
+                        child: IntrinsicWidth(
                           child: Column(
                             children: [
                               Row(
@@ -117,7 +119,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                       style: context.bodyMedium.copyWith(
                                         color: task.assignee == null
                                             ? context.cs.onSurface
-                                                .withOpacity(0.6)
+                                                .withValues(alpha: 0.6)
                                             : null,
                                       ),
                                     ),
@@ -144,8 +146,8 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ];
@@ -187,6 +189,55 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
     );
   }
 
+  Widget _buildTaskName(TaskDetailsState state, TaskDetails task) {
+    final context = state.context;
+    return Column(
+      children: [
+        TextField(
+          controller: state.nameController,
+          style: context.titleLarge,
+          readOnly: !state.isNameEditing.value,
+          onTap: state.onTapNameField,
+          minLines: 1,
+          maxLines: 4,
+          decoration: InputDecoration(
+            hintText: 'Enter task name...',
+            isCollapsed: true,
+            contentPadding: const EdgeInsets.all(_namePadding),
+            border: MaterialStateOutlineInputBorder.resolveWith((states) {
+              return OutlineInputBorder(
+                borderSide: state.isNameEditing.value
+                    ? const BorderSide()
+                    : states.contains(WidgetState.hovered)
+                        ? const BorderSide(width: 0.5)
+                        : BorderSide.none,
+              );
+            }),
+          ),
+        ),
+
+        // cancel & save
+        if (state.isNameEditing.value) ...[
+          H.small,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: state.onNameEditCancel,
+                child: const Text('Cancel'),
+              ),
+              W.small,
+              FilledButton(
+                onPressed: state.onNameSave,
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
   Widget _buildDescription(TaskDetailsState state, TaskDetails task) {
     return Align(
       alignment: Alignment.topCenter,
@@ -203,7 +254,8 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                       child: Text(
                         'No description added yet.',
                         style: state.context.bodySmall.copyWith(
-                          color: state.context.cs.onSurface.withOpacity(0.5),
+                          color:
+                              state.context.cs.onSurface.withValues(alpha: 0.5),
                         ),
                       ),
                     ),

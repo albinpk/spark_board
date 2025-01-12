@@ -1,3 +1,4 @@
+import '../../../services/api/models/task_details_response.dart';
 import '../../../services/api/models/tasks_response.dart';
 import '../enums/task_status.dart';
 
@@ -26,6 +27,17 @@ class TaskModel extends TaskBase {
       description: task.description,
       status: TaskStatus.fromName(task.status),
       createdAt: DateTime.parse(task.createdAt),
+      assignee: task.assignee,
+    );
+  }
+
+  factory TaskModel.fromDetails(TaskDetails task) {
+    return TaskModel(
+      taskId: task.taskId,
+      name: task.name,
+      description: task.description,
+      status: task.status,
+      createdAt: task.createdAt,
       assignee: task.assignee,
     );
   }

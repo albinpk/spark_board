@@ -120,7 +120,7 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
 
     setState(() {
       tasks[task.status]!.remove(task);
-      tasks[status]!.add(TaskModel.fromData(data!.data));
+      tasks[status]!.add(TaskModel.fromDetails(data!.data));
     });
   }
 
