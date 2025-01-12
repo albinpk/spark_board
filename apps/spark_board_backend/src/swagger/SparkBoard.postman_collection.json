@@ -565,12 +565,12 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "",
+      "value": "http://localhost:3000/api/v1",
       "type": "string"
     },
     {
       "key": "token",
-      "value": "",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkMmVhYjZiOC0wZDllLTRjOTItYjgzYi0wNGVjYTNiYzljMTIiLCJpYXQiOjE3MzM5MzU1NjAsImV4cCI6MTczMzkzOTE2MH0.sApSeQT2HCKs103Vu-5KktTvleIoPS9AFJUVSq7sqQ4",
       "type": "string"
     }
   ]
