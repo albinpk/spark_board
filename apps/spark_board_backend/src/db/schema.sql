@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.3
--- Dumped by pg_dump version 16.3
+-- Dumped from database version 17.2 (Debian 17.2-1.pgdg120+1)
+-- Dumped by pg_dump version 17.2 (Debian 17.2-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -148,6 +149,29 @@ CREATE VIEW public.task_assignee_view AS
 
 
 ALTER VIEW public.task_assignee_view OWNER TO postgres;
+
+--
+-- Name: task_details_view; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.task_details_view AS
+ SELECT t.task_id,
+    t.name,
+    t.description,
+    t.status,
+    t.created_at,
+        CASE
+            WHEN (s.staff_id IS NOT NULL) THEN json_build_object('staff_id', s.staff_id, 'name', s.name, 'email', s.email)
+            ELSE NULL::json
+        END AS assignee,
+    json_build_object('project_id', p.project_id, 'owner_id', p.owner_id, 'name', p.name, 'description', p.description, 'created_at', p.created_at) AS project
+   FROM (((public.tasks t
+     LEFT JOIN public.projects p ON ((t.project_id = p.project_id)))
+     LEFT JOIN public.task_assignee a ON ((a.task_id = t.task_id)))
+     LEFT JOIN public.staff s ON ((s.staff_id = a.staff_id)));
+
+
+ALTER VIEW public.task_details_view OWNER TO postgres;
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
