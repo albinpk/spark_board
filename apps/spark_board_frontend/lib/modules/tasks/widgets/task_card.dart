@@ -68,7 +68,6 @@ class _TaskCardState extends State<TaskCard> {
           },
           child: Card(
             elevation: 0,
-            margin: EdgeInsets.zero,
             color: context.cs.surfaceContainer,
             shape: Border(
               left: border,
@@ -131,7 +130,6 @@ class _TaskCardState extends State<TaskCard> {
       feedback: SizedBox(
         child: Card(
           elevation: 0,
-          margin: EdgeInsets.zero,
           color: context.cs.surfaceContainer,
           shape: Border(
             left: thinBorder.copyWith(width: 2),

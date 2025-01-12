@@ -82,7 +82,6 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Card.filled(
-                                        margin: EdgeInsets.zero,
                                         color: task.status.color,
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
