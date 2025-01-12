@@ -1,13 +1,14 @@
-import 'package:go_router/go_router.dart';
-
 import '../modules/dashboard/project_shell.dart';
 import '../modules/login/login_view.dart';
 import '../modules/project_details/project_details_view.dart';
 import '../modules/projects/projects_view.dart';
 import '../modules/signup/signup_view.dart';
 import '../modules/staff/staff_view.dart';
+import '../modules/task_details/task_details_view.dart';
 import '../modules/tasks/tasks_view.dart';
 import '../utils/common.dart';
+import 'dialog_view.dart';
+import 'router.dart';
 
 part 'routes.g.dart';
 
@@ -62,7 +63,12 @@ class SignupRoute extends GoRouteData {
       routes: [
         TypedShellRoute<ProjectShellRoute>(
           routes: [
-            TypedGoRoute<TasksRoute>(path: 'tasks'),
+            TypedGoRoute<TasksRoute>(
+              path: 'tasks',
+              routes: [
+                TypedGoRoute<TaskDetailsDialogRoute>(path: ':taskId'),
+              ],
+            ),
             TypedGoRoute<StaffRoute>(path: 'staff'),
           ],
         ),
@@ -118,6 +124,34 @@ class TasksRoute extends GoRouteData {
   @override
   NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
     return NoTransitionPage(child: TasksView(projectId: projectId));
+  }
+}
+
+class TaskDetailsDialogRoute extends GoRouteData {
+  const TaskDetailsDialogRoute({
+    required this.projectId,
+    required this.taskId,
+  });
+
+  final String projectId;
+  final String taskId;
+
+  static final $parentNavigatorKey = rootNavigatorKey;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return DialogView(
+      builder: (context) {
+        return SizedBox(
+          width: 800,
+          height: 800,
+          child: TaskDetailsView(
+            projectId: projectId,
+            taskId: taskId,
+          ),
+        );
+      },
+    );
   }
 }
 
