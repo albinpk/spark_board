@@ -1,5 +1,3 @@
-import 'package:go_router/go_router.dart';
-
 import '../../providers/projects_provider.dart';
 import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';
