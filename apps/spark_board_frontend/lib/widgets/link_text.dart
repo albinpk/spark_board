@@ -62,3 +62,46 @@ class _LinkTextState extends State<LinkText> {
     );
   }
 }
+
+/// Creates a link text that adds an underline when hovered.
+class HoverLinkText extends StatefulWidget {
+  const HoverLinkText({
+    required this.text,
+    required this.onTap,
+    this.style,
+    this.overflow,
+    super.key,
+  });
+
+  final String text;
+  final VoidCallback onTap;
+  final TextStyle? style;
+  final TextOverflow? overflow;
+
+  @override
+  State<HoverLinkText> createState() => _HoverLinkTextState();
+}
+
+class _HoverLinkTextState extends State<HoverLinkText> {
+  bool _isHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = widget.style ?? context.bodyMedium;
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHover = true),
+      onExit: (_) => setState(() => _isHover = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Text(
+          widget.text,
+          style: style.copyWith(
+            decoration: _isHover ? TextDecoration.underline : null,
+          ),
+          overflow: widget.overflow,
+        ),
+      ),
+    );
+  }
+}

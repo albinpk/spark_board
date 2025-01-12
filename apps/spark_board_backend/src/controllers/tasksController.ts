@@ -92,6 +92,59 @@ export const createTask = async (
 };
 
 /**
+ * Get details of a task.
+ * @param userId
+ * @param taskId
+ * @returns details of task
+ */
+export const taskDetails = async (userId: string, taskId: string) => {
+  const [task] = await sql`
+    SELECT
+      t.task_id,
+      t.name,
+      t.description,
+      t.status,
+      t.created_at,
+      CASE
+        WHEN s.staff_id IS NOT NULL THEN json_build_object(
+          'staff_id',
+          s.staff_id,
+          'name',
+          s.name,
+          'email',
+          s.email
+        )
+        ELSE NULL::json
+      END AS assignee,
+      json_build_object(
+        'project_id',
+        p.project_id,
+        'owner_id',
+        p.owner_id,
+        'name',
+        p.name,
+        'description',
+        p.description,
+        'created_at',
+        p.created_at
+      ) AS project
+    FROM
+      tasks t
+      LEFT JOIN projects p ON t.project_id = p.project_id
+      LEFT JOIN task_assignee a ON a.task_id = t.task_id
+      LEFT JOIN staff s ON s.staff_id = a.staff_id
+    WHERE
+      t.task_id = ${taskId};`;
+
+  if (!task) throw appError("Task not found", 404);
+
+  if (task.project.owner_id !== userId)
+    throw appError("Permission denied", 403);
+
+  return task;
+};
+
+/**
  * Update a task.
  * @param userId
  * @param taskId

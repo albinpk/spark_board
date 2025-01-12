@@ -68,7 +68,6 @@ class _TaskCardState extends State<TaskCard> {
           },
           child: Card(
             elevation: 0,
-            margin: EdgeInsets.zero,
             color: context.cs.surfaceContainer,
             shape: Border(
               left: border,
@@ -78,6 +77,7 @@ class _TaskCardState extends State<TaskCard> {
             ),
             child: Stack(
               children: [
+                // data
                 Padding(
                   padding: const EdgeInsets.all(Margin.small),
                   child: Column(
@@ -85,8 +85,9 @@ class _TaskCardState extends State<TaskCard> {
                     children: [
                       Expanded(
                         child: switch (task) {
-                          TaskModel() => Text(
-                              task.name,
+                          TaskModel() => HoverLinkText(
+                              text: task.name,
+                              onTap: () => _showTaskDetails(task),
                               style: context.bodyMedium,
                               overflow: TextOverflow.fade,
                             ),
@@ -129,7 +130,6 @@ class _TaskCardState extends State<TaskCard> {
       feedback: SizedBox(
         child: Card(
           elevation: 0,
-          margin: EdgeInsets.zero,
           color: context.cs.surfaceContainer,
           shape: Border(
             left: thinBorder.copyWith(width: 2),
@@ -148,6 +148,13 @@ class _TaskCardState extends State<TaskCard> {
       ),
       child: card,
     );
+  }
+
+  void _showTaskDetails(TaskModel task) {
+    TaskDetailsDialogRoute(
+      projectId: GoRouterState.of(context).pathParameters['projectId']!,
+      taskId: task.taskId,
+    ).go(context);
   }
 
   Widget _buildMoreButton(TaskModel task, bool showBorder) {

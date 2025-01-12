@@ -16,6 +16,24 @@ abstract final class AppTheme {
         border: OutlineInputBorder(),
         isDense: true,
       ),
+      dialogTheme: DialogTheme(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Margin.small),
+        ),
+      ),
+      cardTheme: CardTheme(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Margin.xSmall),
+        ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Margin.small),
+          ).toState(),
+        ),
+      ),
       filledButtonTheme: const FilledButtonThemeData(
         style: ButtonStyle(
           shape: WidgetStatePropertyAll(

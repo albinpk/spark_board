@@ -8,6 +8,7 @@ import 'models/create_task_response.dart';
 import 'models/login_response.dart';
 import 'models/projects_response.dart';
 import 'models/staffs_response.dart';
+import 'models/task_details_response.dart';
 import 'models/tasks_response.dart';
 
 part 'api_client.g.dart';
@@ -32,6 +33,13 @@ abstract class ApiClient {
   @GET(Endpoints.tasks)
   Future<HttpResponse<TasksResponse>> tasks({
     @Path('projectId') required String projectId,
+    @CancelRequest() required CancelToken cancelToken,
+  });
+
+  @GET(Endpoints.task)
+  Future<HttpResponse<TaskDetailsResponse>> taskDetails({
+    @Path('projectId') required String projectId,
+    @Path('taskId') required String taskId,
     @CancelRequest() required CancelToken cancelToken,
   });
 

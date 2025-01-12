@@ -1,15 +1,17 @@
 import 'package:flutter/foundation.dart';
-import 'package:go_router/go_router.dart';
 
 import '../utils/common.dart';
 
 part 'router.g.dart';
+
+final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rootNavigator');
 
 @riverpod
 class AppRouter extends _$AppRouter {
   @override
   GoRouter build() {
     return GoRouter(
+      navigatorKey: rootNavigatorKey,
       initialLocation: const LoginRoute().location,
       debugLogDiagnostics: kDebugMode,
       routes: $appRoutes,
