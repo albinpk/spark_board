@@ -100,6 +100,7 @@ class _TaskCardState extends State<TaskCard> {
                       // assignee and status
                       if (task is TaskModel)
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             AssignDropdown(
                               task: task,
@@ -110,7 +111,6 @@ class _TaskCardState extends State<TaskCard> {
                                 );
                               },
                             ),
-                            const Spacer(),
                             StatusDropdown(task: task),
                           ],
                         ),

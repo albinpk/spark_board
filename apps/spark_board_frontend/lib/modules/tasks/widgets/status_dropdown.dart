@@ -2,6 +2,7 @@ import '../../../utils/common.dart';
 import '../enums/task_status.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
+import 'task_card.dart';
 
 class StatusDropdown extends StatelessWidget {
   const StatusDropdown({
@@ -16,7 +17,7 @@ class StatusDropdown extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(
-          color: context.cs.onSurface.withOpacity(0.1),
+          color: context.cs.onSurface.withValues(alpha: 0.1),
         ),
       ),
       child: Drop(
@@ -36,7 +37,7 @@ class StatusDropdown extends StatelessWidget {
         },
         childBuilder: (context, controller) {
           return LimitedBox(
-            maxWidth: 60,
+            maxWidth: TaskCard.width / 2 - 15,
             child: InkWell(
               onTap: controller.show,
               child: Padding(
@@ -56,7 +57,7 @@ class StatusDropdown extends StatelessWidget {
                     ),
                     Icon(
                       Icons.arrow_drop_down,
-                      color: context.cs.onSurface.withOpacity(0.7),
+                      color: context.cs.onSurface.withValues(alpha: 0.7),
                       size: 16,
                     ),
                   ],

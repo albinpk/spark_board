@@ -4,6 +4,7 @@ import '../../../providers/staff_list_provider.dart';
 import '../../../services/api/models/staffs_response.dart';
 import '../../../utils/common.dart';
 import '../models/task_model.dart';
+import 'task_card.dart';
 
 class AssignDropdown extends ConsumerStatefulWidget {
   const AssignDropdown({
@@ -94,7 +95,7 @@ class _AssignDropdownState extends ConsumerState<AssignDropdown> {
         },
         childBuilder: (context, controller) {
           return LimitedBox(
-            maxWidth: 60,
+            maxWidth: TaskCard.width / 2 - 15,
             child: controller.isShowing
                 ? _buildSearchField()
                 : InkWell(
