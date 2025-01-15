@@ -401,8 +401,6 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
       controller: state.descriptionController,
       autofocus: true,
       style: context.bodyMedium,
-      readOnly: !state.isDescriptionEditing.value,
-      onTap: state.onEditDescription,
       minLines: 4,
       maxLines: 10,
       decoration: const InputDecoration(
