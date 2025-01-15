@@ -1,5 +1,6 @@
 import '../../services/api/models/task_details_response.dart';
 import '../../utils/common.dart';
+import '../tasks/enums/task_status.dart';
 import 'task_details_state.dart';
 
 /// Route: [TaskDetailsDialogRoute].
@@ -23,7 +24,21 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
     final task = state.task.value;
 
     // TODO(albin): add shimmer
-    if (task == null) return const Center(child: CircularProgressIndicator());
+    if (task == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          IconButton(
+            tooltip: 'Close',
+            onPressed: () {
+              context.pop<TaskDetails>();
+            },
+            icon: const Icon(Icons.close),
+          ),
+          const Expanded(child: Center(child: CircularProgressIndicator())),
+        ],
+      );
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -58,7 +73,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
               IconButton(
                 tooltip: 'Close',
                 onPressed: () {
-                  context.pop();
+                  context.pop<TaskDetails>(task);
                 },
                 icon: const Icon(Icons.close),
               ),
@@ -78,8 +93,9 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.all(Margin.xLarge - _namePadding),
+                        padding: const EdgeInsets.all(
+                          Margin.xLarge - _namePadding,
+                        ),
                         child: _buildTaskName(state, task),
                       ),
 
@@ -99,20 +115,57 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                   ),
                                   W.xxLarge,
                                   Expanded(
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Card.filled(
-                                        color: task.status.color,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: Margin.small,
-                                          ),
-                                          child: Text(
-                                            task.status.label,
-                                            style: context.bodyMedium.copyWith(
-                                              color: Colors.white,
+                                    child: PopupMenuButton(
+                                      tooltip: 'Change status',
+                                      menuPadding: EdgeInsets.zero,
+                                      position: PopupMenuPosition.under,
+                                      initialValue: task.status,
+                                      onSelected: state.changeStatus,
+                                      itemBuilder: (context) {
+                                        return TaskStatus.values
+                                            .map(
+                                              (e) => PopupMenuItem(
+                                                value: e,
+                                                height: 35,
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    SizedBox.square(
+                                                      dimension: 7,
+                                                      child: ClipOval(
+                                                        child: ColoredBox(
+                                                          color: e.color,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    W.medium,
+                                                    Text(e.label),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                            .toList();
+                                      },
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SizedBox.square(
+                                              dimension: 10,
+                                              child: ClipOval(
+                                                child: ColoredBox(
+                                                  color: task.status.color,
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            W.medium,
+                                            Text(
+                                              task.status.label,
+                                              style: context.bodyMedium,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -190,7 +243,13 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                     controller: state.tabController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      _buildDescription(state, task),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            _buildTaskDescription(state, task),
+                          ],
+                        ),
+                      ),
                       // ListView.builder(
                       //   itemBuilder: (context, index) {
                       //     return Text('Comment $index');
@@ -238,16 +297,15 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
         if (state.isNameEditing.value) ...[
           H.small,
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
-                onPressed: state.onNameEditCancel,
-                child: const Text('Cancel'),
-              ),
-              W.small,
               FilledButton(
                 onPressed: state.onNameSave,
                 child: const Text('Save'),
+              ),
+              W.small,
+              TextButton(
+                onPressed: state.onNameEditCancel,
+                child: const Text('Cancel'),
               ),
             ],
           ),
@@ -256,31 +314,99 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
     );
   }
 
-  Widget _buildDescription(TaskDetailsState state, TaskDetails task) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: SizedBox(
-        width: double.infinity,
-        child: Card.filled(
-          margin: const EdgeInsets.all(Margin.xLarge),
-          child: Padding(
-            padding: const EdgeInsets.all(Margin.medium),
-            child: task.description == null
-                ? SizedBox(
-                    height: 100,
-                    child: Center(
-                      child: Text(
-                        'No description added yet.',
-                        style: state.context.bodySmall.copyWith(
-                          color:
-                              state.context.cs.onSurface.withValues(alpha: 0.5),
+  Widget _buildTaskDescription(TaskDetailsState state, TaskDetails task) {
+    final hasDescription = task.description != null;
+    return Padding(
+      padding: const EdgeInsets.all(Margin.xLarge),
+      child: Column(
+        children: [
+          if (!state.isDescriptionEditing.value)
+            _buildDescriptionView(state, task)
+          else
+            _buildDescriptionEdit(state, task),
+
+          H.small,
+          // save & cancel
+          if (state.isDescriptionEditing.value)
+            Row(
+              children: [
+                FilledButton(
+                  onPressed: state.onDescriptionSave,
+                  child: const Text('Save'),
+                ),
+                W.small,
+                TextButton(
+                  onPressed: state.onDescriptionEditCancel,
+                  child: const Text('Cancel'),
+                ),
+              ],
+            )
+
+          // edit
+          else if (hasDescription)
+            Row(
+              children: [
+                TextButton.icon(
+                  onPressed: state.onEditDescription,
+                  icon: const Icon(Icons.edit),
+                  label: const Text('Edit'),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDescriptionView(TaskDetailsState state, TaskDetails task) {
+    final hasDescription = task.description != null;
+    return SizedBox(
+      width: double.infinity,
+      child: Card.filled(
+        child: Padding(
+          padding: const EdgeInsets.all(Margin.medium),
+          child: !hasDescription
+              ? SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'No description added yet.',
+                          style: state.context.bodySmall.copyWith(
+                            color: state.context.cs.onSurface
+                                .withValues(alpha: 0.5),
+                          ),
                         ),
-                      ),
+                        H.small,
+                        TextButton.icon(
+                          onPressed: state.onEditDescription,
+                          icon: const Icon(Icons.add),
+                          label: const Text('Add'),
+                        ),
+                      ],
                     ),
-                  )
-                : Text(task.description ?? ''),
-          ),
+                  ),
+                )
+              : Text(task.description ?? ''),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDescriptionEdit(TaskDetailsState state, TaskDetails task) {
+    final context = state.context;
+    return TextField(
+      controller: state.descriptionController,
+      autofocus: true,
+      style: context.bodyMedium,
+      readOnly: !state.isDescriptionEditing.value,
+      onTap: state.onEditDescription,
+      minLines: 4,
+      maxLines: 10,
+      decoration: const InputDecoration(
+        hintText: 'Enter task description...',
       ),
     );
   }

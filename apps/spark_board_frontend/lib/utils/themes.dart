@@ -36,6 +36,7 @@ abstract final class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(Margin.xSmall),

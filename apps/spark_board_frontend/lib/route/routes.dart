@@ -6,6 +6,7 @@ import '../modules/signup/signup_view.dart';
 import '../modules/staff/staff_view.dart';
 import '../modules/task_details/task_details_view.dart';
 import '../modules/tasks/tasks_view.dart';
+import '../services/api/models/task_details_response.dart';
 import '../utils/common.dart';
 import 'dialog_view.dart';
 import 'router.dart';
@@ -139,8 +140,9 @@ class TaskDetailsDialogRoute extends GoRouteData {
   static final $parentNavigatorKey = rootNavigatorKey;
 
   @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return DialogView(
+  Page<TaskDetails> buildPage(BuildContext context, GoRouterState state) {
+    return DialogView<TaskDetails>(
+      barrierDismissible: false,
       builder: (context) {
         return SizedBox(
           width: 800,

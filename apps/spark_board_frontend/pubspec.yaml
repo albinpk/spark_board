@@ -8,6 +8,7 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  collection: ^1.19.0
   curl_logger_dio_interceptor: ^1.0.0
   dio: ^5.7.0
   flex_color_scheme: ^8.0.1
