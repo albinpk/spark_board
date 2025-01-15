@@ -225,7 +225,7 @@ export const assignTask = async (
     SELECT
       *
     FROM
-      task_assignee_view
+      task_details_view
     WHERE
       task_id = ${taskId}`;
   return updatedTask;
@@ -259,7 +259,7 @@ export const unassignTask = async (userId: string, taskId: string) => {
     SELECT
       *
     FROM
-      task_assignee_view
+      task_details_view
     WHERE
       task_id = ${taskId}`;
   return updatedTask;
