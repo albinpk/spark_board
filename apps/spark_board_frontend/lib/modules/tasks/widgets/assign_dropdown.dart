@@ -1,22 +1,25 @@
 import 'package:scroll_animator/scroll_animator.dart';
 
+import '../../../providers/staff_list_provider.dart';
+import '../../../services/api/models/staffs_response.dart';
 import '../../../utils/common.dart';
 import '../models/task_model.dart';
-import '../tasks_state.dart';
 
-class AssignDropdown extends StatefulWidget {
+class AssignDropdown extends ConsumerStatefulWidget {
   const AssignDropdown({
     required this.task,
+    required this.onAssign,
     super.key,
   });
 
   final TaskModel task;
+  final ValueChanged<StaffResponse> onAssign;
 
   @override
-  State<AssignDropdown> createState() => _AssignDropdownState();
+  ConsumerState<AssignDropdown> createState() => _AssignDropdownState();
 }
 
-class _AssignDropdownState extends State<AssignDropdown> {
+class _AssignDropdownState extends ConsumerState<AssignDropdown> {
   final _searchTextController = TextEditingController();
   final _searchFocusNode = FocusNode();
   final _scrollController = AnimatedScrollController(
@@ -35,11 +38,21 @@ class _AssignDropdownState extends State<AssignDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final staffs = TasksState.of(context).staffs;
+    final staffs = ref.watch(staffListProvider).valueOrNull;
+
+    if (staffs == null) {
+      return const SizedBox.square(
+        dimension: 15,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+        ),
+      );
+    }
+
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(
-          color: context.cs.onSurface.withOpacity(0.1),
+          color: context.cs.onSurface.withValues(alpha: 0.1),
         ),
       ),
       child: Drop(
@@ -68,10 +81,7 @@ class _AssignDropdownState extends State<AssignDropdown> {
                               controller.hide();
                               setState(() {});
                               _searchTextController.clear();
-                              TasksState.of(context).changeAssignee(
-                                task,
-                                staff,
-                              );
+                              widget.onAssign(staff);
                             },
                           ),
                       ],

@@ -1,6 +1,8 @@
 import '../../services/api/models/task_details_response.dart';
 import '../../utils/common.dart';
 import '../tasks/enums/task_status.dart';
+import '../tasks/models/task_model.dart';
+import '../tasks/widgets/assign_dropdown.dart';
 import 'task_details_state.dart';
 
 /// Route: [TaskDetailsDialogRoute].
@@ -185,14 +187,9 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                   ),
                                   W.xxLarge,
                                   Expanded(
-                                    child: Text(
-                                      task.assignee?.name ?? 'Not assigned',
-                                      style: context.bodyMedium.copyWith(
-                                        color: task.assignee == null
-                                            ? context.cs.onSurface
-                                                .withValues(alpha: 0.6)
-                                            : null,
-                                      ),
+                                    child: AssignDropdown(
+                                      task: TaskModel.fromDetails(task),
+                                      onAssign: state.changeAssignee,
                                     ),
                                   ),
                                 ],

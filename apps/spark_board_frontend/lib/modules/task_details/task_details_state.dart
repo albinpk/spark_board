@@ -1,3 +1,4 @@
+import '../../services/api/models/staffs_response.dart';
 import '../../services/api/models/task_details_response.dart';
 import '../../utils/common.dart';
 import '../tasks/enums/task_status.dart';
@@ -58,6 +59,17 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
       projectId: widget.projectId,
       taskId: widget.taskId,
       body: {'status': status.name},
+    ).go();
+    if (err != null) return AppSnackbar.error(err);
+    task.value = data!.data;
+  }
+
+  Future<void> changeAssignee(StaffResponse staff) async {
+    if (task.value!.assignee?.staffId == staff.staffId) return;
+    final (err, data) = await ref.api.taskAssign(
+      projectId: widget.projectId,
+      taskId: task.value!.taskId,
+      body: {'staffId': staff.staffId},
     ).go();
     if (err != null) return AppSnackbar.error(err);
     task.value = data!.data;

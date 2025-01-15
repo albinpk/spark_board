@@ -1,4 +1,4 @@
-import 'tasks_response.dart';
+import 'task_details_response.dart';
 
 /// Assign/Unassign task api response.
 class AssignTaskResponse {
@@ -12,11 +12,11 @@ class AssignTaskResponse {
     return AssignTaskResponse(
       status: json['status'] as bool,
       message: json['message'] as String,
-      data: TaskResponse.fromJson(json['data'] as Map<String, dynamic>),
+      data: TaskDetails.fromJson(json['data'] as Map<String, dynamic>),
     );
   }
 
   final bool status;
   final String message;
-  final TaskResponse data;
+  final TaskDetails data;
 }

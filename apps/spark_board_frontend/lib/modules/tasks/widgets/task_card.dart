@@ -101,7 +101,15 @@ class _TaskCardState extends State<TaskCard> {
                       if (task is TaskModel)
                         Row(
                           children: [
-                            AssignDropdown(task: task),
+                            AssignDropdown(
+                              task: task,
+                              onAssign: (staff) {
+                                TasksState.of(context).changeAssignee(
+                                  task,
+                                  staff,
+                                );
+                              },
+                            ),
                             const Spacer(),
                             StatusDropdown(task: task),
                           ],
