@@ -4,7 +4,6 @@ import '../../../providers/staff_list_provider.dart';
 import '../../../services/api/models/staffs_response.dart';
 import '../../../utils/common.dart';
 import '../models/task_model.dart';
-import 'task_card.dart';
 
 class AssignDropdown extends ConsumerStatefulWidget {
   const AssignDropdown({
@@ -94,46 +93,43 @@ class _AssignDropdownState extends ConsumerState<AssignDropdown> {
           );
         },
         childBuilder: (context, controller) {
-          return LimitedBox(
-            maxWidth: TaskCard.width / 2 - 15,
-            child: controller.isShowing
-                ? _buildSearchField()
-                : InkWell(
-                    onTap: () {
-                      controller.show();
-                      setState(() {});
-                      _searchTextController.clear();
-                      _searchFocusNode.requestFocus();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 2,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              task.assignee?.name ?? 'Assign',
-                              style: context.bodyMedium.copyWith(
-                                color: task.assignee == null
-                                    ? context.cs.onSurface.withOpacity(0.4)
-                                    : null,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+          return controller.isShowing
+              ? _buildSearchField()
+              : InkWell(
+                  onTap: () {
+                    controller.show();
+                    setState(() {});
+                    _searchTextController.clear();
+                    _searchFocusNode.requestFocus();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 2,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            task.assignee?.name ?? 'Assign',
+                            style: context.bodyMedium.copyWith(
+                              color: task.assignee == null
+                                  ? context.cs.onSurface.withOpacity(0.4)
+                                  : null,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: context.cs.onSurface.withOpacity(0.7),
-                            size: 16,
-                          ),
-                        ],
-                      ),
+                        ),
+                        Icon(
+                          Icons.arrow_drop_down,
+                          color: context.cs.onSurface.withOpacity(0.7),
+                          size: 16,
+                        ),
+                      ],
                     ),
                   ),
-          );
+                );
         },
       ),
     );

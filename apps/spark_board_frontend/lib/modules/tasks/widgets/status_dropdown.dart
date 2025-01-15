@@ -2,7 +2,6 @@ import '../../../utils/common.dart';
 import '../enums/task_status.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
-import 'task_card.dart';
 
 class StatusDropdown extends StatelessWidget {
   const StatusDropdown({
@@ -36,32 +35,29 @@ class StatusDropdown extends StatelessWidget {
           );
         },
         childBuilder: (context, controller) {
-          return LimitedBox(
-            maxWidth: TaskCard.width / 2 - 15,
-            child: InkWell(
-              onTap: controller.show,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 2,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        task.status.label,
-                        style: context.bodyMedium,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+          return InkWell(
+            onTap: controller.show,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 2,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      task.status.label,
+                      style: context.bodyMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    Icon(
-                      Icons.arrow_drop_down,
-                      color: context.cs.onSurface.withValues(alpha: 0.7),
-                      size: 16,
-                    ),
-                  ],
-                ),
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down,
+                    color: context.cs.onSurface.withValues(alpha: 0.7),
+                    size: 16,
+                  ),
+                ],
               ),
             ),
           );

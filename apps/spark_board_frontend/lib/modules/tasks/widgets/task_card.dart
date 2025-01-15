@@ -102,16 +102,22 @@ class _TaskCardState extends State<TaskCard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            AssignDropdown(
-                              task: task,
-                              onAssign: (staff) {
-                                TasksState.of(context).changeAssignee(
-                                  task,
-                                  staff,
-                                );
-                              },
+                            LimitedBox(
+                              maxWidth: TaskCard.width / 2 - 15,
+                              child: AssignDropdown(
+                                task: task,
+                                onAssign: (staff) {
+                                  TasksState.of(context).changeAssignee(
+                                    task,
+                                    staff,
+                                  );
+                                },
+                              ),
                             ),
-                            StatusDropdown(task: task),
+                            LimitedBox(
+                              maxWidth: TaskCard.width / 2 - 15,
+                              child: StatusDropdown(task: task),
+                            ),
                           ],
                         ),
                     ],
