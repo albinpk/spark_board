@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`spark_board_backend` - `v0.0.6`](#spark_board_backend---v006)
+ - [`spark_board_frontend` - `v0.0.4`](#spark_board_frontend---v004)
+
+---
+
+#### `spark_board_backend` - `v0.0.6`
+
+ - **FEAT**: task details & edit (#36).
+ - **FEAT**: task details view (#33).
+ - **FEAT**: update authGurad and handle redirection after login (#32).
+
+#### `spark_board_frontend` - `v0.0.4`
+
+ - **FEAT**: task details & edit (#36).
+ - **FEAT**: add light/dark themes (#35).
+ - **FEAT**: task details view (#33).
+ - **FEAT**: update authGurad and handle redirection after login (#32).
+
+
 ## 2025-01-11
 
 ### Changes

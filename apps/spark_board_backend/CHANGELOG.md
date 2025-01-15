@@ -1,3 +1,9 @@
+## 0.0.6
+
+ - **FEAT**: task details & edit (#36).
+ - **FEAT**: task details view (#33).
+ - **FEAT**: update authGurad and handle redirection after login (#32).
+
 ## 0.0.5
 
  - **FIX**: wrong types in table interface.

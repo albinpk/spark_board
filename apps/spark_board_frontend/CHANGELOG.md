@@ -1,3 +1,10 @@
+## 0.0.4
+
+ - **FEAT**: task details & edit (#36).
+ - **FEAT**: add light/dark themes (#35).
+ - **FEAT**: task details view (#33).
+ - **FEAT**: update authGurad and handle redirection after login (#32).
+
 ## 0.0.3
 
  - **FIX**: increase text sizes for dropdowns and task card (#31).

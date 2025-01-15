@@ -2,7 +2,7 @@
 
 name: spark_board_backend
 
-version: 0.0.5
+version: 0.0.6
 
 environment:
   sdk: ^3.5.3
