@@ -1,7 +1,15 @@
 #### Export postgres schema
 
 ```sh
-pg_dump --schema-only [db] > schema.sql
+# Docker
+docker exec -it pg bash # connect to container
+pg_dump --schema-only -U postgres postgres > schema.sql # export schema
+#                                 ^ db name
+docker cp pg:/schema.sql ./ # copy from container
+
+# Local
+pg_dump --schema-only postgres > schema.sql
+#                     ^ db name
 # --schema-only or -s
 ```
 

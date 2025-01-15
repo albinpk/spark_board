@@ -73,7 +73,7 @@ class SidebarView extends CoraConsumerView<SidebarState> {
   Widget _projectSwitch(SidebarState state) {
     return switch (state.watch(projectsProvider)) {
       AsyncData<List<Data>>(:final value) => CustomDrop<Data>(
-          initialValue: value.firstWhere((e) => e.projectId == projectId),
+          initialValue: value.firstWhereOrNull((e) => e.projectId == projectId),
           menuPadding: EdgeInsets.zero,
           childBuilder: (context, show) {
             return Tooltip(

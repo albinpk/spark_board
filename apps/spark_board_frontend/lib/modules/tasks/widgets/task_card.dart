@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 
+import '../../../services/api/models/task_details_response.dart';
 import '../../../utils/common.dart';
 import '../models/task_model.dart';
 import '../tasks_state.dart';
@@ -81,7 +82,7 @@ class _TaskCardState extends State<TaskCard> {
                 Padding(
                   padding: const EdgeInsets.all(Margin.small),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
                         child: switch (task) {
@@ -99,10 +100,24 @@ class _TaskCardState extends State<TaskCard> {
                       // assignee and status
                       if (task is TaskModel)
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            AssignDropdown(task: task),
-                            const Spacer(),
-                            StatusDropdown(task: task),
+                            LimitedBox(
+                              maxWidth: TaskCard.width / 2 - 15,
+                              child: AssignDropdown(
+                                task: task,
+                                onAssign: (staff) {
+                                  TasksState.of(context).changeAssignee(
+                                    task,
+                                    staff,
+                                  );
+                                },
+                              ),
+                            ),
+                            LimitedBox(
+                              maxWidth: TaskCard.width / 2 - 15,
+                              child: StatusDropdown(task: task),
+                            ),
                           ],
                         ),
                     ],
@@ -150,11 +165,13 @@ class _TaskCardState extends State<TaskCard> {
     );
   }
 
-  void _showTaskDetails(TaskModel task) {
-    TaskDetailsDialogRoute(
+  Future<void> _showTaskDetails(TaskModel task) async {
+    final updatedTask = await TaskDetailsDialogRoute(
       projectId: GoRouterState.of(context).pathParameters['projectId']!,
       taskId: task.taskId,
-    ).go(context);
+    ).push<TaskDetails>(context);
+    if (!mounted || updatedTask == null) return;
+    TasksState.of(context).replaceTask(updatedTask);
   }
 
   Widget _buildMoreButton(TaskModel task, bool showBorder) {

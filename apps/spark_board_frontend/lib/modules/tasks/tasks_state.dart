@@ -1,6 +1,7 @@
 import 'package:scroll_animator/scroll_animator.dart';
 
 import '../../services/api/models/staffs_response.dart';
+import '../../services/api/models/task_details_response.dart';
 import '../../services/api/models/tasks_response.dart';
 import '../../utils/common.dart';
 import 'enums/task_status.dart';
@@ -16,7 +17,6 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
   void initState() {
     super.initState();
     _getTasks();
-    _getStaffs();
     onDispose(scrollController.dispose);
   }
 
@@ -53,14 +53,6 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
       );
     }
     setState(() {});
-  }
-
-  List<StaffResponse> staffs = [];
-
-  Future<void> _getStaffs() async {
-    final (err, data) = await ref.api.staffs(cancelToken: cancelToken()).go();
-    if (err != null) return AppSnackbar.error(err);
-    staffs = data!.data;
   }
 
   void onTapAdd(TaskStatus status) {
@@ -120,7 +112,7 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
 
     setState(() {
       tasks[task.status]!.remove(task);
-      tasks[status]!.add(TaskModel.fromData(data!.data));
+      tasks[status]!.add(TaskModel.fromDetails(data!.data));
     });
   }
 
@@ -138,12 +130,39 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
 
     setState(() {
       tasks[task.status]![tasks[task.status]!.indexOf(task)] =
-          TaskModel.fromData(data!.data);
+          TaskModel.fromDetails(data!.data);
     });
   }
 
   static TasksState of(BuildContext context) {
     return TaskStateProvider.of(context).state;
+  }
+
+  void replaceTask(TaskDetails taskDetails) {
+    final task = TaskModel.fromDetails(taskDetails);
+
+    TaskStatus? prevStatus;
+    int? index;
+    for (final MapEntry(:key, :value) in tasks.entries) {
+      final i = value.indexWhere((e) {
+        return e is TaskModel && e.taskId == task.taskId;
+      });
+      if (i != -1) {
+        prevStatus = key;
+        index = i;
+        break;
+      }
+    }
+    if (prevStatus == null || index == null) return;
+
+    setState(() {
+      if (task.status == prevStatus) {
+        tasks[prevStatus]![index!] = task;
+      } else {
+        tasks[prevStatus]!.removeAt(index!);
+        tasks[task.status]!.add(task);
+      }
+    });
   }
 }
 

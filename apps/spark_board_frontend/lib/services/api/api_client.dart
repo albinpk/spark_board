@@ -56,7 +56,7 @@ abstract class ApiClient {
   });
 
   @PATCH(Endpoints.task)
-  Future<HttpResponse<CreateTaskResponse>> updateTask({
+  Future<HttpResponse<TaskDetailsResponse>> updateTask({
     @Path('projectId') required String projectId,
     @Path('taskId') required String taskId,
     @Body() required Map<String, dynamic> body,
