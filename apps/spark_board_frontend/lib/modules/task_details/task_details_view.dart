@@ -187,9 +187,12 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                   ),
                                   W.xxLarge,
                                   Expanded(
-                                    child: AssignDropdown(
-                                      task: TaskModel.fromDetails(task),
-                                      onAssign: state.changeAssignee,
+                                    child: SizedBox(
+                                      width: 100,
+                                      child: AssignDropdown(
+                                        task: TaskModel.fromDetails(task),
+                                        onAssign: state.changeAssignee,
+                                      ),
                                     ),
                                   ),
                                 ],
