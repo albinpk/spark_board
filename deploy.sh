@@ -14,7 +14,7 @@ echo "Exporting image"
 echo "Export complete"
 
 echo "Copying image to server"
-scp image.tar.gz server:/home/albin/dev/spark_board/
+scp image.tar.gz server:/home/albin/dev/spark_build/
 echo "Image copied to server"
 
 echo "Loading image and starting docker compose"
