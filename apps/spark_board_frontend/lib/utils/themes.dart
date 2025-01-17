@@ -23,6 +23,7 @@ abstract final class AppTheme {
       ),
       cardTheme: CardTheme(
         margin: EdgeInsets.zero,
+        clipBehavior: Clip.hardEdge,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Margin.xSmall),
         ),

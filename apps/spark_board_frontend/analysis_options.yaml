@@ -8,6 +8,7 @@ analyzer:
   errors:
     public_member_api_docs: ignore
     always_use_package_imports: ignore
+    document_ignores: ignore
 
 linter:
   rules:
