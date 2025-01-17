@@ -38,9 +38,9 @@ class SidebarState extends CoraConsumerState<SidebarView>
     end: EdgeInsets.zero,
   ).animate(curve);
 
-  late final dividerColor = ColorTween(
-    begin: Colors.transparent,
-    end: context.theme.dividerColor,
+  late final dividerColorOpacity = Tween<double>(
+    begin: 0,
+    end: 1,
   ).animate(curve);
 
   late final itemIconAlign = AlignmentTween(

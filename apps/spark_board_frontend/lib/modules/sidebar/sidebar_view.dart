@@ -26,7 +26,9 @@ class SidebarView extends CoraConsumerView<SidebarState> {
         decoration: BoxDecoration(
           border: Border(
             right: BorderSide(
-              color: state.dividerColor.value ?? Colors.transparent,
+              color: context.theme.dividerColor.withValues(
+                alpha: state.dividerColorOpacity.value,
+              ),
             ),
           ),
         ),
