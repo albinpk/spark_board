@@ -61,3 +61,9 @@ extension ThemeDataExtension on BuildContext {
     return cs.brightness == Brightness.dark ? dark : light;
   }
 }
+
+/// Extensions for media query.
+extension MediaQueryExt on BuildContext {
+  /// Return width of screen.
+  double get width => MediaQuery.sizeOf(this).width;
+}

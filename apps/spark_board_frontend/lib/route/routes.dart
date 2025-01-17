@@ -86,6 +86,7 @@ class ProjectsRoute extends GoRouteData {
   }
 }
 
+// TODO(albin): create project screen (now redirecting to tasks)
 class ProjectDetailsRoute extends GoRouteData {
   const ProjectDetailsRoute({
     required this.projectId,
@@ -96,6 +97,14 @@ class ProjectDetailsRoute extends GoRouteData {
   @override
   NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
     return NoTransitionPage(child: ProjectDetailsView(projectId: projectId));
+  }
+
+  @override
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
+    if (state.fullPath == '/projects/:projectId') {
+      return TasksRoute(projectId: projectId).location;
+    }
+    return null;
   }
 }
 

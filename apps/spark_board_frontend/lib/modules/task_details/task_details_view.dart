@@ -72,12 +72,8 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
               W.xxLarge,
 
               // close button
-              IconButton(
-                tooltip: 'Close',
-                onPressed: () {
-                  context.pop<TaskDetails>(task);
-                },
-                icon: const Icon(Icons.close),
+              CloseButton(
+                onPressed: () => context.pop<TaskDetails>(task),
               ),
             ],
           ),
