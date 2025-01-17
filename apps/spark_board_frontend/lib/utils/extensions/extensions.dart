@@ -6,3 +6,4 @@ export 'logger_extensions.dart';
 export 'object_extensions.dart';
 export 'obs_state_mixin_extensions.dart';
 export 'ref_extensions.dart';
+export 'string_extensions.dart';

@@ -6,7 +6,9 @@ import '../../providers/projects_provider.dart';
 import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';
 import 'projects_state.dart';
+import 'widget/create_project_dialog.dart';
 
+/// Route: [ProjectsRoute].
 class ProjectsView extends CoraConsumerView<ProjectsState> {
   const ProjectsView({super.key});
 
@@ -43,9 +45,10 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
                       style: context.displaySmall,
                     ),
                   ),
-                  FilledButton(
-                    onPressed: () {},
-                    child: const Text('Create New'),
+                  FilledButton.icon(
+                    onPressed: () => _onTapCreateProject(state),
+                    icon: const Icon(Icons.add),
+                    label: const Text('Create New'),
                   ),
                 ],
               ),
@@ -88,6 +91,19 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
         ),
       ),
     );
+  }
+
+  Future<void> _onTapCreateProject(ProjectsState state) async {
+    final result = await showDialog<CreateProjectDialogResult>(
+      context: state.context,
+      builder: (context) {
+        return const Dialog(
+          child: CreateProjectDialog(),
+        );
+      },
+    );
+    if (result == null) return;
+    await state.createProject(result);
   }
 
   Widget _buildCard(BuildContext context, Data project) {
