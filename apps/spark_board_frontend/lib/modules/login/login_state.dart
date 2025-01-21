@@ -42,7 +42,7 @@ class LoginState extends CoraConsumerState<LoginView> with ObsStateMixin {
       return;
     }
 
-    await ref.storage.setString('token', data!.data.token);
+    await ref.storage.setString(StorageConstants.token, data!.data.token);
     go(widget.nextRoute ?? const ProjectsRoute().location);
   }
 }

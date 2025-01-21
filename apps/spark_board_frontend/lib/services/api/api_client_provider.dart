@@ -15,7 +15,7 @@ ApiClient apiClient(Ref ref) {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final authToken = ref.storage.getString('token');
+        final authToken = ref.storage.getString(StorageConstants.token);
         if (authToken != null) {
           options.headers['Authorization'] = 'Bearer $authToken';
         }

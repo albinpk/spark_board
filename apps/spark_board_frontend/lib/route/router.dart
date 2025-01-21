@@ -23,7 +23,7 @@ class AppRouter extends _$AppRouter {
   FutureOr<String?> _redirect(BuildContext context, GoRouterState state) {
     if (state.matchedLocation == const LoginRoute().location ||
         state.matchedLocation == const SignupRoute().location ||
-        ref.storage.getString('token') != null) {
+        ref.storage.getString(StorageConstants.token) != null) {
       return null;
     }
     return const LoginRoute().location;

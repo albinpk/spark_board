@@ -9,8 +9,9 @@ typedef ThemeState = ({ThemeMode mode, ThemeData light, ThemeData dark});
 class Theme extends _$Theme {
   @override
   ThemeState build() {
+    final mode = ref.storage.getString(StorageConstants.themeMode);
     return (
-      mode: ThemeMode.system,
+      mode: mode == ThemeMode.dark.name ? ThemeMode.dark : ThemeMode.light,
       dark: AppTheme.dark(),
       light: AppTheme.light(),
     );
@@ -22,5 +23,6 @@ class Theme extends _$Theme {
       dark: state.dark,
       light: state.light
     );
+    ref.storage.setString(StorageConstants.themeMode, state.mode.name);
   }
 }

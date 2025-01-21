@@ -8,6 +8,7 @@ export 'package:obs_state_mixin/obs_state_mixin.dart';
 // ignore: invalid_export_of_internal_element
 export 'package:riverpod_annotation/riverpod_annotation.dart';
 
+export '../../services/storage/storage_constants.dart';
 export '../route/routes.dart';
 export '../types.dart';
 export '../widgets/widgets.dart';
