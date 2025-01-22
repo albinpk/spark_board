@@ -1,9 +1,9 @@
 {
   "info": {
-    "_postman_id": "d8d7e3ce-c6a7-49ad-8bcb-cdf1d07d940c",
+    "_postman_id": "cbd472de-25c8-49b7-9816-8bb3ac4cd363",
     "name": "SparkBoard",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "39834430"
+    "_exporter_id": "29322462"
   },
   "item": [
     {
@@ -219,7 +219,7 @@
               "variable": [
                 {
                   "key": "projectId",
-                  "value": "23b9f2df-c215-4d79-bceb-d12e007d0bec"
+                  "value": "80c39ea2-9b03-4f23-950a-10646496a80b"
                 }
               ]
             }
@@ -243,7 +243,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"The task\",\n    \"description\": \"description\",\n    \"status\": \"done\"\n}",
+              "raw": "{\n    \"name\": \"1\",\n    \"description\": \"description\",\n    \"status\": \"done\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -257,7 +257,40 @@
               "variable": [
                 {
                   "key": "projectId",
-                  "value": "23b9f2df-c215-4d79-bceb-d12e007d0bec"
+                  "value": "a30f1a84-2d52-42de-8ab1-328cc35bd59e"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Task details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks", ":taskId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "2034482a-8624-493b-9b42-0f70dd021743"
                 }
               ]
             }
@@ -314,7 +347,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"New name\",\n    \"description\": \"The description\",\n    \"status\": \"todo\"\n}",
+              "raw": "{\n    \"name\": \"New change\",\n    \"description\": \"\",\n    \"status\": \"todo\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -332,7 +365,7 @@
                 },
                 {
                   "key": "taskId",
-                  "value": "4758181a-128c-4e34-b716-2cfb082cfc1a"
+                  "value": "2034482a-8624-493b-9b42-0f70dd021743"
                 }
               ]
             }
@@ -356,7 +389,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"staffId\": \"cbbe1c2f-ea36-4a1b-b4cc-fa3f17f99af7\"\n}",
+              "raw": "{\n    \"staffId\": \"6bea0bf2-e8c7-4cb4-8634-4f274c1111a1\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -374,7 +407,7 @@
                 },
                 {
                   "key": "taskId",
-                  "value": "5d6d62bb-18dd-44ad-8e29-7c5c58788792"
+                  "value": "0ba45bf5-e5c8-4948-89a4-1a141f577cae"
                 }
               ]
             }
@@ -407,7 +440,138 @@
                 },
                 {
                   "key": "taskId",
-                  "value": "4758181a-128c-4e34-b716-2cfb082cfc1a"
+                  "value": "0ba45bf5-e5c8-4948-89a4-1a141f577cae"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"comment\": \"Hello there\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/comments",
+              "host": ["{{base_url}}"],
+              "path": [
+                "projects",
+                ":projectId",
+                "tasks",
+                ":taskId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "ebdd7d18-2187-4c15-bfa1-ca8f21c340df"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List comments",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/comments",
+              "host": ["{{base_url}}"],
+              "path": [
+                "projects",
+                ":projectId",
+                "tasks",
+                ":taskId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "ebdd7d18-2187-4c15-bfa1-ca8f21c340df"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/comments/:commentId",
+              "host": ["{{base_url}}"],
+              "path": [
+                "projects",
+                ":projectId",
+                "tasks",
+                ":taskId",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "ebdd7d18-2187-4c15-bfa1-ca8f21c340df"
+                },
+                {
+                  "key": "commentId",
+                  "value": "73c972cc-1184-4bf3-9a03-7221f86e9966"
                 }
               ]
             }
