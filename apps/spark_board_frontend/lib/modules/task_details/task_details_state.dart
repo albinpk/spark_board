@@ -14,7 +14,11 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 1, vsync: this);
+    tabController = TabController(
+      length: 2,
+      vsync: this,
+      animationDuration: Duration.zero,
+    );
     scrollController.addListener(_onScroll);
     _getTask();
   }

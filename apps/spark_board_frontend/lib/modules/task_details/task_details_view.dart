@@ -229,9 +229,29 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                   isScrollable: true,
                   indicatorColor: context.cs.onSurface,
                   labelColor: context.cs.onSurface,
-                  tabs: const [
-                    Tab(child: Text('Description')),
-                    // Tab(child: Text('Comments')),
+                  tabs: [
+                    const Tab(child: Text('Description')),
+                    Tab(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Comments'),
+                          W.small,
+                          Card.filled(
+                            color: context.cs.surfaceContainerHighest,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Margin.xSmall,
+                              ),
+                              child: Text(
+                                '4',
+                                style: context.labelSmall,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 Flexible(
@@ -246,16 +266,97 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                           ],
                         ),
                       ),
-                      // ListView.builder(
-                      //   itemBuilder: (context, index) {
-                      //     return Text('Comment $index');
-                      //   },
-                      // ),
+                      Column(
+                        children: [
+                          _commentInput(state),
+                          Expanded(
+                            child: ListView.separated(
+                              itemCount: 10,
+                              padding: const EdgeInsets.all(
+                                Margin.xLarge,
+                              ).copyWith(bottom: 50),
+                              itemBuilder: (context, index) {
+                                return _buildComment(index, state);
+                              },
+                              separatorBuilder: (context, index) {
+                                return const Divider(
+                                  height: Margin.xxLarge,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _commentInput(TaskDetailsState state) {
+    return Padding(
+      padding: const EdgeInsets.all(Margin.xLarge),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Expanded(
+            child: TextField(
+              minLines: 1,
+              maxLines: 5,
+              decoration: InputDecoration(
+                hintText: 'Add a comment...',
+              ),
+            ),
+          ),
+          W.medium,
+          IconButton.filledTonal(
+            tooltip: 'Send',
+            onPressed: () {},
+            icon: const Icon(Icons.send_rounded),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComment(int index, TaskDetailsState state) {
+    final context = state.context;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const CircleAvatar(
+          maxRadius: 18,
+          child: Icon(Icons.person),
+        ),
+        W.large,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Albin PK',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  W.large,
+                  Text(
+                    '2 hours ago',
+                    style: context.bodySmall,
+                  ),
+                ],
+              ),
+              const Text(
+                'This task is progressing well. The team is on track to meet the deadline. We should continue to monitor the progress closely.',
+              ),
+            ],
           ),
         ),
       ],
