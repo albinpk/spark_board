@@ -151,6 +151,20 @@ CREATE VIEW public.task_assignee_view AS
 ALTER VIEW public.task_assignee_view OWNER TO postgres;
 
 --
+-- Name: task_comment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.task_comment (
+    comment_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    task_id uuid NOT NULL,
+    comment character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.task_comment OWNER TO postgres;
+
+--
 -- Name: task_details_view; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -340,6 +354,14 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: task_comment task_comment_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task_comment
+    ADD CONSTRAINT task_comment_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
 
 
 --
