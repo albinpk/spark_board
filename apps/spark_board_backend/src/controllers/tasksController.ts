@@ -335,7 +335,9 @@ export const getComments = async (userId: string, taskId: string) => {
     FROM
       task_comment
     WHERE
-      task_id = ${taskId}`;
+      task_id = ${taskId}
+    ORDER BY
+      created_at DESC`;
 };
 
 /**
