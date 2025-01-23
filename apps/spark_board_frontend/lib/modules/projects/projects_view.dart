@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:skeletonizer/skeletonizer.dart';
-
 import '../../providers/projects_provider.dart';
 import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';

@@ -114,7 +114,7 @@ class _AssignDropdownState extends ConsumerState<AssignDropdown> {
                             task.assignee?.name ?? 'Assign',
                             style: context.bodyMedium.copyWith(
                               color: task.assignee == null
-                                  ? context.cs.onSurface.withOpacity(0.4)
+                                  ? context.cs.onSurface.withValues(alpha: 0.4)
                                   : null,
                             ),
                             maxLines: 1,
@@ -123,7 +123,7 @@ class _AssignDropdownState extends ConsumerState<AssignDropdown> {
                         ),
                         Icon(
                           Icons.arrow_drop_down,
-                          color: context.cs.onSurface.withOpacity(0.7),
+                          color: context.cs.onSurface.withValues(alpha: 0.7),
                           size: 16,
                         ),
                       ],

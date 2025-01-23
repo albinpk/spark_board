@@ -138,7 +138,7 @@ class SidebarView extends CoraConsumerView<SidebarState> {
             angle: state.collapseIconRotation.value,
             child: Icon(
               Icons.keyboard_double_arrow_left_rounded,
-              color: state.context.cs.onSurface.withOpacity(0.5),
+              color: state.context.cs.onSurface.withValues(alpha: 0.5),
             ),
           ),
         ),
