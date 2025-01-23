@@ -193,35 +193,11 @@ class StaffView extends CoraConsumerView<StaffState> {
   }
 
   Future<void> _onDelete(StaffResponse staff, StaffState state) async {
-    final confirmed = await showDialog<bool>(
-          context: state.context,
-          builder: (context) {
-            return AlertDialog(
-              content: const Text(
-                'Are you sure you want to delete this staff?',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: const Text('Cancel'),
-                ),
-                FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: context.cs.error,
-                  ),
-                  onPressed: () => context.pop<bool>(true),
-                  child: Text(
-                    'Yes, Delete',
-                    style: TextStyle(
-                      color: context.cs.onError,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
+    final confirmed = await confirmDialog(
+      context: state.context,
+      description: 'Are you sure you want to delete this staff?',
+      confirmText: 'Yes, Delete',
+    );
     if (!confirmed) return;
     await state.deleteStaff(staff);
   }

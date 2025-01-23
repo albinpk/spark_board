@@ -1,8 +1,11 @@
+import '../../providers/task_comment_list_provider.dart';
+import '../../services/api/models/task_comments_response.dart';
 import '../../services/api/models/task_details_response.dart';
 import '../../utils/common.dart';
 import '../tasks/enums/task_status.dart';
 import '../tasks/models/task_model.dart';
 import '../tasks/widgets/assign_dropdown.dart';
+import 'models/comment_more_option_enum.dart';
 import 'task_details_state.dart';
 
 /// Route: [TaskDetailsDialogRoute].
@@ -41,6 +44,10 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
         ],
       );
     }
+    final commentsProvider = taskCommentListProvider(
+      projectId: projectId,
+      taskId: taskId,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -106,9 +113,18 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: Text(
-                                      'Status',
-                                      style: labelStyle,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.radio_button_off,
+                                          size: 14,
+                                        ),
+                                        W.small,
+                                        Text(
+                                          'Status',
+                                          style: labelStyle,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   W.xxLarge,
@@ -176,9 +192,18 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: Text(
-                                      'Assigned to',
-                                      style: labelStyle,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.group_outlined,
+                                          size: 14,
+                                        ),
+                                        W.small,
+                                        Text(
+                                          'Assigned to',
+                                          style: labelStyle,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   W.xxLarge,
@@ -199,9 +224,18 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: Text(
-                                      'Created at',
-                                      style: labelStyle,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.event_outlined,
+                                          size: 14,
+                                        ),
+                                        W.small,
+                                        Text(
+                                          'Created at',
+                                          style: labelStyle,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   W.xxLarge,
@@ -236,19 +270,23 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text('Comments'),
-                          W.small,
-                          Card.filled(
-                            color: context.cs.surfaceContainerHighest,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Margin.xSmall,
-                              ),
-                              child: Text(
-                                '4',
-                                style: context.labelSmall,
+
+                          // comments count
+                          if (task.totalComments > 0) ...[
+                            W.small,
+                            Card.filled(
+                              color: context.cs.surfaceContainerHighest,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: Margin.xSmall,
+                                ),
+                                child: Text(
+                                  '${task.totalComments}',
+                                  style: context.labelSmall,
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
@@ -259,6 +297,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                     controller: state.tabController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
+                      // task description
                       SingleChildScrollView(
                         child: Column(
                           children: [
@@ -266,21 +305,51 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                           ],
                         ),
                       ),
+
+                      // comments
                       Column(
                         children: [
                           _commentInput(state),
                           Expanded(
-                            child: ListView.separated(
-                              itemCount: 10,
-                              padding: const EdgeInsets.all(
-                                Margin.xLarge,
-                              ).copyWith(bottom: 50),
-                              itemBuilder: (context, index) {
-                                return _buildComment(index, state);
-                              },
-                              separatorBuilder: (context, index) {
-                                return const Divider(
-                                  height: Margin.xxLarge,
+                            child: Consumer(
+                              builder: (context, ref, child) {
+                                return Shimmer(
+                                  value: ref.watch(commentsProvider),
+                                  mock: CommentData(
+                                    comment: BoneMock.paragraph,
+                                    commentId: '1',
+                                    createdAt: DateTime.now(),
+                                  ).asList(3),
+                                  builder: (comments) {
+                                    if (comments.isEmpty) {
+                                      return Center(
+                                        child: Text(
+                                          'No comments yet.',
+                                          style: context.bodyMedium.copyWith(
+                                            color: context.cs.onSurface
+                                                .withValues(alpha: 0.5),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return ListView.separated(
+                                      itemCount: comments.length,
+                                      padding: const EdgeInsets.all(
+                                        Margin.xLarge,
+                                      ).copyWith(bottom: 50),
+                                      itemBuilder: (context, index) {
+                                        return _buildComment(
+                                          state,
+                                          comments[index],
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) {
+                                        return const Divider(
+                                          height: Margin.xxLarge,
+                                        );
+                                      },
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -304,11 +373,12 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Expanded(
+          Expanded(
             child: TextField(
+              controller: state.commentController,
               minLines: 1,
               maxLines: 5,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Add a comment...',
               ),
             ),
@@ -316,7 +386,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
           W.medium,
           IconButton.filledTonal(
             tooltip: 'Send',
-            onPressed: () {},
+            onPressed: state.addComment,
             icon: const Icon(Icons.send_rounded),
           ),
         ],
@@ -324,42 +394,78 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
     );
   }
 
-  Widget _buildComment(int index, TaskDetailsState state) {
-    final context = state.context;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const CircleAvatar(
-          maxRadius: 18,
-          child: Icon(Icons.person),
-        ),
-        W.large,
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+  Widget _buildComment(TaskDetailsState state, CommentData comment) {
+    var isMoreOptionVisible = false;
+    return Hovered(
+      builder: (context, isHovered) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CircleAvatar(
+              maxRadius: 18,
+              child: Icon(Icons.person),
+            ),
+            W.large,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Albin PK',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    children: [
+                      const Text(
+                        // TODO(albin): author name
+                        'Albin PK',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      W.large,
+                      Tooltip(
+                        message: comment.createdAt.formatLong(),
+                        child: Text(
+                          comment.createdAt.fromNow(),
+                          style: context.bodySmall,
+                        ),
+                      ),
+                      const Spacer(),
+
+                      // more options
+                      SizedBox.square(
+                        dimension: 30,
+                        child: isHovered || isMoreOptionVisible
+                            ? PopupMenuButton<CommentMoreOption>(
+                                padding: EdgeInsets.zero,
+                                iconSize: 18,
+                                onOpened: () => isMoreOptionVisible = true,
+                                onCanceled: () => isMoreOptionVisible = false,
+                                icon: const Icon(Icons.more_vert),
+                                onSelected: (value) {
+                                  _onCommentOption(
+                                    state,
+                                    comment,
+                                    value,
+                                  );
+                                },
+                                itemBuilder: (context) {
+                                  return CommentMoreOption.values.map((e) {
+                                    return PopupMenuItem(
+                                      value: e,
+                                      child: Text(e.name.capitalize),
+                                    );
+                                  }).toList();
+                                },
+                              )
+                            : null,
+                      ),
+                    ],
                   ),
-                  W.large,
-                  Text(
-                    '2 hours ago',
-                    style: context.bodySmall,
-                  ),
+                  Text(comment.comment),
                 ],
               ),
-              const Text(
-                'This task is progressing well. The team is on track to meet the deadline. We should continue to monitor the progress closely.',
-              ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -504,5 +610,20 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
         hintText: 'Enter task description...',
       ),
     );
+  }
+
+  Future<void> _onCommentOption(
+    TaskDetailsState state,
+    CommentData comment,
+    CommentMoreOption value,
+  ) async {
+    switch (value) {
+      case CommentMoreOption.delete:
+        final confirmed = await confirmDialog(
+          context: state.context,
+          description: 'Are you sure you want to delete this comment?',
+        );
+        if (confirmed) await state.deleteComment(comment);
+    }
   }
 }

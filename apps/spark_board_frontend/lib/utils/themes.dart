@@ -28,6 +28,9 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(Margin.xSmall),
         ),
       ),
+      popupMenuTheme: const PopupMenuThemeData(
+        menuPadding: EdgeInsets.zero,
+      ),
       iconButtonTheme: IconButtonThemeData(
         style: ButtonStyle(
           shape: RoundedRectangleBorder(
