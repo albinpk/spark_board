@@ -1,6 +1,7 @@
 import '../../providers/task_comment_list_provider.dart';
 import '../../services/api/models/task_comments_response.dart';
 import '../../services/api/models/task_details_response.dart';
+import '../../services/api/models/tasks_response.dart';
 import '../../utils/common.dart';
 import '../tasks/enums/task_status.dart';
 import '../tasks/models/task_model.dart';
@@ -24,339 +25,319 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
 
   static const _namePadding = 6.0;
 
+  static final mock = TaskDetails(
+    taskId: '1',
+    name: BoneMock.paragraph,
+    status: TaskStatus.inProgress,
+    description: BoneMock.longParagraph,
+    createdAt: mockDate,
+    totalComments: 1,
+    assignee: Assignee(
+      staffId: '1',
+      email: BoneMock.email,
+      name: BoneMock.name,
+    ),
+    project: Project(
+      projectId: '1',
+      ownerId: '1',
+      name: BoneMock.title,
+      description: BoneMock.paragraph,
+      createdAt: mockDate,
+    ),
+  );
+
   @override
   Widget build(BuildContext context, TaskDetailsState state) {
-    final task = state.task.value;
+    final isLoading = state.task.value == null;
+    final task = state.task.value ?? mock;
 
-    // TODO(albin): add shimmer
-    if (task == null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          IconButton(
-            tooltip: 'Close',
-            onPressed: () {
-              context.pop<TaskDetails>();
-            },
-            icon: const Icon(Icons.close),
-          ),
-          const Expanded(child: Center(child: CircularProgressIndicator())),
-        ],
-      );
-    }
     final commentsProvider = taskCommentListProvider(
       projectId: projectId,
       taskId: taskId,
     );
 
+    final header = Padding(
+      padding: const EdgeInsets.all(Margin.small).copyWith(
+        left: Margin.xLarge,
+      ),
+      child: Row(
+        children: [
+          // task name; only visible when scrolled
+          Expanded(
+            child: AnimatedCrossFade(
+              duration: const Duration(milliseconds: 200),
+              firstCurve: Curves.easeInOut,
+              secondCurve: Curves.easeInOut,
+              sizeCurve: Curves.easeInOut,
+              crossFadeState: state.showHeader.value
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              firstChild: Text(
+                task.name,
+                overflow: TextOverflow.ellipsis,
+                style: context.titleSmall,
+              ),
+              secondChild: const SizedBox(),
+            ),
+          ),
+          W.xxLarge,
+
+          // close button
+          CloseButton(
+            onPressed: () => context.pop<TaskDetails>(state.task.value),
+          ),
+        ],
+      ),
+    );
+
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(Margin.small).copyWith(
-            left: Margin.xLarge,
-          ),
-          child: Row(
-            children: [
-              // task name; only visible when scrolled
-              Expanded(
-                child: AnimatedCrossFade(
-                  duration: const Duration(milliseconds: 200),
-                  firstCurve: Curves.easeInOut,
-                  secondCurve: Curves.easeInOut,
-                  sizeCurve: Curves.easeInOut,
-                  crossFadeState: state.showHeader.value
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                  firstChild: Text(
-                    task.name,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.titleSmall,
-                  ),
-                  secondChild: const SizedBox(),
-                ),
-              ),
-              W.xxLarge,
+        // with this user can close the dialog when loading
+        if (isLoading) header,
 
-              // close button
-              CloseButton(
-                onPressed: () => context.pop<TaskDetails>(task),
-              ),
-            ],
-          ),
-        ),
         Flexible(
-          child: NestedScrollView(
-            controller: state.scrollController,
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              final labelStyle = context.bodyMedium.copyWith(
-                color: context.cs.onSurface.withValues(alpha: 0.7),
-              );
-              return [
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(
-                          Margin.xLarge - _namePadding,
-                        ),
-                        child: _buildTaskName(state, task),
-                      ),
-
-                      // status
-                      Padding(
-                        padding: const EdgeInsets.all(Margin.xLarge),
-                        child: IntrinsicWidth(
+          child: Skeletonizer(
+            enabled: isLoading,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!isLoading) header,
+                Flexible(
+                  child: NestedScrollView(
+                    controller: state.scrollController,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      final labelStyle = context.bodyMedium.copyWith(
+                        color: context.cs.onSurface.fade(0.7),
+                      );
+                      return [
+                        SliverToBoxAdapter(
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.radio_button_off,
-                                          size: 14,
-                                        ),
-                                        W.medium,
-                                        Text(
-                                          'Status',
-                                          style: labelStyle,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  W.xxLarge,
-                                  Expanded(
-                                    child: PopupMenuButton(
-                                      tooltip: 'Change status',
-                                      menuPadding: EdgeInsets.zero,
-                                      position: PopupMenuPosition.under,
-                                      initialValue: task.status,
-                                      onSelected: state.changeStatus,
-                                      itemBuilder: (context) {
-                                        return TaskStatus.values
-                                            .map(
-                                              (e) => PopupMenuItem(
-                                                value: e,
-                                                height: 35,
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    SizedBox.square(
-                                                      dimension: 7,
-                                                      child: ClipOval(
-                                                        child: ColoredBox(
-                                                          color: e.color,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    W.medium,
-                                                    Text(e.label),
-                                                  ],
+                              Padding(
+                                padding: const EdgeInsets.all(
+                                  Margin.xLarge - _namePadding,
+                                ),
+                                child: isLoading
+                                    ? Text(
+                                        BoneMock.address,
+                                        style: context.titleLarge,
+                                      )
+                                    : _buildTaskName(state, task),
+                              ),
+
+                              // status
+                              Padding(
+                                padding: const EdgeInsets.all(Margin.xLarge),
+                                child: IntrinsicWidth(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.radio_button_off,
+                                                  size: 14,
                                                 ),
+                                                W.medium,
+                                                Text(
+                                                  'Status',
+                                                  style: labelStyle,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          W.xxLarge,
+                                          Expanded(
+                                            child: _buildStatusDropdown(
+                                              task,
+                                              state,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      H.large,
+
+                                      // assignee
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.group_outlined,
+                                                  size: 14,
+                                                ),
+                                                W.medium,
+                                                Text(
+                                                  'Assigned to',
+                                                  style: labelStyle,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          W.xxLarge,
+                                          Expanded(
+                                            child: SizedBox(
+                                              width: 100,
+                                              child: AssignDropdown(
+                                                task:
+                                                    TaskModel.fromDetails(task),
+                                                onAssign: state.changeAssignee,
                                               ),
-                                            )
-                                            .toList();
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      H.large,
+
+                                      // created at
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.event_outlined,
+                                                  size: 14,
+                                                ),
+                                                W.medium,
+                                                Text(
+                                                  'Created at',
+                                                  style: labelStyle,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          W.xxLarge,
+                                          Expanded(
+                                            child: Text(
+                                              task.createdAt.format(),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ];
+                    },
+                    body: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TabBar(
+                          controller: state.tabController,
+                          tabAlignment: TabAlignment.start,
+                          isScrollable: true,
+                          indicatorColor: context.cs.onSurface,
+                          labelColor: context.cs.onSurface,
+                          tabs: [
+                            const Tab(child: Text('Description')),
+                            Tab(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text('Comments'),
+
+                                  // comments count
+                                  if (task.totalComments > 0) ...[
+                                    W.small,
+                                    Card.filled(
+                                      color: context.cs.surfaceContainerHighest,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: Margin.xSmall,
+                                        ),
+                                        child: Text(
+                                          '${task.totalComments}',
+                                          style: context.labelSmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Flexible(
+                          child: TabBarView(
+                            controller: state.tabController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              // task description
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    _buildTaskDescription(state, task),
+                                  ],
+                                ),
+                              ),
+
+                              // comments
+                              Column(
+                                children: [
+                                  _commentInput(state),
+                                  Expanded(
+                                    child: Consumer(
+                                      builder: (context, ref, child) {
+                                        return Shimmer(
+                                          value: ref.watch(commentsProvider),
+                                          mock: CommentData(
+                                            comment: BoneMock.paragraph,
+                                            commentId: '1',
+                                            createdAt: mockDate,
+                                          ).asList(3),
+                                          builder: (comments) {
+                                            if (comments.isEmpty) {
+                                              return Center(
+                                                child: Text(
+                                                  'No comments yet.',
+                                                  style: context.bodyMedium
+                                                      .copyWith(
+                                                    color: context.cs.onSurface
+                                                        .fade(0.5),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            return ListView.separated(
+                                              itemCount: comments.length,
+                                              padding: const EdgeInsets.all(
+                                                Margin.xLarge,
+                                              ).copyWith(bottom: 50),
+                                              itemBuilder: (context, index) {
+                                                return _buildComment(
+                                                  state,
+                                                  comments[index],
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return const Divider(
+                                                  height: Margin.xxLarge,
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
                                       },
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            SizedBox.square(
-                                              dimension: 10,
-                                              child: ClipOval(
-                                                child: ColoredBox(
-                                                  color: task.status.color,
-                                                ),
-                                              ),
-                                            ),
-                                            W.medium,
-                                            Text(
-                                              task.status.label,
-                                              style: context.bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              H.large,
-
-                              // assignee
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.group_outlined,
-                                          size: 14,
-                                        ),
-                                        W.medium,
-                                        Text(
-                                          'Assigned to',
-                                          style: labelStyle,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  W.xxLarge,
-                                  Expanded(
-                                    child: SizedBox(
-                                      width: 100,
-                                      child: AssignDropdown(
-                                        task: TaskModel.fromDetails(task),
-                                        onAssign: state.changeAssignee,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              H.large,
-
-                              // created at
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.event_outlined,
-                                          size: 14,
-                                        ),
-                                        W.medium,
-                                        Text(
-                                          'Created at',
-                                          style: labelStyle,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  W.xxLarge,
-                                  Expanded(
-                                    child: Text(task.createdAt.format()),
                                   ),
                                 ],
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ];
-            },
-            body: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TabBar(
-                  controller: state.tabController,
-                  tabAlignment: TabAlignment.start,
-                  isScrollable: true,
-                  indicatorColor: context.cs.onSurface,
-                  labelColor: context.cs.onSurface,
-                  tabs: [
-                    const Tab(child: Text('Description')),
-                    Tab(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('Comments'),
-
-                          // comments count
-                          if (task.totalComments > 0) ...[
-                            W.small,
-                            Card.filled(
-                              color: context.cs.surfaceContainerHighest,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: Margin.xSmall,
-                                ),
-                                child: Text(
-                                  '${task.totalComments}',
-                                  style: context.labelSmall,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-                Flexible(
-                  child: TabBarView(
-                    controller: state.tabController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      // task description
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            _buildTaskDescription(state, task),
-                          ],
-                        ),
-                      ),
-
-                      // comments
-                      Column(
-                        children: [
-                          _commentInput(state),
-                          Expanded(
-                            child: Consumer(
-                              builder: (context, ref, child) {
-                                return Shimmer(
-                                  value: ref.watch(commentsProvider),
-                                  mock: CommentData(
-                                    comment: BoneMock.paragraph,
-                                    commentId: '1',
-                                    createdAt: DateTime.now(),
-                                  ).asList(3),
-                                  builder: (comments) {
-                                    if (comments.isEmpty) {
-                                      return Center(
-                                        child: Text(
-                                          'No comments yet.',
-                                          style: context.bodyMedium.copyWith(
-                                            color: context.cs.onSurface
-                                                .withValues(alpha: 0.5),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    return ListView.separated(
-                                      itemCount: comments.length,
-                                      padding: const EdgeInsets.all(
-                                        Margin.xLarge,
-                                      ).copyWith(bottom: 50),
-                                      itemBuilder: (context, index) {
-                                        return _buildComment(
-                                          state,
-                                          comments[index],
-                                        );
-                                      },
-                                      separatorBuilder: (context, index) {
-                                        return const Divider(
-                                          height: Margin.xxLarge,
-                                        );
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                 ),
               ],
@@ -364,6 +345,62 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildStatusDropdown(TaskDetails task, TaskDetailsState state) {
+    return PopupMenuButton(
+      tooltip: 'Change status',
+      menuPadding: EdgeInsets.zero,
+      position: PopupMenuPosition.under,
+      initialValue: task.status,
+      onSelected: state.changeStatus,
+      itemBuilder: (context) {
+        return TaskStatus.values
+            .map(
+              (e) => PopupMenuItem(
+                value: e,
+                height: 35,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox.square(
+                      dimension: 7,
+                      child: ClipOval(
+                        child: ColoredBox(
+                          color: e.color,
+                        ),
+                      ),
+                    ),
+                    W.medium,
+                    Text(e.label),
+                  ],
+                ),
+              ),
+            )
+            .toList();
+      },
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox.square(
+              dimension: 10,
+              child: ClipOval(
+                child: ColoredBox(
+                  color: task.status.color,
+                ),
+              ),
+            ),
+            W.medium,
+            Text(
+              task.status.label,
+              style: state.context.bodyMedium,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -401,9 +438,10 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               maxRadius: 18,
-              child: Icon(Icons.person),
+              backgroundColor: context.cs.onSurface.fade(0.05),
+              child: const Icon(Icons.person),
             ),
             W.large,
             Expanded(
@@ -485,11 +523,14 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
             isCollapsed: true,
             contentPadding: const EdgeInsets.all(_namePadding),
             border: MaterialStateOutlineInputBorder.resolveWith((states) {
+              final side = BorderSide(
+                color: context.cs.onSurface.fade(0.5),
+              );
               return OutlineInputBorder(
                 borderSide: state.isNameEditing.value
-                    ? const BorderSide()
+                    ? side
                     : states.contains(WidgetState.hovered)
-                        ? const BorderSide(width: 0.5)
+                        ? side.copyWith(width: 0.5)
                         : BorderSide.none,
               );
             }),
@@ -578,8 +619,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                         Text(
                           'No description added yet.',
                           style: state.context.bodySmall.copyWith(
-                            color: state.context.cs.onSurface
-                                .withValues(alpha: 0.5),
+                            color: state.context.cs.onSurface.fade(0.5),
                           ),
                         ),
                         H.small,

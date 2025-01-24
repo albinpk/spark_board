@@ -14,6 +14,7 @@ export '../route/routes.dart';
 export '../types.dart';
 export '../widgets/widgets.dart';
 export 'app_snackbar.dart';
+export 'constants.dart';
 export 'extensions/extensions.dart';
 export 'functions.dart';
 export 'logger.dart';

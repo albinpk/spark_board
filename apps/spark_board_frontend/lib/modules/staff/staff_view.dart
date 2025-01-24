@@ -167,7 +167,7 @@ class StaffView extends CoraConsumerView<StaffState> {
           tooltip: 'Edit',
           icon: const Icon(Icons.edit),
           iconSize: 18,
-          color: state.context.cs.onSurface.withValues(alpha: 0.5),
+          color: state.context.cs.onSurface.fade(0.5),
           onPressed: () => _onEdit(staff, state),
         ),
 
@@ -184,7 +184,7 @@ class StaffView extends CoraConsumerView<StaffState> {
           tooltip: 'Delete',
           icon: const Icon(Icons.delete),
           iconSize: 18,
-          color: state.context.cs.onSurface.withValues(alpha: 0.5),
+          color: state.context.cs.onSurface.fade(0.5),
           onPressed: () => _onDelete(staff, state),
         ),
       ],

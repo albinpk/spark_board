@@ -50,9 +50,9 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
         .go();
     if (err != null) return AppSnackbar.error(err);
 
-    task.value = data!.data;
-    nameController.text = task.value!.name;
-    descriptionController.text = task.value!.description ?? '';
+    task.value = data?.data;
+    nameController.text = task.value?.name ?? '';
+    descriptionController.text = task.value?.description ?? '';
   }
 
   /// Visibility of the task name on the header.

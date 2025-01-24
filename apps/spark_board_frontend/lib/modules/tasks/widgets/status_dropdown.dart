@@ -16,7 +16,7 @@ class StatusDropdown extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(
-          color: context.cs.onSurface.withValues(alpha: 0.1),
+          color: context.cs.onSurface.fade(0.1),
         ),
       ),
       child: Drop(
@@ -54,7 +54,7 @@ class StatusDropdown extends StatelessWidget {
                   ),
                   Icon(
                     Icons.arrow_drop_down,
-                    color: context.cs.onSurface.withValues(alpha: 0.7),
+                    color: context.cs.onSurface.fade(0.7),
                     size: 16,
                   ),
                 ],
