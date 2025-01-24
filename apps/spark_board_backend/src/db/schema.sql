@@ -158,7 +158,7 @@ CREATE TABLE public.task_comment (
     comment_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     task_id uuid NOT NULL,
     comment character varying(255) NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
