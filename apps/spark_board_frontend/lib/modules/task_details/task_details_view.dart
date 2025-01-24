@@ -119,7 +119,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                           Icons.radio_button_off,
                                           size: 14,
                                         ),
-                                        W.small,
+                                        W.medium,
                                         Text(
                                           'Status',
                                           style: labelStyle,
@@ -198,7 +198,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                           Icons.group_outlined,
                                           size: 14,
                                         ),
-                                        W.small,
+                                        W.medium,
                                         Text(
                                           'Assigned to',
                                           style: labelStyle,
@@ -230,7 +230,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                           Icons.event_outlined,
                                           size: 14,
                                         ),
-                                        W.small,
+                                        W.medium,
                                         Text(
                                           'Created at',
                                           style: labelStyle,
