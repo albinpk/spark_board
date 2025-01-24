@@ -6,4 +6,4 @@ docker run -p 5432:5432 --name pg -e POSTGRES_PASSWORD=1234 -v spark_board_pg_da
 sleep 1
 
 # rum schema and add dummy data
-./migrate.sh pg
+./scripts/docker-pg-schema.sh pg

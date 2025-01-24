@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# script to run docker on server
+# Run container on home server
+# This script should be executed on the home server root directory
 
 cd dev/spark_build
 
