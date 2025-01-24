@@ -178,7 +178,10 @@ CREATE VIEW public.task_details_view AS
             WHEN (s.staff_id IS NOT NULL) THEN json_build_object('staff_id', s.staff_id, 'name', s.name, 'email', s.email)
             ELSE NULL::json
         END AS assignee,
-    json_build_object('project_id', p.project_id, 'owner_id', p.owner_id, 'name', p.name, 'description', p.description, 'created_at', p.created_at) AS project
+    json_build_object('project_id', p.project_id, 'owner_id', p.owner_id, 'name', p.name, 'description', p.description, 'created_at', p.created_at) AS project,
+    ( SELECT (count(task_comment.comment_id))::integer AS count
+           FROM public.task_comment
+          WHERE (task_comment.task_id = t.task_id)) AS total_comments
    FROM (((public.tasks t
      LEFT JOIN public.projects p ON ((t.project_id = p.project_id)))
      LEFT JOIN public.task_assignee a ON ((a.task_id = t.task_id)))
