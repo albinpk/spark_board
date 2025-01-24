@@ -12,9 +12,10 @@ VALUES
 
 -- create project
 INSERT INTO
-	public.projects (owner_id, name, description)
+	public.projects (project_id, owner_id, name, description)
 VALUES
 	(
+		'5f4305b0-c37a-48cf-a616-3ed1e8008433',
 		(
 			SELECT
 				user_id
@@ -41,12 +42,7 @@ INSERT INTO
 	public.tasks (project_id, name)
 VALUES
 	(
-		(
-			SELECT
-				project_id
-			FROM
-				projects
-		),
+		'5f4305b0-c37a-48cf-a616-3ed1e8008433',
 		'Task 1'
 	);
 
