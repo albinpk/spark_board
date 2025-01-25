@@ -18,6 +18,7 @@ echo "Export complete"
 echo "Copying image to server"
 scp image.tar.gz server:/home/albin/dev/spark_build/
 echo "Image copied to server"
+rm image.tar.gz # delete local image
 
 echo "Loading image and starting docker compose"
 ssh server "password=$password bash -s" < ./scripts/docker-up.sh
