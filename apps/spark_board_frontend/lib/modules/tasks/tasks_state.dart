@@ -52,7 +52,7 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
         (list) => list..add(TaskModel.fromData(task)),
       );
     }
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   void onTapAdd(TaskStatus status) {
