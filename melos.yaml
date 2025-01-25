@@ -7,7 +7,7 @@ command:
   version:
     hooks:
       # Update the version in package.json
-      preCommit: ./scripts/preVersion.sh
+      preCommit: ./scripts/pre-version.sh
 # scripts:
 #   build: docker build --tag app .
 #   run: docker run -d -p 7070:3000 app:latest
