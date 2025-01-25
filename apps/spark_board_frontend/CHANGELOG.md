@@ -1,3 +1,12 @@
+## 0.0.5
+
+ - **FIX**: enhance sidebar behavior and task loading indicator (#43).
+ - **FIX**: sidebar divider color when them switching (#39).
+ - **FEAT**: task comments (#42).
+ - **FEAT**: persistent theme mode (#41).
+ - **FEAT**: create new staff (#40).
+ - **FEAT**: implement project creation dialog and API integration (#38).
+
 ## 0.0.4
 
  - **FEAT**: task details & edit (#36).

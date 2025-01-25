@@ -1,3 +1,7 @@
+## 0.0.7
+
+ - **FEAT**: task comments (#42).
+
 ## 0.0.6
 
  - **FEAT**: task details & edit (#36).

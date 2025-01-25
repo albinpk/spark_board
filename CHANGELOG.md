@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`spark_board_backend` - `v0.0.7`](#spark_board_backend---v007)
+ - [`spark_board_frontend` - `v0.0.5`](#spark_board_frontend---v005)
+
+---
+
+#### `spark_board_backend` - `v0.0.7`
+
+ - **FEAT**: task comments (#42).
+
+#### `spark_board_frontend` - `v0.0.5`
+
+ - **FIX**: enhance sidebar behavior and task loading indicator (#43).
+ - **FIX**: sidebar divider color when them switching (#39).
+ - **FEAT**: task comments (#42).
+ - **FEAT**: persistent theme mode (#41).
+ - **FEAT**: create new staff (#40).
+ - **FEAT**: implement project creation dialog and API integration (#38).
+
+
 ## 2025-01-15
 
 ### Changes
