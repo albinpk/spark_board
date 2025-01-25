@@ -3,6 +3,8 @@ name: SparkBoard
 packages:
   - apps/*
 
+sdkPath: apps/spark_board_frontend/.fvm/flutter_sdk
+
 command:
   version:
     hooks:
