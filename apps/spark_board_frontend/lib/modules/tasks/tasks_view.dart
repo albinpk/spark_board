@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import '../../services/api/models/tasks_response.dart';
 import '../../utils/common.dart';
 import 'enums/task_status.dart';
+import 'models/task_model.dart';
 import 'tasks_state.dart';
 import 'widgets/task_card.dart';
 
@@ -53,8 +55,46 @@ class TasksView extends CoraConsumerView<TasksState> {
     );
   }
 
+  static final mock = {
+    TaskStatus.todo: [
+      TaskModel(
+        taskId: '1',
+        name: BoneMock.paragraph,
+        description: null,
+        status: TaskStatus.todo,
+        createdAt: mockDate,
+        assignee: Assignee(
+          staffId: '1',
+          name: BoneMock.name,
+          email: BoneMock.email,
+        ),
+      ),
+    ],
+    TaskStatus.inProgress: [
+      TaskModel(
+        taskId: '1',
+        name: BoneMock.subtitle,
+        description: null,
+        status: TaskStatus.inProgress,
+        createdAt: mockDate,
+        assignee: null,
+      ),
+    ],
+    TaskStatus.done: [
+      TaskModel(
+        taskId: '1',
+        name: BoneMock.title,
+        description: null,
+        status: TaskStatus.done,
+        createdAt: mockDate,
+        assignee: null,
+      ),
+    ],
+  };
+
   Widget _buildGridList(TasksState state, TaskStatus status) {
-    final taskList = state.tasks[status] ?? [];
+    final isLoading = state.isLoading.value;
+    final taskList = isLoading ? mock[status]! : state.tasks[status]!;
     return SliverMainAxisGroup(
       slivers: [
         SliverPersistentHeader(
@@ -71,20 +111,24 @@ class TasksView extends CoraConsumerView<TasksState> {
               padding: const EdgeInsets.all(
                 Margin.medium,
               ).copyWith(right: maxWidth % TaskCard.width),
-              sliver: SliverGrid.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: max(1, maxWidth ~/ TaskCard.width),
-                  mainAxisExtent: TaskCard.height,
-                  mainAxisSpacing: Margin.medium,
-                  crossAxisSpacing: Margin.medium,
+              sliver: Skeletonizer.sliver(
+                enabled: isLoading,
+                ignoreContainers: false,
+                child: SliverGrid.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: max(1, maxWidth ~/ TaskCard.width),
+                    mainAxisExtent: TaskCard.height,
+                    mainAxisSpacing: Margin.medium,
+                    crossAxisSpacing: Margin.medium,
+                  ),
+                  itemCount: taskList.length,
+                  itemBuilder: (context, index) {
+                    return TaskCard(
+                      key: ValueKey(taskList[index]),
+                      task: taskList[index],
+                    );
+                  },
                 ),
-                itemCount: taskList.length,
-                itemBuilder: (context, index) {
-                  return TaskCard(
-                    key: ValueKey(taskList[index]),
-                    task: taskList[index],
-                  );
-                },
               ),
             );
           },

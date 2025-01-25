@@ -37,13 +37,17 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
     TaskStatus.done: [],
   };
 
+  late final isLoading = obs(false);
+
   Future<void> _getTasks() async {
+    isLoading.setTrue();
     final (err, data) = await ref.api
         .tasks(
           projectId: widget.projectId,
           cancelToken: cancelToken(),
         )
         .go();
+    if (mounted) isLoading.setFalse();
     if (err != null) return AppSnackbar.error(err);
 
     for (final task in data?.data ?? <TaskResponse>[]) {

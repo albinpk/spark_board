@@ -79,6 +79,18 @@ class SidebarState extends CoraConsumerState<SidebarView>
     onDispose(_controller.dispose);
   }
 
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // close sidebar on small screen
+    if (!_initialized && context.width < 900) {
+      _initialized = true;
+      _controller.value = 1;
+    }
+  }
+
   void toggleExpand() {
     if (curve.isCompleted) {
       _controller.reverse();
