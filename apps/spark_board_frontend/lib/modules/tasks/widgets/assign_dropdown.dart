@@ -38,16 +38,7 @@ class _AssignDropdownState extends ConsumerState<AssignDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final staffs = ref.watch(staffListProvider).valueOrNull;
-
-    if (staffs == null) {
-      return const SizedBox.square(
-        dimension: 15,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-        ),
-      );
-    }
+    final staffs = ref.watch(staffListProvider).valueOrNull ?? [];
 
     return DecoratedBox(
       decoration: BoxDecoration(
