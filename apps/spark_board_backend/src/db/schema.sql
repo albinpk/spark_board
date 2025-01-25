@@ -151,6 +151,20 @@ CREATE VIEW public.task_assignee_view AS
 ALTER VIEW public.task_assignee_view OWNER TO postgres;
 
 --
+-- Name: task_comment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.task_comment (
+    comment_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    task_id uuid NOT NULL,
+    comment character varying(255) NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.task_comment OWNER TO postgres;
+
+--
 -- Name: task_details_view; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -164,7 +178,10 @@ CREATE VIEW public.task_details_view AS
             WHEN (s.staff_id IS NOT NULL) THEN json_build_object('staff_id', s.staff_id, 'name', s.name, 'email', s.email)
             ELSE NULL::json
         END AS assignee,
-    json_build_object('project_id', p.project_id, 'owner_id', p.owner_id, 'name', p.name, 'description', p.description, 'created_at', p.created_at) AS project
+    json_build_object('project_id', p.project_id, 'owner_id', p.owner_id, 'name', p.name, 'description', p.description, 'created_at', p.created_at) AS project,
+    ( SELECT (count(task_comment.comment_id))::integer AS count
+           FROM public.task_comment
+          WHERE (task_comment.task_id = t.task_id)) AS total_comments
    FROM (((public.tasks t
      LEFT JOIN public.projects p ON ((t.project_id = p.project_id)))
      LEFT JOIN public.task_assignee a ON ((a.task_id = t.task_id)))
@@ -340,6 +357,14 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: task_comment task_comment_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task_comment
+    ADD CONSTRAINT task_comment_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
 
 
 --

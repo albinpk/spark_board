@@ -5,10 +5,12 @@ import 'endpoints.dart';
 import 'models/assign_task_response.dart';
 import 'models/create_project_response.dart';
 import 'models/create_staff_response.dart';
+import 'models/create_task_comment_response.dart';
 import 'models/create_task_response.dart';
 import 'models/login_response.dart';
 import 'models/projects_response.dart';
 import 'models/staffs_response.dart';
+import 'models/task_comments_response.dart';
 import 'models/task_details_response.dart';
 import 'models/tasks_response.dart';
 
@@ -80,6 +82,27 @@ abstract class ApiClient {
   Future<HttpResponse<AssignTaskResponse>> removeTaskAssign({
     @Path('projectId') required String projectId,
     @Path('taskId') required String taskId,
+  });
+
+  @POST(Endpoints.taskComments)
+  Future<HttpResponse<CreateTaskCommentResponse>> createTaskComment({
+    @Path('projectId') required String projectId,
+    @Path('taskId') required String taskId,
+    @Body() required Map<String, dynamic> body,
+  });
+
+  @GET(Endpoints.taskComments)
+  Future<HttpResponse<TaskCommentsResponse>> getTaskComments({
+    @Path('projectId') required String projectId,
+    @Path('taskId') required String taskId,
+    @CancelRequest() required CancelToken cancelToken,
+  });
+
+  @DELETE(Endpoints.taskComment)
+  Future<HttpResponse<void>> deleteTaskComment({
+    @Path('projectId') required String projectId,
+    @Path('taskId') required String taskId,
+    @Path('commentId') required String commentId,
   });
 
   @GET(Endpoints.staffs)

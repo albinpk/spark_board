@@ -17,6 +17,12 @@ abstract final class Endpoints {
 
   static const taskAssign = '$_v1/projects/{projectId}/tasks/{taskId}/assign';
 
+  static const taskComments =
+      '$_v1/projects/{projectId}/tasks/{taskId}/comments';
+
+  static const taskComment =
+      '$_v1/projects/{projectId}/tasks/{taskId}/comments/{commentId}';
+
   static const staffs = '$_v1/staff';
 
   static const staff = '$_v1/staff/{staffId}';

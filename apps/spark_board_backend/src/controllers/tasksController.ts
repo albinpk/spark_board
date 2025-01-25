@@ -4,6 +4,7 @@ import { TaskTable } from "../interfaces/taskTable";
 import { appError } from "../models/appError";
 import {
   AssignTaskBody,
+  CreateCommentBody,
   CreateTaskBody,
   UpdateTaskBody,
 } from "../routes/api/v1/projects/tasks/tasksSchema";
@@ -263,4 +264,112 @@ export const unassignTask = async (userId: string, taskId: string) => {
     WHERE
       task_id = ${taskId}`;
   return updatedTask;
+};
+
+/**
+ * Create a comment on a task.
+ * @param userId
+ * @param taskId
+ * @param body create comment body
+ * @returns created comment
+ */
+export const createComment = async (
+  userId: string,
+  taskId: string,
+  body: CreateCommentBody
+) => {
+  const [task] = await sql`
+    SELECT
+      p.owner_id
+    FROM
+      tasks t
+      JOIN projects p ON t.project_id = p.project_id
+    WHERE
+      t.task_id = ${taskId}`;
+
+  if (!task) throw appError("Task not found", 404);
+
+  if (task.owner_id !== userId) throw appError("Permission denied", 403);
+
+  const [comment] = await sql`
+    INSERT INTO
+      task_comment (task_id, comment)
+    VALUES
+      (
+        ${taskId},
+        ${body.comment}
+      )
+    RETURNING
+      comment_id,
+      comment,
+      created_at`;
+
+  return comment;
+};
+
+/**
+ * Get comments of a task.
+ * @param userId
+ * @param taskId
+ * @returns list of comments
+ */
+export const getComments = async (userId: string, taskId: string) => {
+  const [task] = await sql`
+    SELECT
+      p.owner_id
+    FROM
+      tasks t
+      JOIN projects p ON t.project_id = p.project_id
+    WHERE
+      t.task_id = ${taskId}`;
+
+  if (!task) throw appError("Task not found", 404);
+
+  if (task.owner_id !== userId) throw appError("Permission denied", 403);
+
+  return await sql`
+    SELECT
+      comment_id,
+      comment,
+      created_at
+    FROM
+      task_comment
+    WHERE
+      task_id = ${taskId}
+    ORDER BY
+      created_at DESC`;
+};
+
+/**
+ * Delete a comment on a task.
+ * @param userId
+ * @param taskId
+ * @param commentId
+ */
+export const deleteComment = async (
+  userId: string,
+  taskId: string,
+  commentId: string
+) => {
+  const [task] = await sql`
+    SELECT
+      p.owner_id
+    FROM
+      tasks t
+      JOIN projects p ON t.project_id = p.project_id
+    WHERE
+      t.task_id = ${taskId}`;
+
+  if (!task) throw appError("Task not found", 404);
+
+  if (task.owner_id !== userId) throw appError("Permission denied", 403);
+
+  const [comment] = await sql`
+    DELETE FROM task_comment
+    WHERE
+      comment_id = ${commentId}
+    RETURNING
+      comment_id`;
+
+  if (!comment) throw appError("Comment not found", 404);
 };

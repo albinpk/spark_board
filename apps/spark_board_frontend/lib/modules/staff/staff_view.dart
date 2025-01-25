@@ -1,4 +1,3 @@
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 import '../../providers/staff_list_provider.dart';
@@ -168,7 +167,7 @@ class StaffView extends CoraConsumerView<StaffState> {
           tooltip: 'Edit',
           icon: const Icon(Icons.edit),
           iconSize: 18,
-          color: state.context.cs.onSurface.withValues(alpha: 0.5),
+          color: state.context.cs.onSurface.fade(0.5),
           onPressed: () => _onEdit(staff, state),
         ),
 
@@ -185,7 +184,7 @@ class StaffView extends CoraConsumerView<StaffState> {
           tooltip: 'Delete',
           icon: const Icon(Icons.delete),
           iconSize: 18,
-          color: state.context.cs.onSurface.withValues(alpha: 0.5),
+          color: state.context.cs.onSurface.fade(0.5),
           onPressed: () => _onDelete(staff, state),
         ),
       ],
@@ -193,35 +192,11 @@ class StaffView extends CoraConsumerView<StaffState> {
   }
 
   Future<void> _onDelete(StaffResponse staff, StaffState state) async {
-    final confirmed = await showDialog<bool>(
-          context: state.context,
-          builder: (context) {
-            return AlertDialog(
-              content: const Text(
-                'Are you sure you want to delete this staff?',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: const Text('Cancel'),
-                ),
-                FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: context.cs.error,
-                  ),
-                  onPressed: () => context.pop<bool>(true),
-                  child: Text(
-                    'Yes, Delete',
-                    style: TextStyle(
-                      color: context.cs.onError,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
+    final confirmed = await confirmDialog(
+      context: state.context,
+      description: 'Are you sure you want to delete this staff?',
+      confirmText: 'Yes, Delete',
+    );
     if (!confirmed) return;
     await state.deleteStaff(staff);
   }

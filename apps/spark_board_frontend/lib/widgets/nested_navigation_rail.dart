@@ -95,7 +95,7 @@ class _ItemState extends State<_Item> {
                   duration: _duration,
                   child: Icon(
                     Icons.keyboard_arrow_down,
-                    color: context.cs.onPrimaryContainer.withOpacity(0.5),
+                    color: context.cs.onPrimaryContainer.fade(0.5),
                   ),
                 ),
         );

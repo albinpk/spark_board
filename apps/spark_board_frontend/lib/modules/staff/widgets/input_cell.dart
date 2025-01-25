@@ -92,7 +92,7 @@ class _InputCellState extends State<InputCell> with ObsStateMixin {
           child: Icon(
             Icons.edit,
             size: 14,
-            color: context.cs.onSurface.withOpacity(0.5),
+            color: context.cs.onSurface.fade(0.5),
           ),
         ),
       ),

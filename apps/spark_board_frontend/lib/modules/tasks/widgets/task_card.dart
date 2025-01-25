@@ -185,7 +185,7 @@ class _TaskCardState extends State<TaskCard> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: showBorder
-                    ? context.cs.onSurface.withOpacity(0.5)
+                    ? context.cs.onSurface.fade(0.5)
                     : Colors.transparent,
               ),
             ),
@@ -228,7 +228,7 @@ class _TaskCardState extends State<TaskCard> {
       decoration: InputDecoration.collapsed(
         hintText: 'Enter task name...',
         hintStyle: TextStyle(
-          color: context.cs.onSurface.withOpacity(0.3),
+          color: context.cs.onSurface.fade(0.3),
         ),
       ),
       onChanged: (value) {

@@ -52,3 +52,17 @@ export interface AssignTaskBody {
 export const assignTaskSchema = Joi.object<AssignTaskBody>({
   staffId: Joi.string().uuid().required(),
 });
+
+/**
+ * Request body for creating a comment on a task.
+ */
+export interface CreateCommentBody {
+  comment: string;
+}
+
+/**
+ * Joi schema for create comment request body.
+ */
+export const createCommentSchema = Joi.object<CreateCommentBody>({
+  comment: Joi.string().required(),
+});

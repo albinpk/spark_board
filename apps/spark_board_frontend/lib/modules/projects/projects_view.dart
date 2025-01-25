@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:skeletonizer/skeletonizer.dart';
-
 import '../../providers/projects_provider.dart';
 import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';
@@ -22,7 +20,7 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
       projectId: '1',
       name: BoneMock.fullName,
       description: BoneMock.address,
-      createdAt: DateTime.now(),
+      createdAt: mockDate,
     );
 
     final asyncValue = state.watch(projectsProvider);
@@ -129,7 +127,7 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
                 child: Text(
                   project.description ?? '',
                   style: context.bodyMedium.copyWith(
-                    color: context.cs.onSurface.withValues(alpha: 0.5),
+                    color: context.cs.onSurface.fade(0.5),
                   ),
                 ),
               ),
@@ -139,13 +137,13 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
                     child: Text(
                       project.createdAt.format('MMM d, yyyy'),
                       style: context.bodySmall.copyWith(
-                        color: context.cs.onSurface.withValues(alpha: 0.5),
+                        color: context.cs.onSurface.fade(0.5),
                       ),
                     ),
                   ),
                   Icon(
                     Icons.arrow_forward_rounded,
-                    color: context.cs.onSurface.withValues(alpha: 0.5),
+                    color: context.cs.onSurface.fade(0.5),
                   ),
                 ],
               ),

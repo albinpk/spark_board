@@ -1,4 +1,6 @@
+import '../../providers/task_comment_list_provider.dart';
 import '../../services/api/models/staffs_response.dart';
+import '../../services/api/models/task_comments_response.dart';
 import '../../services/api/models/task_details_response.dart';
 import '../../utils/common.dart';
 import '../tasks/enums/task_status.dart';
@@ -8,13 +10,18 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
     with SingleTickerProviderStateMixin, ObsStateMixin {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
+  final commentController = TextEditingController();
   final scrollController = ScrollController();
   late final TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 1, vsync: this);
+    tabController = TabController(
+      length: 2,
+      vsync: this,
+      animationDuration: Duration.zero,
+    );
     scrollController.addListener(_onScroll);
     _getTask();
   }
@@ -25,6 +32,7 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
     scrollController.dispose();
     nameController.dispose();
     descriptionController.dispose();
+    commentController.dispose();
     super.dispose();
   }
 
@@ -42,9 +50,9 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
         .go();
     if (err != null) return AppSnackbar.error(err);
 
-    task.value = data!.data;
-    nameController.text = task.value!.name;
-    descriptionController.text = task.value!.description ?? '';
+    task.value = data?.data;
+    nameController.text = task.value?.name ?? '';
+    descriptionController.text = task.value?.description ?? '';
   }
 
   /// Visibility of the task name on the header.
@@ -142,5 +150,30 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
 
     task.value = data!.data;
     descriptionController.text = task.value!.description ?? '';
+  }
+
+  Future<void> addComment() async {
+    final comment = commentController.text.trim();
+    if (comment.isEmpty) return;
+    final (err, data) = await ref.api.createTaskComment(
+      projectId: widget.projectId,
+      taskId: widget.taskId,
+      body: {'comment': comment},
+    ).go();
+    if (err != null) return AppSnackbar.error(err);
+    commentController.clear();
+    ref.invalidate(taskCommentListProvider);
+  }
+
+  Future<void> deleteComment(CommentData comment) async {
+    final (err, data) = await ref.api
+        .deleteTaskComment(
+          projectId: widget.projectId,
+          taskId: widget.taskId,
+          commentId: comment.commentId,
+        )
+        .go();
+    if (err != null) return AppSnackbar.error(err);
+    ref.invalidate(taskCommentListProvider);
   }
 }

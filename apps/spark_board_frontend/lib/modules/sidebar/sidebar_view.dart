@@ -26,8 +26,8 @@ class SidebarView extends CoraConsumerView<SidebarState> {
         decoration: BoxDecoration(
           border: Border(
             right: BorderSide(
-              color: context.theme.dividerColor.withValues(
-                alpha: state.dividerColorOpacity.value,
+              color: context.theme.dividerColor.fade(
+                state.dividerColorOpacity.value,
               ),
             ),
           ),
@@ -138,7 +138,7 @@ class SidebarView extends CoraConsumerView<SidebarState> {
             angle: state.collapseIconRotation.value,
             child: Icon(
               Icons.keyboard_double_arrow_left_rounded,
-              color: state.context.cs.onSurface.withOpacity(0.5),
+              color: state.context.cs.onSurface.fade(0.5),
             ),
           ),
         ),

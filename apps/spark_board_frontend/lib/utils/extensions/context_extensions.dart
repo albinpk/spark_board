@@ -62,6 +62,12 @@ extension ThemeDataExtension on BuildContext {
   }
 }
 
+/// Extensions for material color.
+extension ColorExt on Color {
+  /// Handy method for adding opacity.
+  Color fade(double value) => withValues(alpha: value);
+}
+
 /// Extensions for media query.
 extension MediaQueryExt on BuildContext {
   /// Return width of screen.

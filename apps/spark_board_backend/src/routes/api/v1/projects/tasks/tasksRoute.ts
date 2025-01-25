@@ -1,9 +1,12 @@
 import { Router } from "express";
 import {
   assignTask,
+  createComment,
   createTask,
+  deleteComment,
   deleteTask,
   getAllTasksOfProject,
+  getComments,
   taskDetails,
   unassignTask,
   updateTask,
@@ -14,6 +17,8 @@ import { tryCatch } from "../../../../../utils/tryCatch";
 import {
   AssignTaskBody,
   assignTaskSchema,
+  CreateCommentBody,
+  createCommentSchema,
   CreateTaskBody,
   createTaskSchema,
   UpdateTaskBody,
@@ -94,6 +99,40 @@ tasks.delete(
   tryCatch(async (req, res) => {
     const task = await unassignTask(req.userId, req.params.taskId);
     res.json(good({ message: "Task unassigned successfully", data: task }));
+  })
+);
+
+// api/v1/projects/:projectId/tasks/:taskId/comments
+tasks.post(
+  "/:taskId/comments",
+  validator(createCommentSchema),
+  tryCatch<CreateCommentBody>(async (req, res) => {
+    const comment = await createComment(
+      req.userId,
+      req.params.taskId,
+      req.body
+    );
+    res.json(good({ message: "Comment added successfully", data: comment }));
+  })
+);
+
+// api/v1/projects/:projectId/tasks/:taskId/comments
+tasks.get(
+  "/:taskId/comments",
+  tryCatch(async (req, res) => {
+    const comments = await getComments(req.userId, req.params.taskId);
+    res.json(
+      good({ message: "Comments fetched successfully", data: comments })
+    );
+  })
+);
+
+// api/v1/projects/:projectId/tasks/:taskId/comments/:commentId
+tasks.delete(
+  "/:taskId/comments/:commentId",
+  tryCatch(async (req, res) => {
+    await deleteComment(req.userId, req.params.taskId, req.params.commentId);
+    res.json(good({ message: "Comment deleted successfully" }));
   })
 );
 

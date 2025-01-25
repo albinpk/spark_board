@@ -32,6 +32,7 @@ class TaskDetails {
     required this.status,
     required this.createdAt,
     required this.project,
+    required this.totalComments,
     this.description,
     this.assignee,
   });
@@ -41,9 +42,9 @@ class TaskDetails {
       taskId: json['task_id'] as String,
       name: json['name'] as String,
       description: json['description'] as String?,
-      // status: json['status'] as String,
       status: TaskStatus.fromName(json['status'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
+      totalComments: json['total_comments'] as int,
       assignee: json['assignee'] == null
           ? null
           : Assignee.fromJson(json['assignee'] as Map<String, dynamic>),
@@ -58,6 +59,7 @@ class TaskDetails {
   final DateTime createdAt;
   final Assignee? assignee;
   final Project project;
+  final int totalComments;
 
   @override
   String toString() =>

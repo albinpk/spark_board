@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   contact: {}
 servers:
-  - url: "{{base_url}}"
+  - url: http://localhost:3000/api/v1
 paths:
   /auth/login:
     post:
@@ -168,7 +168,7 @@ paths:
                   example: description
                 name:
                   type: string
-                  example: The task
+                  example: "1"
                 status:
                   type: string
                   example: done
@@ -176,7 +176,7 @@ paths:
               Create task:
                 value:
                   description: description
-                  name: The task
+                  name: "1"
                   status: done
       responses:
         "200":
@@ -189,8 +189,19 @@ paths:
         required: true
         schema:
           type: string
-          example: 23b9f2df-c215-4d79-bceb-d12e007d0bec
+          example: a30f1a84-2d52-42de-8ab1-328cc35bd59e
   /projects/{projectId}/tasks/{taskId}:
+    get:
+      tags:
+        - Tasks
+      summary: Task details
+      description: Task details
+      operationId: taskDetails
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - Tasks
@@ -216,18 +227,18 @@ paths:
               properties:
                 description:
                   type: string
-                  example: The description
+                  example: ""
                 name:
                   type: string
-                  example: New name
+                  example: New change
                 status:
                   type: string
                   example: todo
             examples:
               Update task:
                 value:
-                  description: The description
-                  name: New name
+                  description: ""
+                  name: New change
                   status: todo
       responses:
         "200":
@@ -246,7 +257,7 @@ paths:
         required: true
         schema:
           type: string
-          example: 4758181a-128c-4e34-b716-2cfb082cfc1a
+          example: 2034482a-8624-493b-9b42-0f70dd021743
   /projects/{projectId}/tasks/{taskId}/assign:
     post:
       tags:
@@ -262,11 +273,11 @@ paths:
               properties:
                 staffId:
                   type: string
-                  example: cbbe1c2f-ea36-4a1b-b4cc-fa3f17f99af7
+                  example: 6bea0bf2-e8c7-4cb4-8634-4f274c1111a1
             examples:
               Assign task:
                 value:
-                  staffId: cbbe1c2f-ea36-4a1b-b4cc-fa3f17f99af7
+                  staffId: 6bea0bf2-e8c7-4cb4-8634-4f274c1111a1
       responses:
         "200":
           description: ""
@@ -295,7 +306,87 @@ paths:
         required: true
         schema:
           type: string
-          example: 4758181a-128c-4e34-b716-2cfb082cfc1a
+          example: 0ba45bf5-e5c8-4948-89a4-1a141f577cae
+  /projects/{projectId}/tasks/{taskId}/comments:
+    get:
+      tags:
+        - Tasks
+      summary: List comments
+      description: List comments
+      operationId: listComments
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Tasks
+      summary: Create comment
+      description: Create comment
+      operationId: createComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  example: Hello there
+            examples:
+              Create comment:
+                value:
+                  comment: Hello there
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ebdd7d18-2187-4c15-bfa1-ca8f21c340df
+  /projects/{projectId}/tasks/{taskId}/comments/{commentId}:
+    delete:
+      tags:
+        - Tasks
+      summary: Delete comment
+      description: Delete comment
+      operationId: deleteComment
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ebdd7d18-2187-4c15-bfa1-ca8f21c340df
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 73c972cc-1184-4bf3-9a03-7221f86e9966
   /staff:
     get:
       tags:
