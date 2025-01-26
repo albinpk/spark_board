@@ -6,10 +6,14 @@ class LoginView extends CoraConsumerView<LoginState> {
   const LoginView({
     super.key,
     this.nextRoute,
+    this.isDemo = false,
   });
 
   /// The route to navigate to after login
   final String? nextRoute;
+
+  /// If true, the form will be pre-filled with demo credentials.
+  final bool isDemo;
 
   @override
   Widget build(BuildContext context, LoginState state) {
