@@ -12,7 +12,7 @@ class AppRouter extends _$AppRouter {
   GoRouter build() {
     return GoRouter(
       navigatorKey: rootNavigatorKey,
-      initialLocation: const LoginRoute().location,
+      initialLocation: const LoginRoute(demo: true).location,
       debugLogDiagnostics: kDebugMode,
       routes: $appRoutes,
       redirect: _redirect,

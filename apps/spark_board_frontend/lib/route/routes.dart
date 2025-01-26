@@ -36,13 +36,17 @@ part 'routes.g.dart';
 class LoginRoute extends GoRouteData {
   const LoginRoute({
     this.next,
+    this.demo,
   });
 
   final String? next;
+  final bool? demo;
 
   @override
   NoTransitionPage<void> buildPage(BuildContext context, GoRouterState state) {
-    return NoTransitionPage(child: LoginView(nextRoute: next));
+    return NoTransitionPage(
+      child: LoginView(nextRoute: next, isDemo: demo ?? false),
+    );
   }
 }
 
