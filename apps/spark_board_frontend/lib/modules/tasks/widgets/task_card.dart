@@ -125,11 +125,9 @@ class _TaskCardState extends State<TaskCard> {
                 ),
 
                 // more button
-                if (task is TaskModel)
-                  _buildMoreButton(
-                    task,
-                    _showMoreButton || _overlayController.isShowing,
-                  ),
+                if (task is TaskModel &&
+                    (_showMoreButton || _overlayController.isShowing))
+                  _buildMoreButton(task),
               ],
             ),
           ),
@@ -174,7 +172,7 @@ class _TaskCardState extends State<TaskCard> {
     TasksState.of(context).replaceTask(updatedTask);
   }
 
-  Widget _buildMoreButton(TaskModel task, bool showBorder) {
+  Widget _buildMoreButton(TaskModel task) {
     return Align(
       alignment: Alignment.topRight,
       child: Drop(
@@ -184,9 +182,7 @@ class _TaskCardState extends State<TaskCard> {
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               border: Border.all(
-                color: showBorder
-                    ? context.cs.onSurface.fade(0.5)
-                    : Colors.transparent,
+                color: context.cs.onSurface.fade(0.5),
               ),
             ),
             child: InkWell(
