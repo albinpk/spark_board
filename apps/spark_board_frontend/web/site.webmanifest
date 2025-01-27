@@ -1,0 +1,36 @@
+{
+  "name": "SparkBoard - Task Management Platform",
+  "short_name": "SparkBoard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0175C2",
+  "theme_color": "#0175C2",
+  "description": "SparkBoard is a powerful task management and project tracking platform built with Flutter. Streamline your workflow, collaborate efficiently, and boost productivity with an intuitive interface and seamless performance.",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "productivity",
+    "business",
+    "collaboration",
+    "task-management"
+  ],
+  "related_applications": [],
+  "lang": "en"
+}

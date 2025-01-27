@@ -1,0 +1,741 @@
+{
+  "info": {
+    "_postman_id": "cbd472de-25c8-49b7-9816-8bb3ac4cd363",
+    "name": "SparkBoard",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29322462"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Body has a token\", () => {",
+                  "    pm.expect(pm.response.json().data.token).to.be.string;",
+                  "    pm.collectionVariables.set(\"token\", pm.response.json().data.token);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"albin@mail.com\",\n    \"password\": \"12345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signup",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Albin\",\n    \"email\": \"albin@mail.com\",\n    \"password\": \"12345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/signup",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "signup"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "List users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "List projects",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects",
+              "host": ["{{base_url}}"],
+              "path": ["projects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Project 1\",\n    \"description\": \"The project\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects",
+              "host": ["{{base_url}}"],
+              "path": ["projects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "ff4721f2-047b-4c2d-bce9-14a2c0cbb23b"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "List tasks",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "80c39ea2-9b03-4f23-950a-10646496a80b"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"1\",\n    \"description\": \"description\",\n    \"status\": \"done\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "a30f1a84-2d52-42de-8ab1-328cc35bd59e"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Task details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks", ":taskId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "2034482a-8624-493b-9b42-0f70dd021743"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks", ":taskId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "30d6223e-74a4-465e-8c30-f95b98fe8771"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New change\",\n    \"description\": \"\",\n    \"status\": \"todo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks", ":taskId"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "2034482a-8624-493b-9b42-0f70dd021743"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"staffId\": \"6bea0bf2-e8c7-4cb4-8634-4f274c1111a1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/assign",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks", ":taskId", "assign"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "0ba45bf5-e5c8-4948-89a4-1a141f577cae"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove assign",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/assign",
+              "host": ["{{base_url}}"],
+              "path": ["projects", ":projectId", "tasks", ":taskId", "assign"],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "0ba45bf5-e5c8-4948-89a4-1a141f577cae"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"comment\": \"Hello there\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/comments",
+              "host": ["{{base_url}}"],
+              "path": [
+                "projects",
+                ":projectId",
+                "tasks",
+                ":taskId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "ebdd7d18-2187-4c15-bfa1-ca8f21c340df"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List comments",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/comments",
+              "host": ["{{base_url}}"],
+              "path": [
+                "projects",
+                ":projectId",
+                "tasks",
+                ":taskId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "ebdd7d18-2187-4c15-bfa1-ca8f21c340df"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete comment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/:projectId/tasks/:taskId/comments/:commentId",
+              "host": ["{{base_url}}"],
+              "path": [
+                "projects",
+                ":projectId",
+                "tasks",
+                ":taskId",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "projectId",
+                  "value": "c7a51111-6fe9-41bd-8b17-efb10d911f46"
+                },
+                {
+                  "key": "taskId",
+                  "value": "ebdd7d18-2187-4c15-bfa1-ca8f21c340df"
+                },
+                {
+                  "key": "commentId",
+                  "value": "73c972cc-1184-4bf3-9a03-7221f86e9966"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Staff",
+      "item": [
+        {
+          "name": "List staff",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/staff",
+              "host": ["{{base_url}}"],
+              "path": ["staff"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create staff",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Praveen\",\n    \"email\": \"praveen@mail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/staff",
+              "host": ["{{base_url}}"],
+              "path": ["staff"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update staff",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Shebin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/:staffId",
+              "host": ["{{base_url}}"],
+              "path": ["staff", ":staffId"],
+              "variable": [
+                {
+                  "key": "staffId",
+                  "value": "cbbe1c2f-ea36-4a1b-b4cc-fa3f17f99af7"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete staff",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/staff/:staffId",
+              "host": ["{{base_url}}"],
+              "path": ["staff", ":staffId"],
+              "variable": [
+                {
+                  "key": "staffId",
+                  "value": "e98085f6-bc9f-4943-bc9b-a3a089649ae9"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkMmVhYjZiOC0wZDllLTRjOTItYjgzYi0wNGVjYTNiYzljMTIiLCJpYXQiOjE3MzM5MzU1NjAsImV4cCI6MTczMzkzOTE2MH0.sApSeQT2HCKs103Vu-5KktTvleIoPS9AFJUVSq7sqQ4",
+      "type": "string"
+    }
+  ]
+}

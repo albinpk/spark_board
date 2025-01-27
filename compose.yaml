@@ -1,0 +1,31 @@
+services:
+
+  # api and frontend
+  server:
+    # for home server
+    image: spark_board-server
+    # for local
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "7070:3000"
+    platform: linux/amd64
+    environment:
+      POSTGRES_HOST: db
+
+  # postgres database
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 1234
+
+volumes:
+  data:
+

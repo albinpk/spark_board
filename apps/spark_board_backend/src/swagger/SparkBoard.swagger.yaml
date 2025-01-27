@@ -1,0 +1,483 @@
+openapi: 3.0.3
+info:
+  title: SparkBoard
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: http://localhost:3000/api/v1
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      description: Login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: albin@mail.com
+                password:
+                  type: string
+                  example: "12345678"
+            examples:
+              Login:
+                value:
+                  email: albin@mail.com
+                  password: "12345678"
+      responses:
+        "200":
+          description: ""
+      security:
+        - {}
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Signup
+      description: Signup
+      operationId: signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: albin@mail.com
+                name:
+                  type: string
+                  example: Albin
+                password:
+                  type: string
+                  example: "12345678"
+            examples:
+              Signup:
+                value:
+                  email: albin@mail.com
+                  name: Albin
+                  password: "12345678"
+      responses:
+        "200":
+          description: ""
+      security:
+        - {}
+  /users:
+    get:
+      tags:
+        - User
+      summary: List users
+      description: List users
+      operationId: listUsers
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+  /projects:
+    get:
+      tags:
+        - Projects
+      summary: List projects
+      description: List projects
+      operationId: listProjects
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Projects
+      summary: Create project
+      description: Create project
+      operationId: createProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: The project
+                name:
+                  type: string
+                  example: Project 1
+            examples:
+              Create project:
+                value:
+                  description: The project
+                  name: Project 1
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+  /projects/{projectId}:
+    delete:
+      tags:
+        - Projects
+      summary: Delete project
+      description: Delete project
+      operationId: deleteProject
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ff4721f2-047b-4c2d-bce9-14a2c0cbb23b
+  /projects/{projectId}/tasks:
+    get:
+      tags:
+        - Tasks
+      summary: List tasks
+      description: List tasks
+      operationId: listTasks
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Tasks
+      summary: Create task
+      description: Create task
+      operationId: createTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: description
+                name:
+                  type: string
+                  example: "1"
+                status:
+                  type: string
+                  example: done
+            examples:
+              Create task:
+                value:
+                  description: description
+                  name: "1"
+                  status: done
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: a30f1a84-2d52-42de-8ab1-328cc35bd59e
+  /projects/{projectId}/tasks/{taskId}:
+    get:
+      tags:
+        - Tasks
+      summary: Task details
+      description: Task details
+      operationId: taskDetails
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Tasks
+      summary: Delete task
+      description: Delete task
+      operationId: deleteTask
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Tasks
+      summary: Update task
+      description: Update task
+      operationId: updateTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: ""
+                name:
+                  type: string
+                  example: New change
+                status:
+                  type: string
+                  example: todo
+            examples:
+              Update task:
+                value:
+                  description: ""
+                  name: New change
+                  status: todo
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 2034482a-8624-493b-9b42-0f70dd021743
+  /projects/{projectId}/tasks/{taskId}/assign:
+    post:
+      tags:
+        - Tasks
+      summary: Assign task
+      description: Assign task
+      operationId: assignTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                staffId:
+                  type: string
+                  example: 6bea0bf2-e8c7-4cb4-8634-4f274c1111a1
+            examples:
+              Assign task:
+                value:
+                  staffId: 6bea0bf2-e8c7-4cb4-8634-4f274c1111a1
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Tasks
+      summary: Remove assign
+      description: Remove assign
+      operationId: removeAssign
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 0ba45bf5-e5c8-4948-89a4-1a141f577cae
+  /projects/{projectId}/tasks/{taskId}/comments:
+    get:
+      tags:
+        - Tasks
+      summary: List comments
+      description: List comments
+      operationId: listComments
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Tasks
+      summary: Create comment
+      description: Create comment
+      operationId: createComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  example: Hello there
+            examples:
+              Create comment:
+                value:
+                  comment: Hello there
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ebdd7d18-2187-4c15-bfa1-ca8f21c340df
+  /projects/{projectId}/tasks/{taskId}/comments/{commentId}:
+    delete:
+      tags:
+        - Tasks
+      summary: Delete comment
+      description: Delete comment
+      operationId: deleteComment
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c7a51111-6fe9-41bd-8b17-efb10d911f46
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ebdd7d18-2187-4c15-bfa1-ca8f21c340df
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 73c972cc-1184-4bf3-9a03-7221f86e9966
+  /staff:
+    get:
+      tags:
+        - Staff
+      summary: List staff
+      description: List staff
+      operationId: listStaff
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Staff
+      summary: Create staff
+      description: Create staff
+      operationId: createStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: praveen@mail.com
+                name:
+                  type: string
+                  example: Praveen
+            examples:
+              Create staff:
+                value:
+                  email: praveen@mail.com
+                  name: Praveen
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+  /staff/{staffId}:
+    delete:
+      tags:
+        - Staff
+      summary: Delete staff
+      description: Delete staff
+      operationId: deleteStaff
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    patch:
+      tags:
+        - Staff
+      summary: Update staff
+      description: Update staff
+      operationId: updateStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Shebin
+            examples:
+              Update staff:
+                value:
+                  name: Shebin
+      responses:
+        "200":
+          description: ""
+      security:
+        - bearerAuth: []
+    parameters:
+      - name: staffId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: e98085f6-bc9f-4943-bc9b-a3a089649ae9
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: Auth
+  - name: User
+  - name: Projects
+  - name: Tasks
+  - name: Staff

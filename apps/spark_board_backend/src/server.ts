@@ -1,15 +1,31 @@
 import dotenv from "dotenv";
-import express, { Express, Request, Response } from "express";
-
 dotenv.config();
 
-const app: Express = express();
+import bodyParser from "body-parser";
+import cors from "cors";
+import express from "express";
+import { logHandler } from "./middlewares/apiLogger";
+import { errorHandler } from "./middlewares/errorHandler";
+import { notFoundHandler } from "./middlewares/notFound";
+import { apiRoutes } from "./routes/api/apiRoutes";
+import { swaggerRoutes } from "./swagger/swagger";
+
 const port = process.env.PORT;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello world!");
-});
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static("public"));
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.use("/api-docs", ...swaggerRoutes);
+
+app.use(logHandler);
+
+// routes
+app.use("/api", apiRoutes);
+
+// error handlers
+app.all("*", notFoundHandler);
+app.use(errorHandler);
+
+app.listen(port, () => console.log(`Server is running on port ${port}`));
