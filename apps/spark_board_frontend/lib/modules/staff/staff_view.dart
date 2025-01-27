@@ -51,18 +51,25 @@ class StaffView extends CoraConsumerView<StaffState> {
             Expanded(
               child: asyncValue.hasError
                   ? Text(asyncValue.error.toString())
-                  : Skeletonizer(
-                      enabled: asyncValue.isLoading,
-                      child: TableView.builder(
-                        columnCount: 4,
-                        rowCount: staffs.length + 1, // +1 for header
-                        pinnedRowCount: 1, // header
-                        columnBuilder: (i) => _columnBuilder(context, i),
-                        rowBuilder: (i) => _rowBuilder(context, i),
-                        cellBuilder: (context, vicinity) =>
-                            _cellBuilder(context, vicinity, state, staffs),
-                      ),
-                    ),
+                  : !asyncValue.isLoading && staffs.isEmpty
+                      ? Center(
+                          child: Text(
+                            'No staff added yet',
+                            style: context.bodySmall.fade(),
+                          ),
+                        )
+                      : Skeletonizer(
+                          enabled: asyncValue.isLoading,
+                          child: TableView.builder(
+                            columnCount: 4,
+                            rowCount: staffs.length + 1, // +1 for header
+                            pinnedRowCount: 1, // header
+                            columnBuilder: (i) => _columnBuilder(context, i),
+                            rowBuilder: (i) => _rowBuilder(context, i),
+                            cellBuilder: (context, vicinity) =>
+                                _cellBuilder(context, vicinity, state, staffs),
+                          ),
+                        ),
             ),
           ],
         ),

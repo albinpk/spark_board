@@ -65,6 +65,12 @@ extension ThemeDataExtension on BuildContext {
   Color grey([double value = 0.5]) => cs.onSurface.fade(value);
 }
 
+/// Extensions for text style.
+extension TextStyleExt on TextStyle {
+  /// Fade text color.
+  TextStyle fade([double value = 0.5]) => copyWith(color: color?.fade(value));
+}
+
 /// Extensions for material color.
 extension ColorExt on Color {
   /// Handy method for adding opacity.
