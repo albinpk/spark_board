@@ -16,8 +16,8 @@ class ProjectBarView extends CoraConsumerView<ProjectBarState> {
 
   @override
   Widget build(BuildContext context, ProjectBarState state) {
-    return SizedBox(
-      height: 40,
+    return Padding(
+      padding: const EdgeInsets.all(Margin.medium),
       child: Row(
         children: [
           const Spacer(),
@@ -68,7 +68,7 @@ class _ProfileIconState extends State<_ProfileIcon> {
           return CompositedTransformFollower(
             link: _layerLink,
             followerAnchor: Alignment.topRight,
-            targetAnchor: Alignment.bottomLeft,
+            targetAnchor: Alignment.bottomRight,
             child: Align(
               alignment: Alignment.topRight,
               child: TapRegion(
