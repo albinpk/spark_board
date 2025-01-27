@@ -94,7 +94,7 @@ class TasksView extends CoraConsumerView<TasksState> {
 
   Widget _buildGridList(TasksState state, TaskStatus status) {
     final isLoading = state.isLoading.value;
-    final taskList = isLoading ? mock[status]! : state.tasks[status]!;
+    final tasks = isLoading ? mock[status]! : state.tasks[status]!;
     return SliverMainAxisGroup(
       slivers: [
         SliverPersistentHeader(
@@ -104,35 +104,50 @@ class TasksView extends CoraConsumerView<TasksState> {
             onTapAdd: () => state.onTapAdd(status),
           ),
         ),
-        SliverLayoutBuilder(
-          builder: (context, constraints) {
-            final maxWidth = constraints.crossAxisExtent;
-            return SliverPadding(
-              padding: const EdgeInsets.all(
-                Margin.medium,
-              ).copyWith(right: maxWidth % TaskCard.width),
-              sliver: Skeletonizer.sliver(
-                enabled: isLoading,
-                ignoreContainers: false,
-                child: SliverGrid.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: max(1, maxWidth ~/ TaskCard.width),
-                    mainAxisExtent: TaskCard.height,
-                    mainAxisSpacing: Margin.medium,
-                    crossAxisSpacing: Margin.medium,
+        if (!isLoading && tasks.isEmpty)
+          SliverToBoxAdapter(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: Margin.xxLarge * 4),
+                child: Text(
+                  'No tasks added yet.',
+                  style: state.context.bodySmall.copyWith(
+                    color: state.context.grey(),
                   ),
-                  itemCount: taskList.length,
-                  itemBuilder: (context, index) {
-                    return TaskCard(
-                      key: ValueKey(taskList[index]),
-                      task: taskList[index],
-                    );
-                  },
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          )
+        else
+          SliverLayoutBuilder(
+            builder: (context, constraints) {
+              final maxWidth = constraints.crossAxisExtent;
+              return SliverPadding(
+                padding: const EdgeInsets.all(
+                  Margin.medium,
+                ).copyWith(right: maxWidth % TaskCard.width),
+                sliver: Skeletonizer.sliver(
+                  enabled: isLoading,
+                  ignoreContainers: false,
+                  child: SliverGrid.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: max(1, maxWidth ~/ TaskCard.width),
+                      mainAxisExtent: TaskCard.height,
+                      mainAxisSpacing: Margin.medium,
+                      crossAxisSpacing: Margin.medium,
+                    ),
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      return TaskCard(
+                        key: ValueKey(tasks[index]),
+                        task: tasks[index],
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
       ],
     );
   }
