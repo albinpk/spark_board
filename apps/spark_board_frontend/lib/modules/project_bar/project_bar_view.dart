@@ -1,6 +1,7 @@
 import '../../utils/common.dart';
 import 'project_bar_state.dart';
 import 'widgets/profile_card.dart';
+import 'widgets/project_info.dart';
 
 class ProjectBarView extends CoraConsumerView<ProjectBarState> {
   const ProjectBarView({
@@ -15,16 +16,33 @@ class ProjectBarView extends CoraConsumerView<ProjectBarState> {
 
   @override
   Widget build(BuildContext context, ProjectBarState state) {
-    return const SizedBox(
+    return SizedBox(
       height: 40,
       child: Row(
         children: [
-          Spacer(),
+          const Spacer(),
 
           // profile
-          _ProfileIcon(),
+          IconButton(
+            tooltip: 'Info',
+            onPressed: () => _showInfo(context),
+            icon: const Icon(Icons.info_outline),
+          ),
+
+          const _ProfileIcon(),
         ],
       ),
+    );
+  }
+
+  void _showInfo(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          child: ProjectInfo(),
+        );
+      },
     );
   }
 }
