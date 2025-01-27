@@ -80,7 +80,7 @@ class Project {
       projectId: json['project_id'] as String,
       ownerId: json['owner_id'] as String,
       name: json['name'] as String,
-      description: json['description'] as String,
+      description: json['description'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
@@ -88,7 +88,7 @@ class Project {
   final String projectId;
   final String ownerId;
   final String name;
-  final String description;
+  final String? description;
   final DateTime createdAt;
 
   @override
