@@ -1,6 +1,7 @@
 import '../../utils/common.dart';
 import 'project_bar_state.dart';
 import 'widgets/profile_card.dart';
+import 'widgets/project_info.dart';
 
 class ProjectBarView extends CoraConsumerView<ProjectBarState> {
   const ProjectBarView({
@@ -15,16 +16,33 @@ class ProjectBarView extends CoraConsumerView<ProjectBarState> {
 
   @override
   Widget build(BuildContext context, ProjectBarState state) {
-    return const SizedBox(
-      height: 40,
+    return Padding(
+      padding: const EdgeInsets.all(Margin.medium),
       child: Row(
         children: [
-          Spacer(),
+          const Spacer(),
 
           // profile
-          _ProfileIcon(),
+          IconButton(
+            tooltip: 'Info',
+            onPressed: () => _showInfo(context),
+            icon: const Icon(Icons.info_outline),
+          ),
+
+          const _ProfileIcon(),
         ],
       ),
+    );
+  }
+
+  void _showInfo(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          child: ProjectInfo(),
+        );
+      },
     );
   }
 }
@@ -50,7 +68,7 @@ class _ProfileIconState extends State<_ProfileIcon> {
           return CompositedTransformFollower(
             link: _layerLink,
             followerAnchor: Alignment.topRight,
-            targetAnchor: Alignment.bottomLeft,
+            targetAnchor: Alignment.bottomRight,
             child: Align(
               alignment: Alignment.topRight,
               child: TapRegion(

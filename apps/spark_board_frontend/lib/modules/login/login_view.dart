@@ -1,4 +1,6 @@
+import '../../providers/package_info_provider.dart';
 import '../../utils/common.dart';
+import '../project_bar/widgets/project_info.dart';
 import 'login_state.dart';
 
 /// Route: [LoginRoute].
@@ -8,6 +10,9 @@ class LoginView extends CoraConsumerView<LoginState> {
     this.nextRoute,
     this.isDemo = false,
   });
+
+  @override
+  LoginState createState() => LoginState();
 
   /// The route to navigate to after login
   final String? nextRoute;
@@ -51,103 +56,118 @@ class LoginView extends CoraConsumerView<LoginState> {
 
                 // right - form
                 Expanded(
-                  child: Center(
-                    child: SizedBox(
-                      width: 300,
-                      child: Padding(
-                        padding: const EdgeInsets.all(Margin.xLarge),
-                        child: Form(
-                          key: state.form,
-                          child: SingleChildScrollView(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: Margin.xLarge,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Hello Again!',
-                                  style: context.titleLarge,
-                                ),
-                                H.xLarge,
-
-                                // email
-                                TextFormField(
-                                  controller: state.emailController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Email',
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: SizedBox(
+                            width: 300,
+                            child: Padding(
+                              padding: const EdgeInsets.all(Margin.xLarge),
+                              child: Form(
+                                key: state.form,
+                                child: SingleChildScrollView(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: Margin.xLarge,
                                   ),
-                                  validator: FormBuilderValidators.email(),
-                                ),
-                                H.xLarge,
-
-                                // password
-                                TextFormField(
-                                  controller: state.passwordController,
-                                  obscureText: !state.showPassword.value,
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    suffixIcon: IconButton(
-                                      onPressed: state.showPassword.toggle,
-                                      icon: Icon(
-                                        state.showPassword.value
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Hello Again!',
+                                        style: context.titleLarge,
                                       ),
-                                    ),
-                                  ),
-                                  validator: FormBuilderValidators.required(),
-                                ),
+                                      H.xLarge,
 
-                                // error message
-                                if (state.error.value != null) ...[
-                                  H.large,
-                                  Text(
-                                    state.error.value!,
-                                    style: context.bodyMedium.copyWith(
-                                      color: context.cs.error,
-                                    ),
-                                  ),
-                                ],
+                                      // email
+                                      TextFormField(
+                                        controller: state.emailController,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Email',
+                                        ),
+                                        validator:
+                                            FormBuilderValidators.email(),
+                                      ),
+                                      H.xLarge,
 
-                                H.xLarge,
-
-                                // login button
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: FilledButton(
-                                    onPressed: state.onLogin,
-                                    child: state.isLoading.value
-                                        ? SizedBox.square(
-                                            dimension: 20,
-                                            child: CircularProgressIndicator(
-                                              color: context.cs.onPrimary,
-                                              strokeWidth: 2,
+                                      // password
+                                      TextFormField(
+                                        controller: state.passwordController,
+                                        obscureText: !state.showPassword.value,
+                                        decoration: InputDecoration(
+                                          labelText: 'Password',
+                                          suffixIcon: IconButton(
+                                            onPressed:
+                                                state.showPassword.toggle,
+                                            icon: Icon(
+                                              state.showPassword.value
+                                                  ? Icons.visibility
+                                                  : Icons.visibility_off,
                                             ),
-                                          )
-                                        : const Text('Login'),
+                                          ),
+                                        ),
+                                        validator:
+                                            FormBuilderValidators.required(),
+                                      ),
+
+                                      // error message
+                                      if (state.error.value != null) ...[
+                                        H.large,
+                                        Text(
+                                          state.error.value!,
+                                          style: context.bodyMedium.copyWith(
+                                            color: context.cs.error,
+                                          ),
+                                        ),
+                                      ],
+
+                                      H.xLarge,
+
+                                      // login button
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: FilledButton(
+                                          onPressed: state.onLogin,
+                                          child: state.isLoading.value
+                                              ? SizedBox.square(
+                                                  dimension: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: context.cs.onPrimary,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                )
+                                              : const Text('Login'),
+                                        ),
+                                      ),
+                                      H.medium,
+
+                                      if (false)
+                                        LinkText(
+                                          [
+                                            ("Don't have an account? ", null),
+                                            (
+                                              'Sign up',
+                                              () => state.go(
+                                                    const SignupRoute()
+                                                        .location,
+                                                  ),
+                                            ),
+                                          ],
+                                          style: context.bodySmall,
+                                        ),
+                                    ],
                                   ),
                                 ),
-                                H.medium,
-
-                                if (false)
-                                  LinkText(
-                                    [
-                                      ("Don't have an account? ", null),
-                                      (
-                                        'Sign up',
-                                        () => state
-                                            .go(const SignupRoute().location),
-                                      ),
-                                    ],
-                                    style: context.bodySmall,
-                                  ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+
+                      // version and info
+                      _buildFooter(),
+                    ],
                   ),
                 ),
               ],
@@ -158,6 +178,38 @@ class LoginView extends CoraConsumerView<LoginState> {
     );
   }
 
-  @override
-  LoginState createState() => LoginState();
+  Widget _buildFooter() {
+    return Consumer(
+      builder: (context, ref, child) {
+        final data = ref.watch(packageInfoProvider).valueOrNull;
+        if (data == null) return const SizedBox.shrink();
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'v${data.version}',
+              style: context.bodySmall,
+            ),
+            IconButton(
+              tooltip: 'Info',
+              onPressed: () => _showInfo(context),
+              iconSize: 14,
+              icon: const Icon(Icons.info_outline),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showInfo(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          child: ProjectInfo(),
+        );
+      },
+    );
+  }
 }
