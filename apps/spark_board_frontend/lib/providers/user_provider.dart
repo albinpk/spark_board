@@ -8,12 +8,12 @@ part 'user_provider.g.dart';
 @riverpod
 class User extends _$User {
   @override
-  TokenData? build() {
+  UserData? build() {
     final token = ref.storage.getString(StorageConstants.token);
     if (token == null) return null;
     final data = _decode(token);
     if (data == null) return null;
-    final tokenData = TokenData.fromJson(data);
+    final tokenData = UserData.fromJson(data);
     ref.keepAlive();
     return tokenData;
   }
@@ -43,15 +43,15 @@ class User extends _$User {
   }
 }
 
-class TokenData {
-  const TokenData({
+class UserData {
+  const UserData({
     required this.userId,
     required this.name,
     required this.email,
   });
 
-  factory TokenData.fromJson(Map<String, dynamic> json) {
-    return TokenData(
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
       userId: json['userId'] as String,
       name: json['name'] as String,
       email: json['email'] as String,
