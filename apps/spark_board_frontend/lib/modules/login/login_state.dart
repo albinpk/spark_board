@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../../utils/common.dart';
 import 'login_view.dart';
 
@@ -5,10 +7,10 @@ import 'login_view.dart';
 class LoginState extends CoraConsumerState<LoginView> with ObsStateMixin {
   final form = GlobalKey<FormState>();
   late final emailController = TextEditingController(
-    text: widget.isDemo ? 'albin@mail.com' : null,
+    text: kDebugMode || widget.isDemo ? 'albin@mail.com' : null,
   );
   late final passwordController = TextEditingController(
-    text: widget.isDemo ? '12345678' : null,
+    text: kDebugMode || widget.isDemo ? '12345678' : null,
   );
 
   @override

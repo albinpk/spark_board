@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
  */
 interface Jwt {
   userId: string;
+  name: string;
+  email: string;
 }
 
 /**

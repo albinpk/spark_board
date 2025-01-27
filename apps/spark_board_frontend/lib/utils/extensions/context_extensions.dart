@@ -60,6 +60,9 @@ extension ThemeDataExtension on BuildContext {
   Color colorOn(Color light, Color dark) {
     return cs.brightness == Brightness.dark ? dark : light;
   }
+
+  /// Disabled text color.
+  Color grey([double value = 0.5]) => cs.onSurface.fade(value);
 }
 
 /// Extensions for material color.

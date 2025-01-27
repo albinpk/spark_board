@@ -130,17 +130,18 @@ class LoginView extends CoraConsumerView<LoginState> {
                                 ),
                                 H.medium,
 
-                                LinkText(
-                                  [
-                                    ("Don't have an account? ", null),
-                                    (
-                                      'Sign up',
-                                      () => state
-                                          .go(const SignupRoute().location),
-                                    ),
-                                  ],
-                                  style: context.bodySmall,
-                                ),
+                                if (false)
+                                  LinkText(
+                                    [
+                                      ("Don't have an account? ", null),
+                                      (
+                                        'Sign up',
+                                        () => state
+                                            .go(const SignupRoute().location),
+                                      ),
+                                    ],
+                                    style: context.bodySmall,
+                                  ),
                               ],
                             ),
                           ),

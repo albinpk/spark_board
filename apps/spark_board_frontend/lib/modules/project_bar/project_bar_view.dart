@@ -1,6 +1,6 @@
-import '../../providers/theme_provider.dart';
 import '../../utils/common.dart';
 import 'project_bar_state.dart';
+import 'widgets/profile_card.dart';
 
 class ProjectBarView extends CoraConsumerView<ProjectBarState> {
   const ProjectBarView({
@@ -15,52 +15,55 @@ class ProjectBarView extends CoraConsumerView<ProjectBarState> {
 
   @override
   Widget build(BuildContext context, ProjectBarState state) {
-    final isLightMode = state.watch(
-      themeProvider.select((s) => s.mode == ThemeMode.light),
-    );
-    return SizedBox(
+    return const SizedBox(
       height: 40,
       child: Row(
         children: [
-          const Spacer(),
-
-          // theme button
-          IconButton(
-            tooltip: isLightMode ? 'Dark mode' : 'Light mode',
-            onPressed: () => state.read(themeProvider.notifier).toggle(),
-            icon: Icon(
-              isLightMode
-                  ? Icons.dark_mode_outlined
-                  : Icons.light_mode_outlined,
-            ),
-          ),
+          Spacer(),
 
           // profile
-          CustomDrop<int>(
-            menuPadding: EdgeInsets.zero,
-            childBuilder: (context, show) {
-              return IconButton(
-                onPressed: show,
-                icon: const Icon(Icons.account_circle),
-              );
-            },
-            onSelected: (value) async {
-              if (value == 1) {
-                await state.ref.storage.clear();
-                if (!context.mounted) return;
-                const LoginRoute().go(context);
-              }
-            },
-            itemBuilder: (context) {
-              return [
-                const PopupMenuItem(
-                  value: 1,
-                  child: Text('Logout'),
-                ),
-              ];
-            },
-          ),
+          _ProfileIcon(),
         ],
+      ),
+    );
+  }
+}
+
+class _ProfileIcon extends StatefulWidget {
+  const _ProfileIcon();
+
+  @override
+  State<_ProfileIcon> createState() => _ProfileIconState();
+}
+
+class _ProfileIconState extends State<_ProfileIcon> {
+  final _controller = OverlayPortalController();
+  final _layerLink = LayerLink();
+
+  @override
+  Widget build(BuildContext context) {
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: OverlayPortal(
+        controller: _controller,
+        overlayChildBuilder: (context) {
+          return CompositedTransformFollower(
+            link: _layerLink,
+            followerAnchor: Alignment.topRight,
+            targetAnchor: Alignment.bottomLeft,
+            child: Align(
+              alignment: Alignment.topRight,
+              child: TapRegion(
+                onTapOutside: (_) => _controller.hide(),
+                child: const ProfileCard(),
+              ),
+            ),
+          );
+        },
+        child: IconButton(
+          onPressed: _controller.show,
+          icon: const Icon(Icons.account_circle),
+        ),
       ),
     );
   }
