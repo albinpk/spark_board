@@ -1,4 +1,3 @@
-import '../../providers/theme_provider.dart';
 import '../../utils/common.dart';
 import 'project_bar_state.dart';
 import 'widgets/profile_card.dart';
@@ -16,28 +15,14 @@ class ProjectBarView extends CoraConsumerView<ProjectBarState> {
 
   @override
   Widget build(BuildContext context, ProjectBarState state) {
-    final isLightMode = state.watch(
-      themeProvider.select((s) => s.mode == ThemeMode.light),
-    );
-    return SizedBox(
+    return const SizedBox(
       height: 40,
       child: Row(
         children: [
-          const Spacer(),
-
-          // theme button
-          IconButton(
-            tooltip: isLightMode ? 'Dark mode' : 'Light mode',
-            onPressed: () => state.read(themeProvider.notifier).toggle(),
-            icon: Icon(
-              isLightMode
-                  ? Icons.dark_mode_outlined
-                  : Icons.light_mode_outlined,
-            ),
-          ),
+          Spacer(),
 
           // profile
-          const _ProfileIcon(),
+          _ProfileIcon(),
         ],
       ),
     );
