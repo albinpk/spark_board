@@ -17,12 +17,18 @@ export const signupUser = async (
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(data.password, salt);
 
-  const user = await sql<UserTable[]>`
+  const [user] = await sql<UserTable[]>`
     INSERT INTO users (name, email, password)
     VALUES (${data.name}, ${data.email}, ${hashedPassword})
     RETURNING user_id, name, email, created_at`;
 
-  return { token: createToken({ userId: user[0].user_id }) };
+  return {
+    token: createToken({
+      userId: user.user_id,
+      name: user.name,
+      email: user.email,
+    }),
+  };
 };
 
 /**
@@ -42,5 +48,11 @@ export const loginUser = async (
     throw appError("Invalid email or password", 400);
   }
 
-  return { token: createToken({ userId: user.user_id }) };
+  return {
+    token: createToken({
+      userId: user.user_id,
+      name: user.name,
+      email: user.email,
+    }),
+  };
 };
