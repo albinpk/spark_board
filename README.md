@@ -6,6 +6,14 @@
 
 ---
 
+## **Demo**
+
+You can check out a live demo of Spark Board here:
+
+**[Demo Link](https://spark-board.albinpk.dev/#/login?demo=true)**
+
+---
+
 ## **Features**
 
 - **Interactive Kanban Boards**: Organize and visualize tasks
