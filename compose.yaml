@@ -2,12 +2,13 @@ services:
 
   # api and frontend
   server:
-    # for home server
-    image: spark_board-server
-    # for local
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
+    # for deploy
+    # image: spark_board-server
+
+    # for build
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     ports:
       - "7070:3000"
