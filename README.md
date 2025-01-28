@@ -17,7 +17,6 @@ You can check out a live demo of Spark Board here:
 ## **Features**
 
 - **Interactive Kanban Boards**: Organize and visualize tasks
-<!-- with customizable drag-and-drop functionality. -->
 - **Task Management**: Create, update, delete, and assign tasks with detailed views and comment support.
 - **Authentication**: Secure user signup and login with JWT-based authentication.
 - **Responsive Design**: Optimized for desktop and web platforms, with mobile support planned.
