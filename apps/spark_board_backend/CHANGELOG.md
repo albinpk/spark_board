@@ -1,3 +1,8 @@
+## 0.0.8
+
+ - **FEAT**: profile card (#45).
+ - **DOCS**: update README.md and CONTRIBUTING.md (#50).
+
 ## 0.0.7
 
  - **FEAT**: task comments (#42).

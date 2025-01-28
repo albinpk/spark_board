@@ -1,3 +1,13 @@
+## 0.0.6
+
+ - **FIX**: make project description nullable in task details response.
+ - **FIX**: add no data widgets (#47).
+ - **FIX**: more button visibility in task card widget.
+ - **FEAT**: add project info dialog (#46).
+ - **FEAT**: profile card (#45).
+ - **FEAT**: demo account login (#44).
+ - **DOCS**: update README.md and CONTRIBUTING.md (#50).
+
 ## 0.0.5
 
  - **FIX**: enhance sidebar behavior and task loading indicator (#43).

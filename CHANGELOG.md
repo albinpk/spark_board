@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`spark_board_backend` - `v0.0.8`](#spark_board_backend---v008)
+ - [`spark_board_frontend` - `v0.0.6`](#spark_board_frontend---v006)
+
+---
+
+#### `spark_board_backend` - `v0.0.8`
+
+ - **FEAT**: profile card (#45).
+ - **DOCS**: update README.md and CONTRIBUTING.md (#50).
+
+#### `spark_board_frontend` - `v0.0.6`
+
+ - **FIX**: make project description nullable in task details response.
+ - **FIX**: add no data widgets (#47).
+ - **FIX**: more button visibility in task card widget.
+ - **FEAT**: add project info dialog (#46).
+ - **FEAT**: profile card (#45).
+ - **FEAT**: demo account login (#44).
+ - **DOCS**: update README.md and CONTRIBUTING.md (#50).
+
+
 ## 2025-01-25
 
 ### Changes
