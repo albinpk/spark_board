@@ -127,9 +127,8 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
               Expanded(
                 child: Text(
                   project.description ?? '',
-                  style: context.bodyMedium.copyWith(
-                    color: context.cs.onSurface.fade(0.5),
-                  ),
+                  overflow: TextOverflow.fade,
+                  style: context.bodyMedium.fade(0.7),
                 ),
               ),
               Row(
