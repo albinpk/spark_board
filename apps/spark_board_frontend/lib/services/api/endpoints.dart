@@ -11,6 +11,8 @@ abstract final class Endpoints {
 
   static const projects = '$_v1/projects';
 
+  static const project = '$_v1/projects/{projectId}';
+
   static const tasks = '$_v1/projects/{projectId}/tasks';
 
   static const task = '$_v1/projects/{projectId}/tasks/{taskId}';
