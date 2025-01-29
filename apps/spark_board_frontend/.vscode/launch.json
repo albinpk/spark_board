@@ -5,10 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "spark_board_frontend",
+            "name": "Dev - local",
             "request": "launch",
             "type": "dart",
             "program": "${workspaceFolder}/lib/main.dart",
+        },
+        {
+            "name": "Dev - remote",
+            "request": "launch",
+            "type": "dart",
+            "program": "${workspaceFolder}/lib/main.dart",
+            "args": [
+                "--dart-define",
+                "BASE_URL=https://spark-board.albinpk.dev/api"
+            ],
         },
     ]
 }
