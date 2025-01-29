@@ -1,6 +1,7 @@
 import 'package:scroll_animator/scroll_animator.dart';
 
 import '../../providers/projects_provider.dart';
+import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';
 import 'projects_view.dart';
 import 'widget/create_project_dialog.dart';
@@ -27,6 +28,16 @@ class ProjectsState extends CoraConsumerState<ProjectsView> with ObsStateMixin {
 
     if (err != null) return AppSnackbar.error(err);
 
+    ref.invalidate(projectsProvider);
+  }
+
+  Future<void> deleteProject(Data project) async {
+    final (err, data) = await ref.api
+        .deleteProject(
+          projectId: project.projectId,
+        )
+        .go();
+    if (err != null) return AppSnackbar.error(err);
     ref.invalidate(projectsProvider);
   }
 }

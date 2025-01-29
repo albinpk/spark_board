@@ -3,6 +3,7 @@ import 'dart:math';
 import '../../providers/projects_provider.dart';
 import '../../services/api/models/projects_response.dart';
 import '../../utils/common.dart';
+import 'models/project_more_option_enum.dart';
 import 'projects_state.dart';
 import 'widget/create_project_dialog.dart';
 
@@ -78,7 +79,11 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
                               ),
                               itemCount: projects.length,
                               itemBuilder: (context, index) {
-                                return _buildCard(context, projects[index]);
+                                return _buildCard(
+                                  context,
+                                  projects[index],
+                                  state,
+                                );
                               },
                             ),
                           );
@@ -105,7 +110,7 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
     await state.createProject(result);
   }
 
-  Widget _buildCard(BuildContext context, Data project) {
+  Widget _buildCard(BuildContext context, Data project, ProjectsState state) {
     return Card(
       elevation: 0,
       child: InkWell(
@@ -115,13 +120,38 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
           ).go(context);
         },
         child: Padding(
-          padding: const EdgeInsets.all(Margin.xxLarge),
+          padding: const EdgeInsets.symmetric(
+            vertical: Margin.xLarge,
+            horizontal: Margin.xxLarge,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                project.name,
-                style: context.titleMedium,
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      project.name,
+                      style: context.titleMedium,
+                    ),
+                  ),
+                  PopupMenuButton<ProjectMoreOption>(
+                    icon: const Icon(Icons.more_vert),
+                    iconColor: context.grey(),
+                    onSelected: (value) =>
+                        _onProjectOption(value, project, state, context),
+                    itemBuilder: (context) {
+                      return ProjectMoreOption.values
+                          .map(
+                            (e) => PopupMenuItem(
+                              value: e,
+                              child: Text(e.name.capitalize),
+                            ),
+                          )
+                          .toList();
+                    },
+                  ),
+                ],
               ),
               H.large,
               Expanded(
@@ -152,5 +182,22 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
         ),
       ),
     );
+  }
+
+  Future<void> _onProjectOption(
+    ProjectMoreOption option,
+    Data project,
+    ProjectsState state,
+    BuildContext context,
+  ) async {
+    switch (option) {
+      case ProjectMoreOption.delete:
+        final confirmed = await confirmDialog(
+          context: context,
+          description: 'Are you sure you want to delete this project?\n'
+              'All tasks in this project will also be deleted.',
+        );
+        if (confirmed) await state.deleteProject(project);
+    }
   }
 }

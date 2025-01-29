@@ -45,7 +45,29 @@ export const deleteProject = async (userId: string, projectId: string) => {
 
   if (project.owner_id !== userId) throw appError("Permission denied", 403);
 
-  await sql`
+  // Begin transaction to delete project and related data
+  await sql.begin(async (sql) => {
+    // Delete all comments related to this project
+    await sql`
+        DELETE FROM task_comment
+        WHERE
+          task_id IN (
+            SELECT
+              task_id
+            FROM
+              tasks
+            WHERE
+              project_id = ${projectId}
+          )`;
+
+    // Delete all tasks related to this project
+    await sql`
+        DELETE FROM tasks
+        WHERE project_id = ${projectId}`;
+
+    // Delete this project
+    await sql`
         DELETE FROM projects
         WHERE project_id = ${projectId}`;
+  });
 };
