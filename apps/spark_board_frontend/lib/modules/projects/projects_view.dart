@@ -14,19 +14,16 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
   @override
   ProjectsState createState() => ProjectsState();
 
+  // for skeleton
+  static final _mock = Data(
+    projectId: '1',
+    name: BoneMock.fullName,
+    description: BoneMock.address,
+    createdAt: mockDate,
+  );
+
   @override
   Widget build(BuildContext context, ProjectsState state) {
-    // for skeleton
-    final mock = Data(
-      projectId: '1',
-      name: BoneMock.fullName,
-      description: BoneMock.address,
-      createdAt: mockDate,
-    );
-
-    final asyncValue = state.watch(projectsProvider);
-    final projects = asyncValue.valueOrNull ?? [mock, mock];
-
     return WebTitle(
       title: 'Projects',
       child: Scaffold(
@@ -55,40 +52,50 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
 
               // grid
               Expanded(
-                child: asyncValue.hasError
-                    ? const Center(child: Text('Something went wrong!'))
-                    : LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Skeletonizer(
-                            enabled: !asyncValue.hasValue,
-                            child: GridView.builder(
-                              controller: state.scrollController,
-                              padding: const EdgeInsets.only(
-                                top: Margin.large,
-                                bottom: 60,
-                              ),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: max(
-                                  1,
-                                  constraints.maxWidth ~/ 300,
-                                ),
-                                mainAxisSpacing: Margin.xLarge,
-                                mainAxisExtent: 150,
-                                crossAxisSpacing: Margin.xLarge,
-                              ),
-                              itemCount: projects.length,
-                              itemBuilder: (context, index) {
-                                return _buildCard(
-                                  context,
-                                  projects[index],
-                                  state,
-                                );
-                              },
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Shimmer(
+                      value: state.watch(projectsProvider),
+                      ignoreContainers: false,
+                      mock: _mock.asList(2),
+                      builder: (projects) {
+                        if (projects.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'No projects found',
+                              style: context.bodyMedium.fade(),
                             ),
                           );
-                        },
-                      ),
+                        }
+                        return GridView.builder(
+                          controller: state.scrollController,
+                          padding: const EdgeInsets.only(
+                            top: Margin.large,
+                            bottom: 60,
+                          ),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: max(
+                              1,
+                              constraints.maxWidth ~/ 300,
+                            ),
+                            mainAxisSpacing: Margin.xLarge,
+                            mainAxisExtent: 150,
+                            crossAxisSpacing: Margin.xLarge,
+                          ),
+                          itemCount: projects.length,
+                          itemBuilder: (context, index) {
+                            return _buildCard(
+                              context,
+                              projects[index],
+                              state,
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),
