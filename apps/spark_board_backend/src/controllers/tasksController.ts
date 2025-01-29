@@ -183,9 +183,18 @@ export const deleteTask = async (userId: string, taskId: string) => {
 
   if (task.owner_id !== userId) throw appError("Permission denied", 403);
 
-  await sql`
-    DELETE FROM tasks
-    WHERE task_id = ${taskId}`;
+  // Begin transaction to delete task and related data
+  await sql.begin(async (sql) => {
+    // Delete all comments related to this task
+    await sql`
+      DELETE FROM task_comment
+      WHERE task_id = ${taskId}`;
+
+    // Delete the task
+    await sql`
+      DELETE FROM tasks
+      WHERE task_id = ${taskId}`;
+  });
 };
 
 /**
