@@ -22,35 +22,37 @@ class TasksView extends CoraConsumerView<TasksState> {
   Widget build(BuildContext context, TasksState state) {
     return WebTitle(
       title: 'Tasks',
-      child: TaskStateProvider(
-        state: state,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final child = CustomScrollView(
-              controller: state.verticalScrollController,
-              slivers: [
-                SliverCrossAxisGroup(
-                  slivers: [
-                    _buildGridList(state, TaskStatus.todo),
-                    _buildGridList(state, TaskStatus.inProgress),
-                    _buildGridList(state, TaskStatus.done),
-                  ],
-                ),
-                const SliverPadding(padding: EdgeInsets.only(bottom: 130)),
-              ],
-            );
+      child: Scaffold(
+        body: TaskStateProvider(
+          state: state,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final child = CustomScrollView(
+                controller: state.verticalScrollController,
+                slivers: [
+                  SliverCrossAxisGroup(
+                    slivers: [
+                      _buildGridList(state, TaskStatus.todo),
+                      _buildGridList(state, TaskStatus.inProgress),
+                      _buildGridList(state, TaskStatus.done),
+                    ],
+                  ),
+                  const SliverPadding(padding: EdgeInsets.only(bottom: 130)),
+                ],
+              );
 
-            const minWidth = TaskCard.width * 3 + 30;
-            if (constraints.maxWidth > minWidth) return child;
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              controller: state.horizontalScrollController,
-              child: SizedBox(
-                width: minWidth,
-                child: child,
-              ),
-            );
-          },
+              const minWidth = TaskCard.width * 3 + 30;
+              if (constraints.maxWidth > minWidth) return child;
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                controller: state.horizontalScrollController,
+                child: SizedBox(
+                  width: minWidth,
+                  child: child,
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
