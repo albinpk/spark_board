@@ -104,7 +104,8 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                 if (!isLoading) header,
                 Flexible(
                   child: NestedScrollView(
-                    controller: state.scrollController,
+                    // TODO(albin): fix smooth scrolling
+                    controller: state.nestedScrollController,
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       final labelStyle = context.bodyMedium.copyWith(
                         color: context.cs.onSurface.fade(0.7),
@@ -274,6 +275,7 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                             children: [
                               // task description
                               SingleChildScrollView(
+                                controller: state.descriptionScrollController,
                                 child: Column(
                                   children: [
                                     _buildTaskDescription(state, task),
@@ -309,6 +311,8 @@ class TaskDetailsView extends CoraConsumerView<TaskDetailsState> {
                                               );
                                             }
                                             return ListView.separated(
+                                              controller:
+                                                  state.commentScrollController,
                                               itemCount: comments.length,
                                               padding: const EdgeInsets.all(
                                                 Margin.xLarge,

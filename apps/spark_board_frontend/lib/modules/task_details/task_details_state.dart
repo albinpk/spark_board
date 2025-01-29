@@ -1,3 +1,5 @@
+import 'package:scroll_animator/scroll_animator.dart';
+
 import '../../providers/task_comment_list_provider.dart';
 import '../../services/api/models/staffs_response.dart';
 import '../../services/api/models/task_comments_response.dart';
@@ -11,7 +13,15 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final commentController = TextEditingController();
-  final scrollController = ScrollController();
+  final nestedScrollController = AnimatedScrollController(
+    animationFactory: const ChromiumEaseInOut(),
+  );
+  final descriptionScrollController = AnimatedScrollController(
+    animationFactory: const ChromiumEaseInOut(),
+  );
+  final commentScrollController = AnimatedScrollController(
+    animationFactory: const ChromiumEaseInOut(),
+  );
   late final TabController tabController;
 
   @override
@@ -22,14 +32,16 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
       vsync: this,
       animationDuration: Duration.zero,
     );
-    scrollController.addListener(_onScroll);
+    nestedScrollController.addListener(_onScroll);
     _getTask();
   }
 
   @override
   void dispose() {
     tabController.dispose();
-    scrollController.dispose();
+    nestedScrollController.dispose();
+    descriptionScrollController.dispose();
+    commentScrollController.dispose();
     nameController.dispose();
     descriptionController.dispose();
     commentController.dispose();
@@ -59,7 +71,7 @@ class TaskDetailsState extends CoraConsumerState<TaskDetailsView>
   /// Will be true when the scroll offset is greater than 70.
   late final showHeader = obs(false);
 
-  void _onScroll() => showHeader.value = scrollController.offset > 70;
+  void _onScroll() => showHeader.value = nestedScrollController.offset > 70;
 
   Future<void> changeStatus(TaskStatus status) async {
     if (task.value!.status == status) return;

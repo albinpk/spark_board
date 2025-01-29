@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:scroll_animator/scroll_animator.dart';
+
 import '../../providers/staff_list_provider.dart';
 import '../../services/api/models/staffs_response.dart';
 import '../../utils/common.dart';
@@ -7,6 +9,20 @@ import 'staff_view.dart';
 import 'widgets/create_staff_dialog.dart';
 
 class StaffState extends CoraConsumerState<StaffView> with ObsStateMixin {
+  final verticalScrollController = AnimatedScrollController(
+    animationFactory: const ChromiumEaseInOut(),
+  );
+  final horizontalScrollController = AnimatedScrollController(
+    animationFactory: const ChromiumEaseInOut(),
+  );
+
+  @override
+  void dispose() {
+    verticalScrollController.dispose();
+    horizontalScrollController.dispose();
+    super.dispose();
+  }
+
   Future<void> updateName(StaffResponse staff, String name) async {
     if (staff.name == name) return;
     final (err, data) = await ref.api.updateStaff(

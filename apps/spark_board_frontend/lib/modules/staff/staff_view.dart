@@ -61,6 +61,12 @@ class StaffView extends CoraConsumerView<StaffState> {
                       : Skeletonizer(
                           enabled: asyncValue.isLoading,
                           child: TableView.builder(
+                            verticalDetails: ScrollableDetails.vertical(
+                              controller: state.verticalScrollController,
+                            ),
+                            horizontalDetails: ScrollableDetails.horizontal(
+                              controller: state.horizontalScrollController,
+                            ),
                             columnCount: 4,
                             rowCount: staffs.length + 1, // +1 for header
                             pinnedRowCount: 1, // header
@@ -107,10 +113,10 @@ class StaffView extends CoraConsumerView<StaffState> {
     return TableSpan(
       padding: const SpanPadding.all(Margin.medium),
       extent: switch (index) {
-        0 => const FixedSpanExtent(50),
-        1 => const FixedSpanExtent(150),
-        2 => const FixedSpanExtent(200),
-        3 => const FixedSpanExtent(150),
+        0 => const FixedSpanExtent(50), // No.
+        1 => const FixedSpanExtent(200), // Name
+        2 => const FixedSpanExtent(250), // Email
+        3 => const FixedSpanExtent(150), // Actions
         _ => throw UnimplementedError(),
       },
     );
