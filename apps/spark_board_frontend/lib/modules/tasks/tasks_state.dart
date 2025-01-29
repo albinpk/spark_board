@@ -9,7 +9,10 @@ import 'models/task_model.dart';
 import 'tasks_view.dart';
 
 class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
-  final scrollController = AnimatedScrollController(
+  final verticalScrollController = AnimatedScrollController(
+    animationFactory: const ChromiumEaseInOut(),
+  );
+  final horizontalScrollController = AnimatedScrollController(
     animationFactory: const ChromiumEaseInOut(),
   );
 
@@ -17,7 +20,8 @@ class TasksState extends CoraConsumerState<TasksView> with ObsStateMixin {
   void initState() {
     super.initState();
     _getTasks();
-    onDispose(scrollController.dispose);
+    onDispose(verticalScrollController.dispose);
+    onDispose(horizontalScrollController.dispose);
   }
 
   @override

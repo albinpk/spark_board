@@ -27,7 +27,7 @@ class TasksView extends CoraConsumerView<TasksState> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final child = CustomScrollView(
-              controller: state.scrollController,
+              controller: state.verticalScrollController,
               slivers: [
                 SliverCrossAxisGroup(
                   slivers: [
@@ -44,6 +44,7 @@ class TasksView extends CoraConsumerView<TasksState> {
             if (constraints.maxWidth > minWidth) return child;
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
+              controller: state.horizontalScrollController,
               child: SizedBox(
                 width: minWidth,
                 child: child,

@@ -61,6 +61,7 @@ class ProjectsView extends CoraConsumerView<ProjectsState> {
                           return Skeletonizer(
                             enabled: !asyncValue.hasValue,
                             child: GridView.builder(
+                              controller: state.scrollController,
                               padding: const EdgeInsets.only(
                                 top: Margin.large,
                                 bottom: 60,

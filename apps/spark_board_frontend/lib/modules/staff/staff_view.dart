@@ -61,6 +61,12 @@ class StaffView extends CoraConsumerView<StaffState> {
                       : Skeletonizer(
                           enabled: asyncValue.isLoading,
                           child: TableView.builder(
+                            verticalDetails: ScrollableDetails.vertical(
+                              controller: state.verticalScrollController,
+                            ),
+                            horizontalDetails: ScrollableDetails.horizontal(
+                              controller: state.horizontalScrollController,
+                            ),
                             columnCount: 4,
                             rowCount: staffs.length + 1, // +1 for header
                             pinnedRowCount: 1, // header
